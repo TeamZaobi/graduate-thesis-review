@@ -1,0 +1,23 @@
+{
+  "skill_name": "graduate-thesis-review",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "用 $graduate-thesis-review 审查一篇卒中后吞咽障碍随机对照论文。摘要写 PAS 仅治疗组改善，正文表格却显示三组组内均改善；方法写 PAS 来自 FEES，但纳入筛查写的是 VFSS；论文还有多张核心柱状图。请给出 P0/P1/P2，并说明是否必须进入深审。",
+      "expected_output": "应触发强制深审，识别核心结局证据链矛盾为高优先级，并要求图片法证与统计一致性核查。",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "用 $graduate-thesis-review 审查一篇康复工程论文。正文使用 sEMG 和超声作为主要指标，但没有写采样频率、滤波和归一化；图 2-2 与图 2-3 的横轴顺序与其他图相反，图 2-9 纵轴标签疑似沿用了另一指标。请输出深审路线。",
+      "expected_output": "应调用工程和图像法证两个核心 agent，指出可复现性缺口和图像语义错误，并给出证据型交付建议。",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "用户拿来 Codex、Claude Code 和 AntiGrativity 三方意见，互相对论文靶点和统计方法有不同判断。请用 $graduate-thesis-review 统一裁决并说明哪些建议 Adopt、哪些需要改写。",
+      "expected_output": "应按原文证据优先级回查，并输出 Adopt / Adopt with rewrite / Downgrade / Reject 的统一裁决，而不是直接服从任何单一代理。",
+      "files": []
+    }
+  ]
+}

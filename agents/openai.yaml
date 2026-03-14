@@ -1,0 +1,4 @@
+interface:
+  display_name: "研究生论文审查"
+  short_description: "用于研究生论文审查、深度科学性把关、跨代理建议复核与修改规划的系统化技能"
+  default_prompt: "用 $graduate-thesis-review 审查这篇论文或 manuscript。对临床干预、康复工程或图像证据密集的论文，先做快筛，再进入强制深审，并按中文使用习惯输出优先级修改方案。"
