@@ -12,7 +12,21 @@ project-root/
     paper01/
       原论文.docx / 原论文.pdf
       综合评审汇总.html
+      objects/
+        figures.json
+        tables.json
+        citations.json
+        assets_manifest.json
       reviews/
+        process_projection.md
+        审阅对象冻结说明.md
+        版本冻结与依赖回归台账.md
+        关键数值与复算准入台账.md
+        图表索引台账.md
+        图表专项核查.md
+        伦理合规与数据追溯审计表.md
+        主文补充附录交叉索引台账.md
+        文献对标与引文法证.md
         论文多智能体审查报告.md
         最终可执行修改清单.md
         学生执行版修改清单.md
@@ -20,6 +34,10 @@ project-root/
         第三方建议复核意见.md
       assets/
         figures/
+          docx_media/
+          key/
+        tables/
+          docx_csv/
         zoom/
         pdf_pages/
         scans/
@@ -29,7 +47,7 @@ project-root/
   CHANGELOG.md
 ```
 
-如果用户已有别的目录体系，不必强行重构，但至少保证“原文、评审文档、图像资源、HTML 汇总页”彼此可追踪。
+如果用户已有别的目录体系，不必强行重构，但至少保证“原文、对象层、评审文档、图像资源、HTML 汇总页”彼此可追踪。
 
 ## 2. 命名规则
 
@@ -49,13 +67,54 @@ project-root/
 - `第三方建议复核意见.md`
 - `综合评审汇总.html`
 
+对复杂或高风险项目，证据型中间文件也建议固定命名：
+
+- `process_projection.md`
+- `审阅对象冻结说明.md`
+- `版本冻结与依赖回归台账.md`
+- `关键数值与复算准入台账.md`
+- `图表索引台账.md`
+- `图表专项核查.md`
+- `核心结果证据链表.md`
+- `伦理合规与数据追溯审计表.md`
+- `主文补充附录交叉索引台账.md`
+- `文献对标与引文法证.md`
+
+进入导师式精修模式时，允许追加：
+
+- `原子级修改建议.md`
+- `论断-引文核查表.md`
+- `证据绑定改写表.md`
+- `章节结构调整建议.md`
+
 这样做的好处：
 
 - 便于后续代理或脚本快速识别文件角色
 - 不容易因命名风格变化而找不到材料
 - 同一篇论文可以长期迭代，不必频繁重命名
+- 能明确区分“冻结/审计台账”和“最终结论文档”
+
+同一类文件要有唯一落点，不要在 workflow 里写模糊路径如 `reviews/...`。应始终写成精确文件名，必要时在 README 里注明哪个文件是该类信息的唯一真源。
 
 ## 3. 结构分工
+
+建议把论文审阅工作区按四层理解，而不是只按目录看：
+
+1. `truth_source`
+2. `execution_object`
+3. `status_projection`
+4. `display_projection`
+
+同一份事实优先只给一个明确真源；`status` 和 `display` 不应反向改写真源。
+
+### `objects/`
+
+放结构化慢变量，不放最终长文结论。
+
+- `figures.json`：图号、caption、图像路径、证据角色、摘要/结论可用性
+- `tables.json`：表号、caption、结果类型、主分析/敏感性角色
+- `citations.json`：关键引文、类型、一手/二手、绑定论断
+- `assets_manifest.json`：图片来源、输出路径、页图/裁图/关键图关系
 
 ### `reviews/`
 
@@ -64,12 +123,18 @@ project-root/
 - 详细长文档放这里
 - 学生版和导师版也放这里
 - 外部评审原文或复核意见也放这里
+- 证据型中间台账也默认放这里，除非项目已经约定单独的 `reviews/evidence/`
+- `process_projection.md` 也放这里，用作多线程、多代理接手面；它是过程投影，不是真源
+- `citation_extraction_manifest.json` 可作为机器生成的引文抽取摘要放这里，用于人工快速回查
 
 ### `assets/`
 
 放所有图片资源。
 
 - `figures/`：拼图、汇总图
+- `figures/docx_media/`：从 `DOCX word/media` 直接抽出的原始图件
+- `figures/key/`：为引用和人工核查重命名后的关键图
+- `tables/docx_csv/`：从 `DOCX` 抽出的原始表格 CSV
 - `zoom/`：局部裁切放大图
 - `pdf_pages/`：PDF 整页导出图
 - `scans/`：扫描图或其他中间图像
@@ -80,6 +145,7 @@ project-root/
 
 - 原论文
 - `综合评审汇总.html`
+- `objects/`
 - `reviews/`
 - `assets/`
 
@@ -126,3 +192,7 @@ project-root/
 3. CHANGELOG 是否记录了这轮结构性变动
 4. `reviews/` 中是否已有完整版、学生版、导师版
 5. 新文件名是否遵循既有命名规则
+6. 新建的台账文件是否已有实填内容，而不是只停留在空骨架
+7. 结果真源、版本冻结和图表核查文件是否各自只有一个权威落点
+8. `objects/` 是否存在，且图表密集项目不再只依赖手写 Markdown 路径
+9. 迁移后是否跑过旧绝对路径扫描，而不是等到 HTML 或报告里才暴露路径漂移

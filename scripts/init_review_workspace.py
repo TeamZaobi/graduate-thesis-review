@@ -2,12 +2,13 @@
 from __future__ import annotations
 
 import argparse
+import json
 from pathlib import Path
 
 
 README_TEXT = """# 论文审查项目整理说明
 
-本目录按“论文原文 + 评审材料就近放置”的原则整理。每篇论文的主要原文、评审材料、图片资源和汇总页面尽量放在同一棵子目录下。
+本目录按“论文原文 + 对象层 + 评审材料就近放置”的原则整理。每篇论文的主要原文、结构化对象、评审材料、图片资源和汇总页面尽量放在同一棵子目录下。
 """
 
 CHANGELOG_TEXT = """# Changelog
@@ -15,10 +16,31 @@ CHANGELOG_TEXT = """# Changelog
 ## {date}
 
 - 初始化论文审查工作区。
-- 新建 `papers/{paper_id}/reviews/` 与 `papers/{paper_id}/assets/` 标准结构。
+- 新建 `papers/{paper_id}/objects/`、`papers/{paper_id}/reviews/` 与 `papers/{paper_id}/assets/` 标准结构。
 """
 
 REVIEW_PLACEHOLDERS = {
+    "process_projection.md": """# process_projection
+
+## goal
+
+## actions
+
+## findings
+
+## decisions
+
+## artifacts
+
+## status
+
+## next_step
+""",
+    "审阅对象冻结说明.md": "# 审阅对象冻结说明\n",
+    "版本冻结与依赖回归台账.md": "# 版本冻结与依赖回归台账\n",
+    "关键数值与复算准入台账.md": "# 关键数值与复算准入台账\n",
+    "图表索引台账.md": "# 图表索引台账\n",
+    "图表专项核查.md": "# 图表专项核查\n",
     "论文多智能体审查报告.md": "# 论文多智能体审查报告\n",
     "最终可执行修改清单.md": "# 最终可执行修改清单\n",
     "学生执行版修改清单.md": "# 学生执行版修改清单\n",
@@ -46,6 +68,14 @@ def ensure_file(path: Path, content: str) -> None:
         path.write_text(content, encoding="utf-8")
 
 
+def ensure_json(path: Path, payload: dict) -> None:
+    if not path.exists():
+        path.write_text(
+            json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(
         description="为新论文初始化标准审查工作区，不改动现有论文原文。"
@@ -64,10 +94,16 @@ def main() -> int:
     paper_dir = root / "papers" / args.paper_id
     reviews_dir = paper_dir / "reviews"
     assets_dir = paper_dir / "assets"
+    objects_dir = paper_dir / "objects"
 
     for subdir in [
         reviews_dir,
+        objects_dir,
         assets_dir / "figures",
+        assets_dir / "figures" / "docx_media",
+        assets_dir / "figures" / "key",
+        assets_dir / "tables",
+        assets_dir / "tables" / "docx_csv",
         assets_dir / "zoom",
         assets_dir / "pdf_pages",
         assets_dir / "scans",
@@ -78,6 +114,23 @@ def main() -> int:
 
     for filename, content in REVIEW_PLACEHOLDERS.items():
         ensure_file(reviews_dir / filename, content)
+
+    ensure_json(
+        objects_dir / "figures.json",
+        {"paper_id": args.paper_id, "kind": "figures", "items": []},
+    )
+    ensure_json(
+        objects_dir / "tables.json",
+        {"paper_id": args.paper_id, "kind": "tables", "items": []},
+    )
+    ensure_json(
+        objects_dir / "citations.json",
+        {"paper_id": args.paper_id, "kind": "citations", "items": []},
+    )
+    ensure_json(
+        objects_dir / "assets_manifest.json",
+        {"paper_id": args.paper_id, "kind": "assets_manifest", "items": []},
+    )
 
     if args.with_root_docs:
         ensure_file(root / "README.md", README_TEXT)

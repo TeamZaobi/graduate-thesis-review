@@ -62,6 +62,8 @@
 - 暴露与结局定义
 - 混杂因素控制
 - 倾向评分、匹配、多变量调整是否合理
+- 如果声称因果推断或策略比较，是否说清 `estimand / time zero / follow-up / censoring`
+- 如果使用 `target trial emulation / new-user / active-comparator / IPTW / MSM / competing risk / interaction`，继续加载 `specialty-public-health-causal.md`
 - STROBE 要点是否齐全
 
 高频风险：
@@ -69,6 +71,7 @@
 - 混杂控制不足
 - 因果语气过强
 - 选择偏倚和信息偏倚没有交代
+- `time zero` 错位、`immortal time bias`、正值性问题或竞争风险解释混乱
 
 ### C. 诊断准确性研究
 

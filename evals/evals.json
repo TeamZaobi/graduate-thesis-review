@@ -18,6 +18,102 @@
       "prompt": "用户拿来 Codex、Claude Code 和 AntiGrativity 三方意见，互相对论文靶点和统计方法有不同判断。请用 $graduate-thesis-review 统一裁决并说明哪些建议 Adopt、哪些需要改写。",
       "expected_output": "应按原文证据优先级回查，并输出 Adopt / Adopt with rewrite / Downgrade / Reject 的统一裁决，而不是直接服从任何单一代理。",
       "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "用 $graduate-thesis-review 审查一篇公共卫生硕士论文。论文声明采用 target trial emulation 比较两种抗病毒药物，但 time zero 写得含混，new-user 只口头声明，正文做了 IPTW 和 competing risk 分析，却没有交代 positivity 或 ESS/CV；同时还要判断性别交互作用的写法是否过强。",
+      "expected_output": "应加载公共卫生与观察性因果推断专项，调用观察性因果推断专家，优先检查目标试验映射、time zero、加权诊断、竞争风险和交互作用解释边界，而不是套用 RCT 审查模板。",
+      "files": []
+    },
+    {
+      "id": 5,
+      "prompt": "用户说：不要只给我问题清单，用导师视角把摘要和结论逐句改到可直接替换，但不能补造数据。请用 $graduate-thesis-review 输出原子级修改建议。",
+      "expected_output": "应进入导师式原子改稿模式，调用原子改稿与证据绑定改写能力，输出带有定位、原句、证据锚点、建议改写、禁止改法和待人工回查标记的修改卡片。",
+      "files": []
+    },
+    {
+      "id": 6,
+      "prompt": "论文讨论里多次用综述和次级文献支撑关键方法学论断，部分句子还把观察性结果写成‘证实’。请用 $graduate-thesis-review 做导师式精修并核查引文。",
+      "expected_output": "应同时触发引文完整性和证据绑定改写能力，指出错引或弱引，并把强因果动词降级为与证据层级一致的安全表述。",
+      "files": []
+    },
+    {
+      "id": 7,
+      "prompt": "学生说中英文摘要、结论和创新性都还没改完，但当前 DOCX 里这些章节其实已经存在，只是数字和讨论口径还停留在旧版；reviews/ 下也已有多份中间文件。请用 $graduate-thesis-review 开始审阅。",
+      "expected_output": "应先冻结审阅对象与版本基线，区分 `已存在但待重写`、`确实缺失`、`已完成但需回归`，并先生成审阅对象冻结说明，而不是直接按学生口述判定进度。",
+      "files": []
+    },
+    {
+      "id": 8,
+      "prompt": "工作区里已经生成了图表索引台账、核心结果证据链表、伦理合规表等文件，但多数只有标题和空表格。用户问现在是否可以直接出最终审查报告。请用 $graduate-thesis-review 处理。",
+      "expected_output": "应识别模板与实填证据的区别，拒绝把空骨架视为完成审查，要求先补实证据型中间文件，再进入综合报告和 HTML 汇总。",
+      "files": []
+    },
+    {
+      "id": 9,
+      "prompt": "同一篇论文的摘要仍写旧版 HR=2.19、RERI=0.78，正文主分析表和补充材料已经更新为 HR=2.05、RERI=0.57，HTML 和目录里也混有旧值。请用 $graduate-thesis-review 给出处理顺序。",
+      "expected_output": "应先冻结核心结果真源，建立版本冻结与依赖回归台账，把这类问题判定为版本漂移并优先回归，不应直接做语言润色。",
+      "files": []
+    },
+    {
+      "id": 10,
+      "prompt": "用户要求你复核一篇真实世界队列论文的 IPTW 结果是否算对了，但工作区只有 DOCX、PDF 和截图，没有原始数据、脚本或结果导出。请用 $graduate-thesis-review 审查。",
+      "expected_output": "应明确本轮属于非复算审查，只能做文本、图表和证据锚点核查，不得暗示已经重新跑过模型。",
+      "files": []
+    },
+    {
+      "id": 11,
+      "prompt": "正文把加权平衡诊断和附加模型放在补充材料，摘要和结论直接写确定性结论，但补充表编号混乱、部分图表引用失效。请用 $graduate-thesis-review 审查这篇公共卫生论文。",
+      "expected_output": "应检查主文、补充与附录闭环，核对编号、入口和结果口径一致性，并把关键诊断是否被藏在附录中作为结构性问题处理。",
+      "files": []
+    },
+    {
+      "id": 12,
+      "prompt": "论文文献综述章节看起来已完成，但主要用综述和二手文献支撑方法学论断；伦理批准、注册、数据可得性和利益冲突在不同位置说法也不一致。请用 $graduate-thesis-review 给出深审重点。",
+      "expected_output": "应前移文献对标与引文法证，以及伦理、注册和数据追溯审计，不应把这类问题留到最后的格式检查阶段。",
+      "files": []
+    },
+    {
+      "id": 13,
+      "prompt": "这篇论文已经建立了多代理 workflow、十几个台账和 HTML 工作台，用户要求严谨推进下一轮审阅。请用 $graduate-thesis-review 规划后续步骤。",
+      "expected_output": "应追加一次上下文隔离反思或质询，主动追问是否遗漏了图表审阅、补充材料闭环、合规审计、复算准入或模板假完成等角度，而不是直接宣称流程已覆盖全部风险。",
+      "files": []
+    },
+    {
+      "id": 14,
+      "prompt": "论文项目里已经有 `图表索引台账.md`、`图表专项核查.md` 和 HTML，但图号、caption 和路径还散在 Markdown 里，`objects/figures.json`、`tables.json`、`assets_manifest.json` 都没有。请用 $graduate-thesis-review 开始这轮评审。",
+      "expected_output": "应先把图、表和资产路径升级到对象层，至少建立 `figures.json / tables.json / assets_manifest.json`，再继续做图表法证和 HTML 回归，而不是继续把 Markdown 台账兼任结构化数据库。",
+      "files": []
+    },
+    {
+      "id": 15,
+      "prompt": "同一篇论文已经跨了多个线程、多个代理和多轮工作流，当前接手主要靠回放聊天记录。用户让你继续审。请用 $graduate-thesis-review 处理。",
+      "expected_output": "应建立或刷新 `process_projection` 作为统一接手面，压缩 `goal / actions / findings / decisions / artifacts / status / next_step`，而不是继续把完整线程当成唯一恢复链。",
+      "files": []
+    },
+    {
+      "id": 16,
+      "prompt": "项目从旧目录迁移到新目录后，Markdown 报告和 HTML 里还混有旧绝对路径。用户要你继续推进毕业论文审阅。请用 $graduate-thesis-review 处理。",
+      "expected_output": "应把这类问题判定为路径漂移，优先扫描和清理旧绝对路径，必要时调用 `scan_stale_paths.py` 或等效检查，而不是只在报告里继续追加新链接。",
+      "files": []
+    },
+    {
+      "id": 17,
+      "prompt": "这篇论文的主要结果都在 Word 原生表格里，当前只有 Markdown 台账手工记了表号和几个数字，`objects/tables.json` 还是空的。用户要你开始正式评审。请用 $graduate-thesis-review 处理。",
+      "expected_output": "应先把这类问题视为表格真源未结构化，优先调用 `extract_docx_tables.py` 或等效流水线，把表格导到 `assets/tables/docx_csv` 并回写 `objects/tables.json`，再继续做数字一致性和摘要/结论回归。",
+      "files": []
+    },
+    {
+      "id": 18,
+      "prompt": "用户问：这轮为论文审阅加的对象层、抽图、抽表和路径扫描到底有没有提升准备效率与接手效率？请用 $graduate-thesis-review 给出建议做法。",
+      "expected_output": "应建议运行 `evaluate_review_toolchain.py` 或等效轻量评估，至少回看准备时间、接手恢复时间、图表表格覆盖率和路径漂移发现率，而不是只凭主观感受判断流程升级是否有效。",
+      "files": []
+    },
+    {
+      "id": 19,
+      "prompt": "论文讨论和文献综述里有大量序号引用，但当前仍靠人工在参考文献列表里逐条回查，`objects/citations.json` 为空。用户要你继续深审。请用 $graduate-thesis-review 处理。",
+      "expected_output": "应先把这类问题视为引文锚点未结构化，优先调用 `extract_docx_citations.py` 或等效流水线，把正文引用锚点与参考文献条目映射回写到 `objects/citations.json`，再继续做引文法证和论断-引文核查。",
+      "files": []
     }
   ]
 }
