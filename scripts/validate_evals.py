@@ -25,6 +25,7 @@ REQUIRED_THEMES = {
     "table_pipeline": ["extract_docx_tables.py", "tables.json", "docx_csv", "表格"],
     "toolchain_evaluation": ["evaluate_review_toolchain.py", "准备时间", "接手", "覆盖率"],
     "citation_pipeline": ["extract_docx_citations.py", "citations.json", "claim_anchor", "参考文献"],
+    "specialty_readiness": ["complete", "partial", "missing", "专业手册", "专项补充"],
 }
 
 

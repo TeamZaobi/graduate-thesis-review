@@ -53,7 +53,7 @@ description: 面向中文使用者操作的研究生毕业论文审查技能，�
 
 图、表、引文和资产索引优先进入 `truth_source` 的结构化对象层，不要只活在 Markdown 台账里。多线程、多代理或多轮迁移时，再补一个统一接手用的 `process_projection`。
 
-在审查方法、统计、图表、外部建议时，加载 [references/review-rubric.md](./references/review-rubric.md)。在起草 Markdown 报告、修改清单、HTML 汇总页、答辩口径和导师式精修材料时，加载 [references/output-templates.md](./references/output-templates.md)。在规划目录、文件命名、交付物落点时，加载 [references/file-structure.md](./references/file-structure.md)。在判断工作区四层、对象层、默认读取顺序、图表/表格/引文结构化资产和多线程接手面时，加载 [references/review-operations-architecture.md](./references/review-operations-architecture.md)。当论文涉及统计图、结果图、脑图、连接图、表格重构或答辩 PPT 图表时，加载 [references/figure-table-standards.md](./references/figure-table-standards.md)。当需要区分干预研究、观察性研究、诊断研究、预测模型或系统综述时，加载 [references/clinical-study-types.md](./references/clinical-study-types.md)。当用户明确要求导师式逐段改稿、原子级修改建议或可直接替换的文字版本时，加载 [references/advisor-line-editing.md](./references/advisor-line-editing.md)。**每次审查任务开启，必须先加载 [references/specialty-router.md](./references/specialty-router.md) 识别专业领域，再按路由结果决定加载哪些专项文件**：当论文属于康复医学、神经工程、脑机接口、神经影像或多模态设备研究时，加载 [references/rehab-neuroengineering.md](./references/rehab-neuroengineering.md)；当论文属于心血管内科/外科时，加载 [references/specialty-cardiology.md](./references/specialty-cardiology.md)；当论文属于中医或中西医结合时，加载 [references/specialty-tcm.md](./references/specialty-tcm.md)；当论文属于公共卫生、临床流行病学、真实世界队列、药物流行病学或目标试验模拟时，加载 [references/specialty-public-health-causal.md](./references/specialty-public-health-causal.md)；其他专业按 `specialty-router.md` 第4节流程处理。当论文属于临床干预、随机对照、康复工程交叉，或用户明确要求“更深的科学性/学术性检查”时，追加加载 [references/deep-review-gates.md](./references/deep-review-gates.md)。当任务需要综合 `Codex`、`Claude Code`、`AntiGrativity` 或其他代理的输出，或用户明确要求跨工具复核时，加载 [references/agent-tool-adaptation.md](./references/agent-tool-adaptation.md)。如果论文原文是英文，则用同样流程核查，只把术语、图题、结果层级和答辩口径切换为英文论文常见表达。
+在审查方法、统计、图表、外部建议时，加载 [references/review-rubric.md](./references/review-rubric.md)。在起草 Markdown 报告、修改清单、HTML 汇总页、答辩口径和导师式精修材料时，加载 [references/output-templates.md](./references/output-templates.md)。在规划目录、文件命名、交付物落点时，加载 [references/file-structure.md](./references/file-structure.md)。在判断工作区四层、对象层、默认读取顺序、图表/表格/引文结构化资产和多线程接手面时，加载 [references/review-operations-architecture.md](./references/review-operations-architecture.md)。当论文涉及统计图、结果图、脑图、连接图、表格重构或答辩 PPT 图表时，加载 [references/figure-table-standards.md](./references/figure-table-standards.md)。当需要区分干预研究、观察性研究、诊断研究、预测模型或系统综述时，加载 [references/clinical-study-types.md](./references/clinical-study-types.md)。当用户明确要求导师式逐段改稿、原子级修改建议或可直接替换的文字版本时，加载 [references/advisor-line-editing.md](./references/advisor-line-editing.md)。**每次审查任务开启，必须先加载 [references/specialty-router.md](./references/specialty-router.md) 识别专业领域，再加载 [references/specialty-manual-readiness-gate.md](./references/specialty-manual-readiness-gate.md) 判断当前专项手册是否 `complete / partial / missing`，然后再按路由结果决定加载哪些专项文件**：当论文属于康复医学、神经工程、脑机接口、神经影像或多模态设备研究时，加载 [references/rehab-neuroengineering.md](./references/rehab-neuroengineering.md)；当论文属于心血管内科/外科时，加载 [references/specialty-cardiology.md](./references/specialty-cardiology.md)；当论文属于中医或中西医结合时，加载 [references/specialty-tcm.md](./references/specialty-tcm.md)；当论文属于公共卫生、临床流行病学、真实世界队列、药物流行病学或目标试验模拟时，加载 [references/specialty-public-health-causal.md](./references/specialty-public-health-causal.md)；其他专业按 `specialty-router.md` 第6节流程处理。只有当需要新建或重写共享专项文件时，才加载 [references/specialty-manual-standard.md](./references/specialty-manual-standard.md)，并在完成后运行 `scripts/check_specialty_manual.py`。当论文属于临床干预、随机对照、康复工程交叉，或用户明确要求“更深的科学性/学术性检查”时，追加加载 [references/deep-review-gates.md](./references/deep-review-gates.md)。当任务需要综合 `Codex`、`Claude Code`、`AntiGrativity` 或其他代理的输出，或用户明确要求跨工具复核时，加载 [references/agent-tool-adaptation.md](./references/agent-tool-adaptation.md)。如果论文原文是英文，则用同样流程核查，只把术语、图题、结果层级和答辩口径切换为英文论文常见表达。
 
 如果任务需要核对最新指南、规范或对照研究，优先查官方或一手来源，并可配合 [$deep-research](/Users/jixiaokang/.agents/skills/deep-research/SKILL.md)。如果任务需要做结构清晰、适合打印和展示的 HTML 汇总页，可配合 [$design-taste-frontend](/Users/jixiaokang/.agents/skills/taste-skill/SKILL.md)。但视觉设计不能替代证据映射深度；HTML 的完整性、映射粒度和回归检查由本 Skill 本身负责。
 
@@ -122,15 +122,17 @@ description: 面向中文使用者操作的研究生毕业论文审查技能，�
 
 没有版本基线时，不要直接下“这一章还没写/已经完成”的结论；尤其不要把学生自述、旧截图或旧 HTML 当成当前版本事实。
 
-### 1.2 确认专业领域，加载对应专项模块
+### 1.2 确认专业领域，先过专项手册完备性 gate
 
 在读完论文基本结构后，立即执行专业识别，再开始任何实质性审查。
 
-加载 [references/specialty-router.md](./references/specialty-router.md)，按其定义的流程：
+固定按这个顺序走：
 
-1. 从封面、摘要、关键词、研究对象中识别**大学科 + 小学科**
-2. 查路由表，确定加载哪些专项文件、屏蔽哪些通用检查
-3. 如果无对应专项文件，先用通用框架快筛，同时触发 deep-research 获取该领域当前规范，按需创建新专项文件
+1. 加载 [references/specialty-router.md](./references/specialty-router.md)，从封面、摘要、关键词、研究对象中识别**大学科 + 小学科**
+2. 加载 [references/specialty-manual-readiness-gate.md](./references/specialty-manual-readiness-gate.md)，把当前专项状态判成 `complete / partial / missing`
+3. 只有在 `complete` 时，才直接加载对应专项进入深审
+4. 如果是 `partial`，先生成 `reviews/专业手册完备性判断.md` 和 `reviews/专业专项补充说明.md`，再用“专项 + 论文级补充”进入深审
+5. 如果是 `missing`，先用通用框架快筛，同时触发 deep-research 获取该领域当前规范；只有当补充内容具备跨论文复用性时，才加载 [references/specialty-manual-standard.md](./references/specialty-manual-standard.md) 新建或重写共享专项
 
 **当前已有专项文件**：
 - 康复医学 + 神经工程 → `references/rehab-neuroengineering.md`
@@ -140,7 +142,7 @@ description: 面向中文使用者操作的研究生毕业论文审查技能，�
 
 **如果无法从论文中判断专业**，直接问用户："这篇论文属于哪个科室/专业方向？"，不要猜测后默默加载错误模块。
 
-专项文件的屏蔽规则见 `specialty-router.md` 第3节。不同专业的方法学标准不同，错误加载会导致用错误标准评判论文。
+专项文件的屏蔽规则见 `specialty-router.md` 第5节。不同专业的方法学标准不同；而“专项文件存在但不够用”同样会导致错误判断，所以不要跳过完备性 gate。
 
 ### 1.3 判断是否进入“导师式原子改稿”模式
 
@@ -264,11 +266,11 @@ description: 面向中文使用者操作的研究生毕业论文审查技能，�
 - [agents/stats-endpoint-agent.md](./agents/stats-endpoint-agent.md)：主要/次要结局、数据类型、模型、多重比较、摘要-正文-表图一致性
 - [agents/figure-forensics-agent.md](./agents/figure-forensics-agent.md)：图页导出、裁图、坐标轴/图题/图注/正文互证
 - [agents/neuroengineering-agent.md](./agents/neuroengineering-agent.md)：设备参数、采样、滤波、特征提取、归一化、黑箱边界
-- [agents/academic-writing-agent.md](./agents/academic-writing-agent.md)：术语稳定、摘要闭合、参考文献错配、占位残留
+- [agents/academic-writing-agent.md](./agents/academic-writing-agent.md)：默认写作与规范扫雷，附带轻量结构闭合检查
 - [agents/citation-integrity-agent.md](./agents/citation-integrity-agent.md)：论断-引文匹配、一手来源与错引核查
-- [agents/chapter-logic-surgeon.md](./agents/chapter-logic-surgeon.md)：章节功能、段落角色与迁移重构
-- [agents/evidence-anchored-rewrite-agent.md](./agents/evidence-anchored-rewrite-agent.md)：证据绑定改写、强度降级和禁改提醒
-- [agents/advisor-line-edit-agent.md](./agents/advisor-line-edit-agent.md)：导师式原子级改写卡与可直接替换文本
+- [agents/chapter-logic-surgeon.md](./agents/chapter-logic-surgeon.md)：仅用于重度章节错位、迁移和重构
+- [agents/evidence-anchored-rewrite-agent.md](./agents/evidence-anchored-rewrite-agent.md)：改写安全闸门，负责证据绑定、强度降级和禁改提醒
+- [agents/advisor-line-edit-agent.md](./agents/advisor-line-edit-agent.md)：最终导师式原子级改写卡与可直接替换文本
 - [agents/defense-risk-agent.md](./agents/defense-risk-agent.md)：答辩高风险追问、可守口径、禁区表述
 
 如果时间或环境有限，至少保留最贴近研究类型的前四个；但只要题目、结局和图像证据高度耦合，就不允许跳过 `stats-endpoint-agent` 和 `figure-forensics-agent`；只要用户明确要求导师式精修，就不允许跳过 `advisor-line-edit-agent` 和 `evidence-anchored-rewrite-agent`。

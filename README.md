@@ -10,6 +10,7 @@
 - **对象层治理**：把图、表、引文和资产路径沉淀到 `objects/*.json`，不只放在 Markdown 台账里
 - **多线程接手面**：用 `process_projection` 压缩多代理、多会话过程，降低恢复成本
 - **专业领域路由**：自动识别论文所属小学科，加载对应专项模块，屏蔽不相关检查
+- **专项手册完备性 gate**：先判定当前专项是 `complete / partial / missing`，再决定是否直接深审
 - **多镜头审查**：流行病学、统计学、学术写作、医学工程、康复科学、神经科学、伦理合规
 - **观察性因果推断专项**：目标试验模拟、`time zero`、新使用者设计、权重、竞争风险、交互作用
 - **强制深审模式**：干预研究、随机对照、设备/影像密集型论文自动升级为专家 agent 分工审查
@@ -41,6 +42,8 @@ graduate-thesis-review/
     ├── review-operations-architecture.md # 四层运行底座、对象层、接手顺序、工具链
     ├── advisor-line-editing.md       # 导师式原子改稿流程
     ├── specialty-router.md           # 专业领域识别与路由（每次必加载）
+    ├── specialty-manual-readiness-gate.md # 专项手册完备性判定与补建流程
+    ├── specialty-manual-standard.md  # 共享专项手册的高标准规范
     ├── specialty-cardiology.md       # 心血管专项
     ├── specialty-tcm.md              # 中医/中西医结合专项
     ├── specialty-public-health-causal.md # 公共卫生与观察性因果推断专项
@@ -62,6 +65,7 @@ graduate-thesis-review/
     ├── extract_docx_citations.py     # 抽取 DOCX 数字引文到 objects/citations.json
     ├── evaluate_review_toolchain.py  # 对单篇论文工作区做轻量工具链评估
     ├── scan_stale_paths.py           # 扫描旧绝对路径和路径漂移
+    ├── check_specialty_manual.py     # 校验共享专项手册是否满足高标准结构
     └── validate_evals.py             # 轻量校验 eval 覆盖
 ```
 
@@ -71,7 +75,7 @@ graduate-thesis-review/
 1.   从原文建上下文（不先信外审）
 1.0  建立运行底座与接手顺序
 1.1  冻结审阅对象与版本基线
-1.2  确认专业领域 → 加载专项模块 / 屏蔽不相关检查
+1.2  确认专业领域 → 先过专项手册完备性 gate → 再决定直接深审还是论文级补充
 1.3  判断是否进入导师式原子改稿模式
 1.4  冻结核心结果真源与依赖关系
 1.5  判断是否跨代理协作场景
@@ -128,7 +132,20 @@ graduate-thesis-review/
 | 公共卫生 / 临床流行病学 / 真实世界因果推断 | `specialty-public-health-causal.md` | ✅ |
 | 其他专业 | 按需 deep-research 创建 | 动态扩展 |
 
-未收录的专业，skill 会自动触发 deep-research 获取当前领域规范，并创建新专项文件。
+未收录的专业，skill 不会直接硬套相邻专项，而是先判定为 `missing`，用通用框架快筛，再按需用 deep-research 和 `specialty-manual-standard.md` 补建。
+
+## 专项手册 Gate
+
+每篇论文进入专业路由后，固定先判定专项状态：
+
+- `complete`：当前共享专项足以支撑这篇论文的研究类型与论文阶段，直接进入深审
+- `partial`：共享专项存在，但不足以覆盖当前论文的关键问题；先补 `专业专项补充说明`
+- `missing`：没有合适共享专项；先用通用框架快筛，再按标准补建专项
+
+只要判成 `partial` 或 `missing`，建议最少落两份文件：
+
+- `reviews/专业手册完备性判断.md`
+- `reviews/专业专项补充说明.md`
 
 ## 推荐触发语句
 
@@ -157,6 +174,7 @@ claude skill install https://github.com/TeamZaobi/graduate-thesis-review
 - **模板不等于完成**：空台账和脚手架文件不算审查完成，必须有可回查证据
 - **复算边界要说清**：没有原始数据和脚本时，只能做非复算审查，不能假装重跑过模型
 - **专业隔离**：不同小学科的方法学标准不同，错误加载会导致错误判断
+- **先判断手册够不够**：有专项文件不等于当前论文已经被覆盖；先过完备性 gate
 - **改写必须绑证据**：不给“脱锚润色”，不给无出处的漂亮句子
 - **答辩导向**：每条批评都配可操作的修法和答辩口径
 
@@ -175,6 +193,16 @@ python /Users/jixiaokang/.agents/skills/graduate-thesis-review/scripts/validate_
 - `id` 是否连续且唯一
 - 是否覆盖 `审阅对象冻结 / 模板假完成 / 真源与版本漂移 / 非复算审查 / 主文补充附录闭环 / 合规与引文法证 / 上下文隔离反思 / 对象层 / process_projection / 路径漂移 / 表格抽取流水线 / 工具链轻量评估` 等关键回归主题
 - 文档抽取脚本是否仍能覆盖 `图 / 表 / 引文` 三条对象层流水线
+
+如需校验共享专项手册结构，额外运行：
+
+```bash
+python /Users/jixiaokang/.agents/skills/graduate-thesis-review/scripts/check_specialty_manual.py \
+  --file /Users/jixiaokang/.agents/skills/graduate-thesis-review/references/rehab-neuroengineering.md \
+  --file /Users/jixiaokang/.agents/skills/graduate-thesis-review/references/specialty-cardiology.md \
+  --file /Users/jixiaokang/.agents/skills/graduate-thesis-review/references/specialty-tcm.md \
+  --file /Users/jixiaokang/.agents/skills/graduate-thesis-review/references/specialty-public-health-causal.md
+```
 
 如需校验工作区和结构合同，额外运行：
 

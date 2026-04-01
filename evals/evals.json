@@ -114,6 +114,18 @@
       "prompt": "论文讨论和文献综述里有大量序号引用，但当前仍靠人工在参考文献列表里逐条回查，`objects/citations.json` 为空。用户要你继续深审。请用 $graduate-thesis-review 处理。",
       "expected_output": "应先把这类问题视为引文锚点未结构化，优先调用 `extract_docx_citations.py` 或等效流水线，把正文引用锚点与参考文献条目映射回写到 `objects/citations.json`，再继续做引文法证和论断-引文核查。",
       "files": []
+    },
+    {
+      "id": 20,
+      "prompt": "这篇论文属于心脏康复方向，但同时用了可穿戴传感器和运动处方依从性分析。现有 `specialty-cardiology.md` 能覆盖硬终点和背景治疗，却没有把心脏康复剂量、设备依从性和答辩前高频追问写全。请用 $graduate-thesis-review 开始审阅。",
+      "expected_output": "应先通过专项手册完备性 gate，把当前共享专项判为 `partial`，生成 `专业手册完备性判断`，再补 `专业专项补充说明`，而不是把已有专业手册直接当作 complete 后进入深审。",
+      "files": []
+    },
+    {
+      "id": 21,
+      "prompt": "用户给来一篇肿瘤科真实世界论文，主轴是免疫治疗联合化疗的目标试验模拟，现有 `references/` 里没有肿瘤专项。请用 $graduate-thesis-review 开始处理。",
+      "expected_output": "应先把专项状态判为 `missing`，用通用框架快筛，再形成 `专业手册完备性判断` 和论文级 `专项补充`；只有在补充内容具备跨论文复用性时，才按高标准新建共享专项文件。",
+      "files": []
     }
   ]
 }
