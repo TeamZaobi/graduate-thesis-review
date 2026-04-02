@@ -24,6 +24,8 @@ project-root/
         assets_manifest.json
       reviews/
         process_projection.md
+        audience_language_contract.md
+        display_projection_schema.md
         专业手册完备性判断.md
         专业专项补充说明.md
         审阅对象冻结说明.md
@@ -84,6 +86,8 @@ project-root/
 对复杂或高风险项目，证据型中间文件也建议固定命名：
 
 - `process_projection.md`
+- `audience_language_contract.md`
+- `display_projection_schema.md`
 - `专业手册完备性判断.md`
 - `专业专项补充说明.md`
 - `审阅对象冻结说明.md`
@@ -142,6 +146,8 @@ project-root/
 - 外部评审原文或复核意见也放这里
 - 证据型中间台账也默认放这里，除非项目已经约定单独的 `reviews/evidence/`
 - `process_projection.md` 也放这里，用作多线程、多代理接手面；它是过程投影，不是真源
+- `audience_language_contract.md` 放这里，用作网页展示层的受众语言合同
+- `display_projection_schema.md` 放这里，用作网页展示层的内容扩增合同
 - `专业手册完备性判断.md` 和 `专业专项补充说明.md` 也放这里；它们属于当前论文的执行对象，不回写共享专项
 - `citation_extraction_manifest.json` 可作为机器生成的引文抽取摘要放这里，用于人工快速回查
 
@@ -222,7 +228,13 @@ project-root/
 3. CHANGELOG 是否记录了这轮结构性变动
 4. `reviews/` 中是否已有完整版、学生版、导师版
 5. `display/` 中是否已有问题清单页、完整评审页、学生执行页、导师汇报页
-6. 新建的台账文件是否已有实填内容，而不是只停留在空骨架
-7. 结果真源、版本冻结和图表核查文件是否各自只有一个权威落点
-8. `objects/` 是否存在，且图表密集项目不再只依赖手写 Markdown 路径
-9. 迁移后是否跑过旧绝对路径扫描，而不是等到 HTML 或报告里才暴露路径漂移
+6. `reviews/` 中是否已有 `audience_language_contract.md` 与 `display_projection_schema.md`
+7. 新建的台账文件是否已有实填内容，而不是只停留在空骨架
+8. 结果真源、版本冻结和图表核查文件是否各自只有一个权威落点
+9. `objects/` 是否存在，且图表密集项目不再只依赖手写 Markdown 路径
+10. 迁移后是否跑过旧绝对路径扫描，而不是等到 HTML 或报告里才暴露路径漂移
+
+补充说明：
+
+- `scripts/check_review_workspace.py` 默认按兼容模式运行，缺少 `display/` 子页或展示层合同文件时会给出 warning，适合遗留项目、轻量项目或单页项目
+- 只有在明确采用标准多页 `display_projection` 时，才建议使用 `scripts/check_review_workspace.py --strict`

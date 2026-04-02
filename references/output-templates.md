@@ -9,6 +9,8 @@
 常用的证据型中间文件包括：
 
 - `process_projection.md`
+- `audience_language_contract.md`
+- `display_projection_schema.md`
 - `审阅对象冻结说明.md`
 - `版本冻结与依赖回归台账.md`
 - `关键数值与复算准入台账.md`
@@ -65,6 +67,8 @@
 如果 workflow 很复杂，或论文经历了多轮改稿、多代理协作、摘要结论反复漂移，再优先补以下治理型文件：
 
 - `process_projection.md`
+- `audience_language_contract.md`
+- `display_projection_schema.md`
 - `审阅对象冻结说明.md`
 - `版本冻结与依赖回归台账.md`
 - `关键数值与复算准入台账.md`
@@ -107,6 +111,46 @@
 ## 2.5 网页多页投影模板
 
 只要用户要求网页、HTML、完整评审展示、学生页、导师页，或明确说“不要只报问题，要有完整结果”，默认做多页投影，不要把所有内容混在一页。
+
+开始写网页前，先固定补两份合同文件：
+
+- `reviews/audience_language_contract.md`
+- `reviews/display_projection_schema.md`
+
+没有这两份合同文件，不要直接开始写入口页或四个子页。
+
+### 2.5.1 `audience_language_contract.md`
+
+最少字段：
+
+- 页面名
+- 目标读者
+- 使用场景
+- 允许出现的术语
+- 禁止直接出现的内部术语
+- 首层应该保留的判断
+- 不应在该页承担的职责
+
+用途：
+
+- 防止把内部工作语言直接写到成品页
+- 防止学生页、导师页、完整评审页混用同一种语气
+
+### 2.5.2 `display_projection_schema.md`
+
+最少字段：
+
+- 页面名
+- 页面目标
+- 目标读者要做出的判断
+- 必须出现的内容块
+- 不应出现的内容块
+- 上游依据文件
+
+用途：
+
+- 先定义“该页需要哪些评审内容”，再决定展示结构
+- 防止只扩 tips / drilldown / tab / 流程图，却没有真正补充完整评审结果
 
 ### A. 入口页 `综合评审汇总.html`
 
@@ -225,6 +269,8 @@
 - 导师汇报页
 
 没有进入共享映射的问题，不要直接写入某个网页子页。
+
+`audience_language_contract.md` 和 `display_projection_schema.md` 也应与这份共享映射共同维护；如果其中一份改了，相关网页子页都要同步回查。
 
 ## 3. 综合报告模板
 
@@ -365,6 +411,11 @@ HTML 的目标是：准、全、能跳转、能打印、能共享。对“强制
 - `确认状态`
 
 没有进入台账的问题，不要直接写进网页；未核实但必须提醒人工回查的点，统一标成 `待人工回查`。
+
+同时检查两份展示层合同文件是否已实填：
+
+- `audience_language_contract.md`
+- `display_projection_schema.md`
 
 如果图像和表格资产已经对象化，优先从 `objects/assets_manifest.json`、`objects/figures.json` 和 `objects/tables.json` 生成网页中的证据路径、图号和 caption，不要在 HTML 里手写绝对路径。
 

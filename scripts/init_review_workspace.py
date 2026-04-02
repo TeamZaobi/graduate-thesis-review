@@ -36,6 +36,36 @@ REVIEW_PLACEHOLDERS = {
 
 ## next_step
 """,
+    "audience_language_contract.md": """# audience_language_contract
+
+## 页面
+
+## 目标读者
+
+## 使用场景
+
+## 允许术语
+
+## 禁止直接出现的内部术语
+
+## 首层应保留的判断
+
+## 不应承担的职责
+""",
+    "display_projection_schema.md": """# display_projection_schema
+
+## 页面
+
+## 页面目标
+
+## 目标读者要做出的判断
+
+## 必须出现的内容块
+
+## 不应出现的内容块
+
+## 上游依据文件
+""",
     "审阅对象冻结说明.md": "# 审阅对象冻结说明\n",
     "版本冻结与依赖回归台账.md": "# 版本冻结与依赖回归台账\n",
     "关键数值与复算准入台账.md": "# 关键数值与复算准入台账\n",

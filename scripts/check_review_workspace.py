@@ -15,6 +15,11 @@ REQUIRED_REVIEW_FILES = [
     "图表专项核查.md",
 ]
 
+STRICT_REVIEW_FILES = [
+    "audience_language_contract.md",
+    "display_projection_schema.md",
+]
+
 REQUIRED_OBJECT_FILES = [
     "figures.json",
     "tables.json",
@@ -35,6 +40,15 @@ def main() -> int:
         description="Check the minimum workspace contract for a thesis review project."
     )
     parser.add_argument("--paper-dir", required=True, help="Path to papers/paperXX")
+    parser.add_argument(
+        "--strict",
+        action="store_true",
+        help=(
+            "Enforce the full multi-page display_projection contract. "
+            "Without this flag, display/ pages and display_projection contract "
+            "files are reported as warnings for legacy or lightweight projects."
+        ),
+    )
     args = parser.parse_args()
 
     paper_dir = Path(args.paper_dir).expanduser().resolve()
@@ -54,10 +68,18 @@ def main() -> int:
         errors.append(f"Missing objects directory: {objects_dir}")
     if not assets_dir.exists():
         errors.append(f"Missing assets directory: {assets_dir}")
-    if not display_dir.exists():
-        errors.append(f"Missing display directory: {display_dir}")
     if not (paper_dir / "综合评审汇总.html").exists():
         errors.append(f"Missing display entry page: {paper_dir / '综合评审汇总.html'}")
+    if not display_dir.exists():
+        message = (
+            f"Missing display directory: {display_dir}"
+            if args.strict
+            else (
+                f"Missing display directory: {display_dir} "
+                "(allowed in non-strict mode for legacy or single-page projects)"
+            )
+        )
+        (errors if args.strict else warnings).append(message)
 
     thesis_files = list(paper_dir.glob("*.docx")) + list(paper_dir.glob("*.pdf"))
     if not thesis_files:
@@ -67,6 +89,19 @@ def main() -> int:
         path = reviews_dir / name
         if not path.exists():
             errors.append(f"Missing review contract file: {path}")
+
+    for name in STRICT_REVIEW_FILES:
+        path = reviews_dir / name
+        if not path.exists():
+            message = (
+                f"Missing display projection contract file: {path}"
+                if args.strict
+                else (
+                    f"Missing display projection contract file: {path} "
+                    "(allowed in non-strict mode for legacy or single-page projects)"
+                )
+            )
+            (errors if args.strict else warnings).append(message)
 
     for name in REQUIRED_OBJECT_FILES:
         path = objects_dir / name
@@ -84,7 +119,15 @@ def main() -> int:
     for name in REQUIRED_DISPLAY_FILES:
         path = display_dir / name
         if not path.exists():
-            errors.append(f"Missing display page: {path}")
+            message = (
+                f"Missing display page: {path}"
+                if args.strict
+                else (
+                    f"Missing display page: {path} "
+                    "(allowed in non-strict mode for legacy or single-page projects)"
+                )
+            )
+            (errors if args.strict else warnings).append(message)
 
     if not (assets_dir / "figures").exists():
         errors.append(f"Missing figures directory: {assets_dir / 'figures'}")
