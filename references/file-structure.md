@@ -24,6 +24,7 @@ project-root/
         assets_manifest.json
       reviews/
         process_projection.md
+        评审闭环与放行判断.md
         audience_language_contract.md
         display_projection_schema.md
         专业手册完备性判断.md
@@ -86,6 +87,7 @@ project-root/
 对复杂或高风险项目，证据型中间文件也建议固定命名：
 
 - `process_projection.md`
+- `评审闭环与放行判断.md`
 - `audience_language_contract.md`
 - `display_projection_schema.md`
 - `专业手册完备性判断.md`
@@ -146,6 +148,7 @@ project-root/
 - 外部评审原文或复核意见也放这里
 - 证据型中间台账也默认放这里，除非项目已经约定单独的 `reviews/evidence/`
 - `process_projection.md` 也放这里，用作多线程、多代理接手面；它是过程投影，不是真源
+- `评审闭环与放行判断.md` 也放这里，用作进入执行清单、导师摘要、网页决策页和原子改稿前的最小放行锚点
 - `audience_language_contract.md` 放这里，用作网页展示层的受众语言合同
 - `display_projection_schema.md` 放这里，用作网页展示层的内容扩增合同
 - `专业手册完备性判断.md` 和 `专业专项补充说明.md` 也放这里；它们属于当前论文的执行对象，不回写共享专项
@@ -186,6 +189,15 @@ project-root/
 - `导师汇报页.html`：高层判断、风险摘要、关键决策、答辩口径
 
 根目录的 `综合评审汇总.html` 默认承担入口页职责，负责导航到这四个子页，并展示当前状态总览。
+
+`学生 / 导师` 两类轻量 Markdown 和对应 HTML 的主从关系默认如下：
+
+- `学生执行版修改清单.md` 是主 `status_projection`
+- `display/学生执行页.html` 是它的 `display_projection`
+- `导师汇报版摘要.md` 是主 `status_projection`
+- `display/导师汇报页.html` 是它的 `display_projection`
+
+如果主 Markdown 尚未放行，不要先把 HTML 做成“已可执行 / 已可送审”的样子。
 
 ## 4. 何时拆版
 

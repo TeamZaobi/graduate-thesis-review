@@ -15,7 +15,11 @@ REQUIRED_REVIEW_FILES = [
     "图表专项核查.md",
 ]
 
-STRICT_REVIEW_FILES = [
+STRICT_GATE_REVIEW_FILES = [
+    "评审闭环与放行判断.md",
+]
+
+STRICT_DISPLAY_REVIEW_FILES = [
     "audience_language_contract.md",
     "display_projection_schema.md",
 ]
@@ -90,7 +94,20 @@ def main() -> int:
         if not path.exists():
             errors.append(f"Missing review contract file: {path}")
 
-    for name in STRICT_REVIEW_FILES:
+    for name in STRICT_GATE_REVIEW_FILES:
+        path = reviews_dir / name
+        if not path.exists():
+            message = (
+                f"Missing review release gate file: {path}"
+                if args.strict
+                else (
+                    f"Missing review release gate file: {path} "
+                    "(allowed in non-strict mode for legacy or lightweight projects)"
+                )
+            )
+            (errors if args.strict else warnings).append(message)
+
+    for name in STRICT_DISPLAY_REVIEW_FILES:
         path = reviews_dir / name
         if not path.exists():
             message = (
@@ -98,7 +115,7 @@ def main() -> int:
                 if args.strict
                 else (
                     f"Missing display projection contract file: {path} "
-                    "(allowed in non-strict mode for legacy or single-page projects)"
+                    "(allowed in non-strict mode for legacy or lightweight projects)"
                 )
             )
             (errors if args.strict else warnings).append(message)
@@ -144,7 +161,7 @@ def main() -> int:
             print(f"- WARN: {warning}")
         return 1
 
-    print(f"Workspace contract looks valid: {paper_dir}")
+    print(f"Workspace structure looks valid (review completion not implied): {paper_dir}")
     for warning in warnings:
         print(f"- WARN: {warning}")
     return 0

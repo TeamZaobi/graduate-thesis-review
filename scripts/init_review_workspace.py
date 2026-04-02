@@ -36,6 +36,24 @@ REVIEW_PLACEHOLDERS = {
 
 ## next_step
 """,
+    "评审闭环与放行判断.md": """# 评审闭环与放行判断
+
+## scope_frozen
+
+## deep_review_status
+
+## coverage_status
+
+## can_emit_problem_list
+
+## can_emit_execution_outputs
+
+## can_issue_readiness_verdict
+
+## can_enter_line_editing
+
+## blockers
+""",
     "audience_language_contract.md": """# audience_language_contract
 
 ## 页面
