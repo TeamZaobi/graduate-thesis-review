@@ -26,6 +26,8 @@ REQUIRED_THEMES = {
     "toolchain_evaluation": ["evaluate_review_toolchain.py", "准备时间", "接手", "覆盖率"],
     "citation_pipeline": ["extract_docx_citations.py", "citations.json", "claim_anchor", "参考文献"],
     "specialty_readiness": ["complete", "partial", "missing", "专业手册", "专项补充"],
+    "entry_mode_manifest": ["review_version_manifest.json", "entry_mode", "version_rebase", "historical_sources"],
+    "template_gate": ["tainted", "READY", "PARTIAL", "BLOCKED", "脚手架"],
 }
 
 

@@ -9,6 +9,7 @@
 常用的证据型中间文件包括：
 
 - `process_projection.md`
+- `review_version_manifest.json`
 - `评审闭环与放行判断.md`
 - `audience_language_contract.md`
 - `display_projection_schema.md`
@@ -25,6 +26,15 @@
 - `上下文隔离反思.md`
 
 这些文件不要求每篇论文全开，但至少要覆盖本轮最主要的风险源。空模板、只写标题的骨架文件，不算“已完成审查”。
+如果文件来自 `init_review_workspace.py` 的默认脚手架，先清掉 `tainted` 标记，再把它视为可交付对象。
+
+`review_version_manifest.json` 最少要能回答：
+
+- 这次进入工作区的 `entry_mode` 是什么
+- 当前唯一审阅对象和真源是什么
+- 历史版本、废弃锚点和 rebase 状态是什么
+- 当前 slow variables 和 dependents 是什么
+- 当前工作区 readiness 处于 `blocked / partial / ready` 哪一档
 
 如果论文高度依赖图、表、引文或多线程接手，再补对象层真源：
 
@@ -112,6 +122,7 @@
 如果 workflow 很复杂，或论文经历了多轮改稿、多代理协作、摘要结论反复漂移，再优先补以下治理型文件：
 
 - `process_projection.md`
+- `review_version_manifest.json`
 - `评审闭环与放行判断.md`
 - `audience_language_contract.md`
 - `display_projection_schema.md`

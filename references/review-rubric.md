@@ -47,6 +47,7 @@
 - 当前工作区里哪些只是模板文件，哪些已经填入了可回查证据
 
 如果这三件事没搞清，后面的“深审”很容易只是对着旧版本或空骨架做推演。
+同时检查 `reviews/review_version_manifest.json` 是否已写明当前 `entry_mode / truth_source / readiness`；如果它仍是 `tainted`，先清 manifest，再继续深审。
 
 ## 0.4 先判断结构化资产和接手面是否存在
 
@@ -235,6 +236,7 @@
 - 新改动有没有引入脏字符、错链、旧版本残留
 - 清单是否已经膨胀到需要拆出学生版和导师版
 - 多线程项目的接手信息是否已经被压进 `process_projection`，还是只能靠聊天回放恢复
+- `review_version_manifest.json` 是否已经同步更新 `entry_mode / rebase / dependents / readiness`
 
 ## 2. 多镜头提问模板
 

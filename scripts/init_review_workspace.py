@@ -20,7 +20,9 @@ CHANGELOG_TEXT = """# Changelog
 """
 
 REVIEW_PLACEHOLDERS = {
-    "process_projection.md": """# process_projection
+    "process_projection.md": """<!-- review-template: tainted -->
+<!-- clear this marker after recording current decisions, artifacts, and next gate -->
+# process_projection
 
 ## goal
 
@@ -36,7 +38,9 @@ REVIEW_PLACEHOLDERS = {
 
 ## next_step
 """,
-    "评审闭环与放行判断.md": """# 评审闭环与放行判断
+    "评审闭环与放行判断.md": """<!-- review-template: tainted -->
+<!-- clear this marker after writing an actual release gate judgement -->
+# 评审闭环与放行判断
 
 ## scope_frozen
 
@@ -54,7 +58,9 @@ REVIEW_PLACEHOLDERS = {
 
 ## blockers
 """,
-    "audience_language_contract.md": """# audience_language_contract
+    "audience_language_contract.md": """<!-- review-template: tainted -->
+<!-- clear this marker after freezing the audience language contract -->
+# audience_language_contract
 
 ## 页面
 
@@ -84,7 +90,9 @@ REVIEW_PLACEHOLDERS = {
 
 ## 不应承担的职责
 """,
-    "display_projection_schema.md": """# display_projection_schema
+    "display_projection_schema.md": """<!-- review-template: tainted -->
+<!-- clear this marker after freezing the display projection contract -->
+# display_projection_schema
 
 ## 页面
 
@@ -104,16 +112,46 @@ REVIEW_PLACEHOLDERS = {
 
 ## 上游依据文件
 """,
-    "审阅对象冻结说明.md": "# 审阅对象冻结说明\n",
-    "版本冻结与依赖回归台账.md": "# 版本冻结与依赖回归台账\n",
-    "关键数值与复算准入台账.md": "# 关键数值与复算准入台账\n",
-    "图表索引台账.md": "# 图表索引台账\n",
-    "图表专项核查.md": "# 图表专项核查\n",
-    "论文多智能体审查报告.md": "# 论文多智能体审查报告\n",
-    "最终可执行修改清单.md": "# 最终可执行修改清单\n",
-    "学生执行版修改清单.md": "# 学生执行版修改清单\n",
-    "导师汇报版摘要.md": "# 导师汇报版摘要\n",
-    "第三方建议复核意见.md": "# 第三方建议复核意见\n",
+    "审阅对象冻结说明.md": """<!-- review-template: tainted -->
+<!-- clear this marker after freezing the current review object and source anchors -->
+# 审阅对象冻结说明
+""",
+    "版本冻结与依赖回归台账.md": """<!-- review-template: tainted -->
+<!-- clear this marker after freezing current slow variables and dependents -->
+# 版本冻结与依赖回归台账
+""",
+    "关键数值与复算准入台账.md": """<!-- review-template: tainted -->
+<!-- clear this marker after writing recompute boundary and key numeric evidence -->
+# 关键数值与复算准入台账
+""",
+    "图表索引台账.md": """<!-- review-template: tainted -->
+<!-- clear this marker after indexing actual figures/tables/assets -->
+# 图表索引台账
+""",
+    "图表专项核查.md": """<!-- review-template: tainted -->
+<!-- clear this marker after recording actual figure/table findings -->
+# 图表专项核查
+""",
+    "论文多智能体审查报告.md": """<!-- review-template: tainted -->
+<!-- clear this marker after writing the actual review report -->
+# 论文多智能体审查报告
+""",
+    "最终可执行修改清单.md": """<!-- review-template: tainted -->
+<!-- clear this marker after the release gate allows execution outputs -->
+# 最终可执行修改清单
+""",
+    "学生执行版修改清单.md": """<!-- review-template: tainted -->
+<!-- clear this marker after the release gate allows student-facing outputs -->
+# 学生执行版修改清单
+""",
+    "导师汇报版摘要.md": """<!-- review-template: tainted -->
+<!-- clear this marker after the release gate allows advisor-facing outputs -->
+# 导师汇报版摘要
+""",
+    "第三方建议复核意见.md": """<!-- review-template: tainted -->
+<!-- clear this marker after third-party inputs are actually reviewed -->
+# 第三方建议复核意见
+""",
 }
 
 ENTRY_HTML_PLACEHOLDER = """<!doctype html>
@@ -124,6 +162,7 @@ ENTRY_HTML_PLACEHOLDER = """<!doctype html>
   <title>综合评审汇总</title>
 </head>
 <body>
+  <!-- display-template: tainted -->
   <h1>综合评审汇总</h1>
   <p>此页面为论文审查网页入口页占位文件。</p>
   <ul>
@@ -144,6 +183,7 @@ DISPLAY_PAGE_TEMPLATE = """<!doctype html>
   <title>{title}</title>
 </head>
 <body>
+  <!-- display-template: tainted -->
   <h1>{title}</h1>
   <p>此页面为论文审查多页展示层占位文件。</p>
   <p><a href="../综合评审汇总.html">返回入口页</a></p>
@@ -156,6 +196,44 @@ DISPLAY_PLACEHOLDERS = {
     "完整评审页.html": "完整评审页",
     "学生执行页.html": "学生执行页",
     "导师汇报页.html": "导师汇报页",
+}
+
+REVIEW_VERSION_MANIFEST = {
+    "schema_version": "1.0",
+    "template_status": "tainted",
+    "entry_mode": None,
+    "review_object": {
+        "path": None,
+        "label": None,
+        "last_modified": None,
+        "derived_text_source": None,
+        "derived_pdf_source": None,
+        "stage": None,
+    },
+    "truth_source": {
+        "current": [],
+        "historical_sources": [],
+        "deprecated_anchors": [],
+    },
+    "rebase": {
+        "enabled": False,
+        "from_version": None,
+        "to_version": None,
+        "status": None,
+        "impacted_artifacts": [],
+    },
+    "slow_variables": [],
+    "dependents": [],
+    "readiness": {
+        "workspace_gate": "blocked",
+        "reason": "template_initialized",
+    },
+    "handoff": {
+        "process_projection": "reviews/process_projection.md",
+        "decision_snapshot": [],
+        "produced_artifacts": [],
+        "next_gate": None,
+    },
 }
 
 
@@ -215,6 +293,8 @@ def main() -> int:
 
     for filename, content in REVIEW_PLACEHOLDERS.items():
         ensure_file(reviews_dir / filename, content)
+
+    ensure_json(reviews_dir / "review_version_manifest.json", REVIEW_VERSION_MANIFEST)
 
     ensure_json(
         objects_dir / "figures.json",

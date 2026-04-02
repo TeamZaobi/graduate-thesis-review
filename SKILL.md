@@ -52,6 +52,7 @@ description: 面向中文使用者操作的研究生毕业论文审查技能，�
 4. `display_projection`
 
 图、表、引文和资产索引优先进入 `truth_source` 的结构化对象层，不要只活在 Markdown 台账里。多线程、多代理或多轮迁移时，再补一个统一接手用的 `process_projection`。
+对版本切换、跨线程接手和输出回归，额外补一个机器可读锚点：`reviews/review_version_manifest.json`。它不替代 Markdown 台账，而是把 `entry_mode / review_object / truth_source / rebase / slow_variables / dependents / readiness / handoff` 固定成可检查结构。
 
 在审查方法、统计、图表、外部建议时，加载 [references/review-rubric.md](./references/review-rubric.md)。在起草 Markdown 报告、修改清单、HTML / 网页展示层、答辩口径和导师式精修材料时，加载 [references/output-templates.md](./references/output-templates.md)。只要任务进入网页 / HTML / display_projection 模式，再额外加载 [references/display-projection-gates.md](./references/display-projection-gates.md)。在规划目录、文件命名、交付物落点时，加载 [references/file-structure.md](./references/file-structure.md)。在判断工作区四层、对象层、默认读取顺序、图表/表格/引文结构化资产和多线程接手面时，加载 [references/review-operations-architecture.md](./references/review-operations-architecture.md)。当论文涉及统计图、结果图、脑图、连接图、表格重构或答辩 PPT 图表时，加载 [references/figure-table-standards.md](./references/figure-table-standards.md)。当需要区分干预研究、观察性研究、诊断研究、预测模型或系统综述时，加载 [references/clinical-study-types.md](./references/clinical-study-types.md)。当用户明确要求导师式逐段改稿、原子级修改建议或可直接替换的文字版本时，加载 [references/advisor-line-editing.md](./references/advisor-line-editing.md)。**每次审查任务开启，必须先加载 [references/specialty-router.md](./references/specialty-router.md) 识别专业领域，再加载 [references/specialty-manual-readiness-gate.md](./references/specialty-manual-readiness-gate.md) 判断当前专项手册是否 `complete / partial / missing`，然后再按路由结果决定加载哪些专项文件**：当论文属于康复医学、神经工程、脑机接口、神经影像或多模态设备研究时，加载 [references/rehab-neuroengineering.md](./references/rehab-neuroengineering.md)；当论文属于心血管内科/外科时，加载 [references/specialty-cardiology.md](./references/specialty-cardiology.md)；当论文属于中医或中西医结合时，加载 [references/specialty-tcm.md](./references/specialty-tcm.md)；当论文属于公共卫生、临床流行病学、真实世界队列、药物流行病学或目标试验模拟时，加载 [references/specialty-public-health-causal.md](./references/specialty-public-health-causal.md)；其他专业按 `specialty-router.md` 第6节流程处理。只有当需要新建或重写共享专项文件时，才加载 [references/specialty-manual-standard.md](./references/specialty-manual-standard.md)，并在完成后运行 `scripts/check_specialty_manual.py`。当论文属于临床干预、随机对照、康复工程交叉，或用户明确要求“更深的科学性/学术性检查”时，追加加载 [references/deep-review-gates.md](./references/deep-review-gates.md)。当任务需要综合 `Codex`、`Claude Code`、`AntiGrativity` 或其他代理的输出，或用户明确要求跨工具复核时，加载 [references/agent-tool-adaptation.md](./references/agent-tool-adaptation.md)。如果论文原文是英文，则用同样流程核查，只把术语、图题、结果层级和答辩口径切换为英文论文常见表达。
 
@@ -95,7 +96,7 @@ description: 面向中文使用者操作的研究生毕业论文审查技能，�
 
 ### 1.0 先建立运行底座与接手顺序
 
-在冻结版本之前，先把工作区的运行底座判清。固定做五件事：
+在冻结版本之前，先把工作区的运行底座判清。固定做六件事：
 
 1. 判断四层落点：哪些文件是 `truth_source`，哪些只是 `execution_object / status_projection / display_projection`
 2. 如果论文图表、表格、引文或资产较重，先建立对象层：
@@ -107,25 +108,45 @@ description: 面向中文使用者操作的研究生毕业论文审查技能，�
    - `objects/assets_manifest.json` 至少写明 `source_kind` 和 `asset_type`，区分“图件原始来源是什么”与“当前证据资产是怎么取得的”
    - 对表格密集项目，优先用 `scripts/extract_docx_tables.py` 生成 `assets/tables/docx_csv/` 和 `objects/tables.json`，不要继续手工在 Markdown 里抄表号和列名
    - 对引文密集项目，优先用 `scripts/extract_docx_citations.py` 生成 `objects/citations.json` 和 `reviews/citation_extraction_manifest.json`，先把引用锚点结构化，再做引文法证
-3. 如果本轮依赖多个线程、多个代理、多个终端工具或多轮交接，先补 `reviews/process_projection.md`，统一记录 `goal / actions / findings / decisions / artifacts / status / next_step`
-4. 按固定读取顺序接手：原始论文与底稿 → 对象层 → 冻结与版本台账 → workflow 与执行台账 → display_projection 与摘要
-5. 对迁移过的项目或多轮改动项目，尽早跑一次 `scripts/check_review_workspace.py`、`scripts/scan_stale_paths.py`，必要时再跑 `scripts/evaluate_review_toolchain.py` 做轻量 readiness 评估，不要等到交付前才发现结构漂移
+3. 先建立或刷新 `reviews/review_version_manifest.json`，把本轮 `entry_mode / review_object / truth_source / rebase / slow_variables / dependents / readiness / handoff` 固定下来
+4. 如果本轮依赖多个线程、多个代理、多个终端工具或多轮交接，先补 `reviews/process_projection.md`，统一记录 `goal / actions / findings / decisions / artifacts / status / next_step`
+5. 按固定读取顺序接手：原始论文与底稿 → 对象层 → `review_version_manifest.json` → 冻结与版本台账 → workflow 与执行台账 → display_projection 与摘要
+6. 对迁移过的项目或多轮改动项目，尽早跑一次 `scripts/check_review_workspace.py`、`scripts/scan_stale_paths.py`，必要时再跑 `scripts/evaluate_review_toolchain.py` 做轻量 readiness 评估，不要等到交付前才发现结构漂移
 
 补充说明：
 
-- `scripts/check_review_workspace.py` 默认以兼容模式运行，允许遗留项目或轻量单页项目把多页 `display/` 与展示层合同文件视为 warning
+- `scripts/check_review_workspace.py` 默认返回三态：`READY / PARTIAL / BLOCKED`
+- `BLOCKED` 代表缺少必需合同文件、模板污点未清、仍是占位页或关键 JSON 不可用
+- `PARTIAL` 代表结构可用但仍有未收口项，例如对象层未实填、展示层合同未补齐或提示词仍未清除
+- `READY` 才表示当前工作区已经具备继续放行到执行面或展示面的最小条件
+- `scripts/check_review_workspace.py` 默认以兼容模式运行，允许遗留项目或轻量单页项目把多页 `display/` 与展示层合同文件视为 warning，但不会忽略核心版本 manifest 和模板污点
 - 只有当项目明确进入标准多页 `display_projection` 模式时，才使用 `scripts/check_review_workspace.py --strict`
 
 如果对象层或接手面缺失，不代表不能审；但要先把本轮边界降清楚，避免后续反复手工补路径、补图号和补线程摘要。
 
+### 1.0.1 先判这次到底是哪种进入方式
+
+不要把所有任务都当成“从零开始审新论文”。在正式冻结版本前，先给 `review_version_manifest.json` 写明 `entry_mode`。
+
+当前默认只用五种：
+
+1. `initial_review`：第一次为该论文建立工作区和版本基线
+2. `version_rebase`：论文换了新版本，需要把旧锚点、旧数值和旧判断 rebase 到新真源
+3. `evidence_upgrade`：原有结论边界不变，但新增了数据、脚本、表格、引文或图证
+4. `display_regression`：真源未换，但 HTML、摘要、清单或展示层需要回归
+5. `handoff_resume`：主要任务是跨线程、跨代理或跨工具接手恢复
+
+如果 `entry_mode` 没判清，就不要直接下深审判断，也不要跳到综合报告或执行清单。
+
 ### 1.1 先冻结审阅对象与版本基线
 
-开始下结论前，先明确“现在到底审哪一个文件、哪一个版本、哪些章节处于什么状态”。固定做四件事：
+开始下结论前，先明确“现在到底审哪一个文件、哪一个版本、哪些章节处于什么状态”。固定做五件事：
 
 1. 记录唯一审阅对象：文件路径、文件名、最近修改时间，以及可用时的页数或行号底稿。
 2. 对照学生、导师或其他代理给出的进度描述，逐项标记为 `已存在但待重写`、`确实缺失`、`已完成但需回归`、`不可判定`。
 3. 把原论文、抽取文本、页图/裁图、补充材料和当前工作区中间产物分成“原始证据”和“派生产物”。
-4. 先写一份 `审阅对象冻结说明`，再进入深审、逐条改稿或综合结论阶段。
+4. 同步把这些判断回写到 `reviews/review_version_manifest.json` 的 `review_object / truth_source / historical_sources / readiness`
+5. 先写一份 `审阅对象冻结说明`，再进入深审、逐条改稿或综合结论阶段。
 
 没有版本基线时，不要直接下“这一章还没写/已经完成”的结论；尤其不要把学生自述、旧截图或旧 HTML 当成当前版本事实。
 
@@ -235,6 +256,7 @@ description: 面向中文使用者操作的研究生毕业论文审查技能，�
 4. 没有真源、真源互相冲突、或只来自二手转述的数字，不得写入最终结论或“可直接替换文本”。
 
 复杂项目默认补一份 `版本冻结与依赖回归台账.md`；没有这一步，就容易把旧版结果继续带进摘要、结论和答辩口径。
+如果已经进入 `version_rebase`，再把 `from_version / to_version / deprecated_anchors / impacted_artifacts` 同步回写到 `review_version_manifest.json`，不要只在 Markdown 里口头说明。
 
 ### 1.5 先判断是不是跨代理协作场景
 
@@ -385,6 +407,7 @@ description: 面向中文使用者操作的研究生毕业论文审查技能，�
 先产出证据型中间文件，再产出总结型交付物。对复杂或高风险论文，至少先完成与本项目相关的几类台账：
 
 - `process_projection`
+- `review_version_manifest.json`
 - `审阅对象冻结说明`
 - `版本冻结与依赖回归台账`
 - `关键数值与复算准入台账`
@@ -395,6 +418,7 @@ description: 面向中文使用者操作的研究生毕业论文审查技能，�
 - `文献对标与引文法证`
 
 脚手架或空模板不算“已完成审查”；只有填入了具体证据、定位和判断的文件，才算有效产出。
+凡是由 `scripts/init_review_workspace.py` 新建的 Markdown 或 HTML 模板，默认都带 `tainted` 标记；在写入当前版本证据和判断前，不得视为已完成。
 
 如果论文属于图表密集型、表格密集型或多线程接手型项目，优先把这几类结构化对象补到 `truth_source`：
 
@@ -581,7 +605,8 @@ HTML 不是把 Markdown 报告压缩一遍。普通项目可以偏概览；但�
 
 - 目录和命名规则见 [references/file-structure.md](./references/file-structure.md)
 - 可以直接运行 `scripts/init_review_workspace.py` 初始化标准结构
-- 工作区建好后，优先跑 `scripts/check_review_workspace.py` 检查对象层、交付层和接手面是否齐全；如果本轮明确采用标准多页 `display_projection`，再补跑 `scripts/check_review_workspace.py --strict`
+- 工作区建好后，优先先清理 `review_version_manifest.json` 和首批核心模板的 `tainted` 标记，再跑 `scripts/check_review_workspace.py`
+- `scripts/check_review_workspace.py` 输出 `READY / PARTIAL / BLOCKED`；如果本轮明确采用标准多页 `display_projection`，再补跑 `scripts/check_review_workspace.py --strict`
 - 如果原文是 DOCX，初始化后优先补三条结构化流水线，并按来源分流：`docx_media` 图件用 `scripts/extract_docx_media.py` 抽出 `word/media`；`shape_rendered` 图件先登记到 `objects/figures.json` 与 `objects/assets_manifest.json`，必要时再补页图、重导出页图或渲染链路审计；`scripts/extract_docx_tables.py --paper-dir <paperXX>` 抽表；`scripts/extract_docx_citations.py --paper-dir <paperXX>` 抽引文锚点
 - 脚手架只创建目录和占位文件，不改动用户原有论文文件
 

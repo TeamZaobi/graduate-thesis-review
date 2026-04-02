@@ -39,6 +39,13 @@ def load_items_count(path: Path) -> int | None:
     return len(items) if isinstance(items, list) else None
 
 
+def parse_workspace_status(output: str) -> str | None:
+    for line in output.splitlines():
+        if line.startswith("STATUS: "):
+            return line.split("STATUS: ", 1)[1].strip()
+    return None
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(
         description="Evaluate thesis-review toolchain readiness on a paper workspace."
@@ -68,6 +75,7 @@ def main() -> int:
         "paper_dir": str(paper_dir),
         "docx_path": str(docx_path) if docx_path else None,
         "workspace_contract_ok": None,
+        "workspace_contract_status": None,
         "docx_lines_present": any(reviews_dir.glob("*docx_lines.txt")),
         "process_projection_present": (reviews_dir / "process_projection.md").exists(),
         "objects": {
@@ -96,8 +104,11 @@ def main() -> int:
         ]
     )
     report["timings_ms"]["check_review_workspace"] = round((time.perf_counter() - started) * 1000, 2)
+    contract_output = contract.stdout.strip() or contract.stderr.strip()
+    workspace_status = parse_workspace_status(contract_output)
     report["workspace_contract_ok"] = contract.returncode == 0
-    report["workspace_contract_output"] = contract.stdout.strip() or contract.stderr.strip()
+    report["workspace_contract_status"] = workspace_status
+    report["workspace_contract_output"] = contract_output
 
     if docx_path and docx_path.exists():
         with tempfile.TemporaryDirectory() as tmpdir:

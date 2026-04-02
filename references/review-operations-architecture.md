@@ -38,6 +38,7 @@
   - 原始数据、分析导出和复算结果
 - `execution_object`
   - 各类台账、审计表、改稿卡片
+  - `review_version_manifest.json`
   - `评审闭环与放行判断.md`
 - `status_projection`
   - `审阅工作流.md`
@@ -141,15 +142,29 @@ Markdown 台账继续保留，但默认只承担执行面，不再兼任结构�
 
 它是过程投影，不是真源；作用只是降低接手和恢复成本。不要把 `next_step` 直接当作“已经放行到下一阶段”的依据。
 
+另补一个机器可读锚点：`reviews/review_version_manifest.json`。它至少固定：
+
+- `entry_mode`
+- `review_object`
+- `truth_source`
+- `rebase`
+- `slow_variables`
+- `dependents`
+- `readiness`
+- `handoff`
+
+默认把它看成版本治理的结构化索引，不代替 Markdown 台账中的判断正文。
+
 ## 5. 默认读取顺序
 
 接手时优先按这个顺序：
 
 1. 原始论文和当前底稿
 2. 对象层
-3. 审阅对象冻结说明
-4. 版本冻结与依赖回归台账
-5. `评审闭环与放行判断.md`
+3. `review_version_manifest.json`
+4. 审阅对象冻结说明
+5. 版本冻结与依赖回归台账
+6. `评审闭环与放行判断.md`
 6. 审阅工作流和执行状态页
 7. 证据型台账
 8. HTML、导师摘要和其他展示页
@@ -169,7 +184,7 @@ Markdown 台账继续保留，但默认只承担执行面，不再兼任结构�
 4. `scripts/extract_docx_citations.py`
    - 从 `DOCX` 抽取正文引用锚点与参考文献条目映射，并回写 `objects/citations.json`
 5. `scripts/check_review_workspace.py`
-   - 检查工作区合同和对象层
+   - 检查工作区合同、模板污点和 `READY / PARTIAL / BLOCKED` gate
 6. `scripts/scan_stale_paths.py`
    - 扫旧绝对路径和迁移漂移
 7. `scripts/evaluate_review_toolchain.py`

@@ -126,6 +126,18 @@
       "prompt": "用户给来一篇肿瘤科真实世界论文，主轴是免疫治疗联合化疗的目标试验模拟，现有 `references/` 里没有肿瘤专项。请用 $graduate-thesis-review 开始处理。",
       "expected_output": "应先把专项状态判为 `missing`，用通用框架快筛，再形成 `专业手册完备性判断` 和论文级 `专项补充`；只有在补充内容具备跨论文复用性时，才按高标准新建共享专项文件。",
       "files": []
+    },
+    {
+      "id": 22,
+      "prompt": "同一篇论文昨天刚完成首轮审阅，今天用户又上传了 6.2 版 DOCX。当前工作区还保留 6.1 的底稿、旧行号和旧 HTML。请用 $graduate-thesis-review 继续处理。",
+      "expected_output": "应先把本轮判成 `version_rebase`，更新 `review_version_manifest.json` 的 `entry_mode / truth_source / historical_sources / rebase / impacted_artifacts`，再处理旧锚点和旧摘要回归，而不是直接沿用 6.1 行号继续深审。",
+      "files": []
+    },
+    {
+      "id": 23,
+      "prompt": "用户刚用初始化脚本搭了新论文工作区，`reviews/` 下已经有很多文件和 HTML 页面，但都还是默认占位。用户问现在能不能直接开始写综合报告和学生执行页。请用 $graduate-thesis-review 处理。",
+      "expected_output": "应先识别这些文件仍带模板污点，要求更新 `review_version_manifest.json`、清掉 `tainted` 标记，并用 `check_review_workspace.py` 的 `READY / PARTIAL / BLOCKED` gate 判当前状态，而不是把脚手架当成已完成工作区。",
+      "files": []
     }
   ]
 }

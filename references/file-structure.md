@@ -24,6 +24,7 @@ project-root/
         assets_manifest.json
       reviews/
         process_projection.md
+        review_version_manifest.json
         评审闭环与放行判断.md
         audience_language_contract.md
         display_projection_schema.md
@@ -87,6 +88,7 @@ project-root/
 对复杂或高风险项目，证据型中间文件也建议固定命名：
 
 - `process_projection.md`
+- `review_version_manifest.json`
 - `评审闭环与放行判断.md`
 - `audience_language_contract.md`
 - `display_projection_schema.md`
@@ -135,6 +137,34 @@ project-root/
 
 同一类文件要有唯一落点，不要在 workflow 里写模糊路径如 `reviews/...`。应始终写成精确文件名，必要时在 README 里注明哪个文件是该类信息的唯一真源。
 
+### `review_version_manifest.json`
+
+这是版本治理的机器可读锚点，放在 `reviews/` 下，与 Markdown 台账并列维护。
+
+最少字段：
+
+- `template_status`
+- `entry_mode`
+- `review_object`
+- `truth_source`
+- `rebase`
+- `slow_variables`
+- `dependents`
+- `readiness`
+- `handoff`
+
+用途：
+
+- 让 `initial_review / version_rebase / evidence_upgrade / display_regression / handoff_resume` 五种入口模式有统一落点
+- 把 `current source / historical sources / deprecated anchors / impacted artifacts` 固定为可检查结构
+- 给 `check_review_workspace.py`、`evaluate_review_toolchain.py` 和多线程接手提供稳定锚点
+
+默认规则：
+
+- 新工作区初始化后，`template_status = tainted`
+- 只有在写入当前版本事实、入口模式和当前 readiness 后，才允许清掉 `tainted`
+- 它不代替 `审阅对象冻结说明.md` 和 `版本冻结与依赖回归台账.md`；前者偏机器读写，后两者偏人类判断与证据叙述
+
 ## 3. 结构分工
 
 建议把论文审阅工作区按四层理解，而不是只按目录看：
@@ -164,6 +194,7 @@ project-root/
 - 外部评审原文或复核意见也放这里
 - 证据型中间台账也默认放这里，除非项目已经约定单独的 `reviews/evidence/`
 - `process_projection.md` 也放这里，用作多线程、多代理接手面；它是过程投影，不是真源
+- `review_version_manifest.json` 也放这里，用作版本入口、rebase 和 readiness 的机器锚点；它不是最终判断正文
 - `评审闭环与放行判断.md` 也放这里，用作进入执行清单、导师摘要、网页决策页和逐条改稿前的最小放行锚点
 - `audience_language_contract.md` 放这里，用作网页展示层的受众语言合同
 - `display_projection_schema.md` 放这里，用作网页展示层的内容扩增合同
@@ -257,12 +288,14 @@ project-root/
 4. `reviews/` 中是否已有完整版、学生版、导师版
 5. `display/` 中是否已有问题清单页、完整评审页、学生执行页、导师汇报页
 6. `reviews/` 中是否已有 `audience_language_contract.md` 与 `display_projection_schema.md`
-7. 新建的台账文件是否已有实填内容，而不是只停留在空骨架
-8. 结果真源、版本冻结和图表核查文件是否各自只有一个权威落点
-9. `objects/` 是否存在，且图表密集项目不再只依赖手写 Markdown 路径
-10. 迁移后是否跑过旧绝对路径扫描，而不是等到 HTML 或报告里才暴露路径漂移
+7. `reviews/review_version_manifest.json` 是否已清除 `tainted`，并写明当前 `entry_mode`
+8. 新建的台账文件是否已有实填内容，而不是只停留在空骨架
+9. 结果真源、版本冻结和图表核查文件是否各自只有一个权威落点
+10. `objects/` 是否存在，且图表密集项目不再只依赖手写 Markdown 路径
+11. 迁移后是否跑过旧绝对路径扫描，而不是等到 HTML 或报告里才暴露路径漂移
 
 补充说明：
 
-- `scripts/check_review_workspace.py` 默认按兼容模式运行，缺少 `display/` 子页或展示层合同文件时会给出 warning，适合遗留项目、轻量项目或单页项目
+- `scripts/check_review_workspace.py` 默认输出 `READY / PARTIAL / BLOCKED`
+- 兼容模式下，缺少 `display/` 子页或展示层合同文件仍可能只是 warning，但 `review_version_manifest.json` 缺失、模板污点未清、占位 HTML 未清或核心台账仍为空会直接落到 `BLOCKED`
 - 只有在明确采用标准多页 `display_projection` 时，才建议使用 `scripts/check_review_workspace.py --strict`

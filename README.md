@@ -7,6 +7,7 @@
 - **效率与效能优先**：所有结构和工具改动都以“减少人工成本、提升证据绑定强度和改稿可执行性”为判断标准
 - **分级问题识别**：P0/P1/P2 关键问题分级
 - **四层运行底座**：把工作区稳定拆成 `truth_source / execution_object / status_projection / display_projection`
+- **机器可读版本锚点**：用 `reviews/review_version_manifest.json` 固定 `entry_mode / truth_source / rebase / readiness / handoff`
 - **对象层治理**：把图、表、引文和资产路径沉淀到 `objects/*.json`，不只放在 Markdown 台账里
 - **多线程接手面**：用 `process_projection` 压缩多代理、多会话过程，降低恢复成本
 - **专业领域路由**：自动识别论文所属小学科，加载对应专项模块，屏蔽不相关检查
@@ -59,7 +60,7 @@ graduate-thesis-review/
     └── self-audit.md                 # 交付物自审清单
 └── scripts/
     ├── init_review_workspace.py      # 初始化标准工作区与对象层
-    ├── check_review_workspace.py     # 检查工作区结构合同
+    ├── check_review_workspace.py     # 检查工作区结构与 READY/PARTIAL/BLOCKED gate
     ├── extract_docx_media.py         # 抽取 DOCX word/media 图像资产，并标注 docx_media 来源类型
     ├── extract_docx_tables.py        # 抽取 DOCX 表格到 CSV 与 objects/tables.json
     ├── extract_docx_citations.py     # 抽取 DOCX 数字引文到 objects/citations.json
@@ -74,6 +75,7 @@ graduate-thesis-review/
 ```
 1.   从原文建上下文（不先信外审）
 1.0  建立运行底座与接手顺序
+1.0.1 先判 entry_mode（initial_review / version_rebase / evidence_upgrade / display_regression / handoff_resume）
 1.1  冻结审阅对象与版本基线
 1.2  确认专业领域 → 先过专项手册完备性 gate → 再决定直接深审还是论文级补充
 1.3  判断是否进入导师式逐条改稿模式
@@ -115,7 +117,20 @@ graduate-thesis-review/
 
 如果 workflow 跨线程、跨工具或跨代理，再补：
 
+- `reviews/review_version_manifest.json`
 - `reviews/process_projection.md`
+
+`review_version_manifest.json` 最少固定以下字段：
+
+- `template_status`
+- `entry_mode`
+- `review_object`
+- `truth_source`
+- `rebase`
+- `slow_variables`
+- `dependents`
+- `readiness`
+- `handoff`
 
 如果论文高度依赖 Word 原生表格，建议尽早补：
 
@@ -196,7 +211,7 @@ python /Users/jixiaokang/.agents/skills/graduate-thesis-review/scripts/validate_
 - `evals.json` 是否可解析
 - `id / prompt / expected_output / files` 结构是否完整
 - `id` 是否连续且唯一
-- 是否覆盖 `审阅对象冻结 / 模板假完成 / 真源与版本漂移 / 非复算审查 / 主文补充附录闭环 / 合规与引文法证 / 上下文隔离反思 / 对象层 / process_projection / 路径漂移 / 表格抽取流水线 / 工具链轻量评估` 等关键回归主题
+- 是否覆盖 `审阅对象冻结 / 模板假完成 / 真源与版本漂移 / 非复算审查 / 主文补充附录闭环 / 合规与引文法证 / 上下文隔离反思 / 对象层 / process_projection / review_version_manifest / 路径漂移 / 表格抽取流水线 / 工具链轻量评估 / workspace gate` 等关键回归主题
 - 文档抽取脚本是否仍能覆盖 `图 / 表 / 引文` 三条对象层流水线
 
 如需校验共享专项手册结构，额外运行：
@@ -218,3 +233,9 @@ python /Users/jixiaokang/.agents/skills/graduate-thesis-review/scripts/extract_d
 python /Users/jixiaokang/.agents/skills/graduate-thesis-review/scripts/scan_stale_paths.py --root /path/to/project-root --match-root /old/absolute/root
 python /Users/jixiaokang/.agents/skills/graduate-thesis-review/scripts/evaluate_review_toolchain.py --paper-dir /path/to/project-root/papers/paper01 --docx /path/to/project-root/papers/paper01/thesis.docx
 ```
+
+其中 `check_review_workspace.py` 默认输出三态：
+
+- `READY`：当前工作区已通过最小合同检查
+- `PARTIAL`：结构可用，但仍有未收口项
+- `BLOCKED`：仍缺核心文件、模板污点未清或关键页面 / JSON 仍是占位状态
