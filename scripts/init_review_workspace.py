@@ -74,6 +74,14 @@ REVIEW_PLACEHOLDERS = {
 
 ## 首层应保留的判断
 
+## 页面阅读规则
+
+## 适合写成 tips 的内容
+
+## tips 不应承担的内容
+
+## drilldown 标题与展开方式
+
 ## 不应承担的职责
 """,
     "display_projection_schema.md": """# display_projection_schema
@@ -83,6 +91,12 @@ REVIEW_PLACEHOLDERS = {
 ## 页面目标
 
 ## 目标读者要做出的判断
+
+## 首层必须承载的判断
+
+## tips 需要承载的阅读规则
+
+## drilldown 需要承载的深层依据、例外或阻塞项
 
 ## 必须出现的内容块
 
