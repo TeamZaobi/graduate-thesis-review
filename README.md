@@ -1,21 +1,21 @@
 # Graduate Thesis Review Skill
 
-面向中文使用者的研究生毕业论文审查 Skill。执行“严格、答辩导向、可落地”的审查流程，支持中文和英文论文，并可在需要时进入导师式原子改稿模式。
+面向中文使用者的研究生毕业论文审查 Skill。执行“严格、答辩导向、可落地”的审查流程，支持中文和英文论文，并可在需要时进入导师式逐条改稿模式。
 
 ## 核心能力
 
 - **效率与效能优先**：所有结构和工具改动都以“减少人工成本、提升证据绑定强度和改稿可执行性”为判断标准
-- **分级问题识别**：P0（送审硬伤）/ P1（答辩追问）/ P2（规范加固）
+- **分级问题识别**：P0/P1/P2 关键问题分级
 - **四层运行底座**：把工作区稳定拆成 `truth_source / execution_object / status_projection / display_projection`
 - **对象层治理**：把图、表、引文和资产路径沉淀到 `objects/*.json`，不只放在 Markdown 台账里
 - **多线程接手面**：用 `process_projection` 压缩多代理、多会话过程，降低恢复成本
 - **专业领域路由**：自动识别论文所属小学科，加载对应专项模块，屏蔽不相关检查
 - **专项手册完备性 gate**：先判定当前专项是 `complete / partial / missing`，再决定是否直接深审
-- **多镜头审查**：流行病学、统计学、学术写作、医学工程、康复科学、神经科学、伦理合规
+- **多角度复核**：流行病学、统计学、学术写作、医学工程、康复科学、神经科学、伦理合规
 - **观察性因果推断专项**：目标试验模拟、`time zero`、新使用者设计、权重、竞争风险、交互作用
 - **强制深审模式**：干预研究、随机对照、设备/影像密集型论文自动升级为专家 agent 分工审查
 - **外部建议复核**：对导师、外审、AI 建议逐条判断 Adopt / Adopt with rewrite / Downgrade / Reject
-- **导师式原子改稿**：输出逐段 / 逐句 / 可直接替换的证据绑定修改建议
+- **导师式逐条改稿**：输出逐段 / 逐句 / 可直接替换的证据绑定修改建议
 - **引文与章节外科**：核查论断-引文匹配，并修复章节功能错位
 - **答辩口径生成**：高频追问的安全应答框架
 - **证据-结论匹配度评估**：工作量充足性的方法论判定，而非毕业资格审查
@@ -35,12 +35,12 @@ graduate-thesis-review/
 │   ├── citation-integrity-agent.md   # 引文完整性专家
 │   ├── chapter-logic-surgeon.md      # 章节逻辑外科专家
 │   ├── evidence-anchored-rewrite-agent.md # 证据绑定改写专家
-│   ├── advisor-line-edit-agent.md    # 导师式原子改稿专家
+│   ├── advisor-line-edit-agent.md    # 导师式逐条改稿专家
 │   ├── defense-risk-agent.md         # 答辩风险与口径专家
 │   └── workload-assessment-agent.md  # 证据-结论匹配度评估专家
 ├── references/
     ├── review-operations-architecture.md # 四层运行底座、对象层、接手顺序、工具链
-    ├── advisor-line-editing.md       # 导师式原子改稿流程
+    ├── advisor-line-editing.md       # 导师式逐条改稿流程
     ├── specialty-router.md           # 专业领域识别与路由（每次必加载）
     ├── specialty-manual-readiness-gate.md # 专项手册完备性判定与补建流程
     ├── specialty-manual-standard.md  # 共享专项手册的高标准规范
@@ -50,7 +50,7 @@ graduate-thesis-review/
     ├── rehab-neuroengineering.md     # 康复医学+神经工程专项
     ├── clinical-study-types.md       # 研究类型分流（RCT/观察/诊断/预测/Meta）
     ├── deep-review-gates.md          # 强制深审闸门与五项必交付证据
-    ├── review-rubric.md              # 多镜头审查评分框架
+    ├── review-rubric.md              # 多角度复核评分框架
     ├── workload-evidence-criteria.md # 证据-结论匹配度判定标准
     ├── figure-table-standards.md     # 图表规范
     ├── output-templates.md           # 交付物模板
@@ -76,13 +76,13 @@ graduate-thesis-review/
 1.0  建立运行底座与接手顺序
 1.1  冻结审阅对象与版本基线
 1.2  确认专业领域 → 先过专项手册完备性 gate → 再决定直接深审还是论文级补充
-1.3  判断是否进入导师式原子改稿模式
+1.3  判断是否进入导师式逐条改稿模式
 1.4  冻结核心结果真源与依赖关系
 1.5  判断是否跨代理协作场景
 1.6  判断是否具备复算条件
 1.7  对复杂 workflow 追加上下文隔离反思
 1.8  判断是否进入强制深审模式
-2.   多镜头审查 → 按研究类型升级为专家 agent 分工
+2.   多角度复核 → 按研究类型升级为专家 agent 分工
 2.5  判断是否需要工作量证据评估
 3.   分级（P0/P1/P2/Strategy/Upgrade）
 4.   严格复核外部建议
@@ -97,7 +97,7 @@ graduate-thesis-review/
 对复杂论文项目，默认把工作区看成四层：
 
 - `truth_source`：原论文、带行号底稿、结构化对象层、原始数据和可追溯结果
-- `execution_object`：图表台账、版本冻结台账、合规审计表、原子级修改建议
+- `execution_object`：图表台账、版本冻结台账、合规审计表、逐条修改建议
 - `status_projection`：执行状态总览、workflow、执行清单、学生版
 - `display_projection`：HTML、导师摘要和展示页
 
@@ -158,7 +158,7 @@ graduate-thesis-review/
 用这个 Skill 审查这篇论文，给出 P0/P1/P2 清单。
 帮我综合外审、导师和 AI 的意见，判断哪些该改。
 把这篇论文做成答辩导向的审查报告和 HTML 汇总。
-用导师视角给这篇论文做逐段 / 逐句 / 原子级修改建议。
+用导师视角给这篇论文做逐段 / 逐句 / 逐条修改建议。
 不要只告诉我哪里错，直接给我能替换回正文的安全改写。
 复核这些修改建议有没有过度解读或造事实风险。
 审查这篇英文 thesis，按中文习惯给我输出修改优先级和答辩建议。

@@ -56,7 +56,7 @@
 
 - `status` 和 `display` 只能 summarize/display，不改写真源
 - 同一慢变量优先只有一个明确真源
-- 是否允许进入执行清单、导师判断、送审 / 答辩 readiness 或原子改稿，只能由 `评审闭环与放行判断.md` 决定，不要让 `status` 或 `display` 反向充当阶段推进器
+- 是否允许进入执行清单、导师判断、送审 / 答辩 readiness 或逐条改稿，只能由 `评审闭环与放行判断.md` 决定，不要让 `status` 或 `display` 反向充当阶段推进器
 - 学生 / 导师 Markdown 默认是主 `status_projection`；对应 HTML 子页是它们的 `display_projection`，不要让两套投影各写各的
 
 ## 3. 对象层最小集合

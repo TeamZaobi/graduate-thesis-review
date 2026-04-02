@@ -125,7 +125,7 @@ description: 面向中文使用者操作的研究生毕业论文审查技能，�
 1. 记录唯一审阅对象：文件路径、文件名、最近修改时间，以及可用时的页数或行号底稿。
 2. 对照学生、导师或其他代理给出的进度描述，逐项标记为 `已存在但待重写`、`确实缺失`、`已完成但需回归`、`不可判定`。
 3. 把原论文、抽取文本、页图/裁图、补充材料和当前工作区中间产物分成“原始证据”和“派生产物”。
-4. 先写一份 `审阅对象冻结说明`，再进入深审、原子改稿或综合结论阶段。
+4. 先写一份 `审阅对象冻结说明`，再进入深审、逐条改稿或综合结论阶段。
 
 没有版本基线时，不要直接下“这一章还没写/已经完成”的结论；尤其不要把学生自述、旧截图或旧 HTML 当成当前版本事实。
 
@@ -193,11 +193,7 @@ description: 面向中文使用者操作的研究生毕业论文审查技能，�
 
 如果某条闭环暂时没有对应的专门 agent，不等于这条闭环不存在；此时由命中的共享专项文件或 `专业专项补充说明` 暂代该专家闭环，但仍要单独写出判断，不要让统计或写作 agent 代替临床闭环发言。
 
-默认专家组合：
-
-- 观察性 / 公卫 / 真实世界主轴：`causal-inference-observational-agent` + `stats-endpoint-agent` + 对应专项文件或论文级专项补充
-- 干预 / 随机 / 疗效比较主轴：`epi-rct-agent` + `stats-endpoint-agent` + 对应专项文件或论文级专项补充
-- 设备 / 信号 / 神经工程主轴：`neuroengineering-agent` + `stats-endpoint-agent` + 对应专项文件或论文级专项补充
+默认专家启动组合、串并行选择和无对应专病 agent 时的暂代规则，统一以 [references/deep-review-gates.md](./references/deep-review-gates.md) 第2节为准，这里不再双写。
 
 没有先写清 `domain_stack / primary_loop / required_expert_checks`，就不要宣布“已启动多专家审计”。
 
@@ -209,7 +205,7 @@ description: 面向中文使用者操作的研究生毕业论文审查技能，�
 - 用户不只要问题清单，还要能直接回填到正文的改写建议
 - `reviews/评审闭环与放行判断.md` 已明确 `can_enter_line_editing = yes`
 
-以下情况只提高原子改稿的优先级，不单独构成进入条件：
+以下情况只提高逐条改稿的优先级，不单独构成进入条件：
 
 - 论文已经进入送审、盲审、预答辩或正式答辩前精修阶段
 
@@ -333,7 +329,7 @@ description: 面向中文使用者操作的研究生毕业论文审查技能，�
 - [agents/citation-integrity-agent.md](./agents/citation-integrity-agent.md)：论断-引文匹配、一手来源与错引核查
 - [agents/chapter-logic-surgeon.md](./agents/chapter-logic-surgeon.md)：仅用于重度章节错位、迁移和重构
 - [agents/evidence-anchored-rewrite-agent.md](./agents/evidence-anchored-rewrite-agent.md)：改写安全闸门，负责证据绑定、强度降级和禁改提醒
-- [agents/advisor-line-edit-agent.md](./agents/advisor-line-edit-agent.md)：最终导师式原子级改写卡与可直接替换文本
+- [agents/advisor-line-edit-agent.md](./agents/advisor-line-edit-agent.md)：最终导师式逐条改写卡与可直接替换文本
 - [agents/defense-risk-agent.md](./agents/defense-risk-agent.md)：答辩高风险追问、可守口径、禁区表述
 
 如果时间或环境有限，至少保留最贴近研究类型的前四个；但只要题目、结局和图像证据高度耦合，就不允许跳过 `stats-endpoint-agent` 和 `figure-forensics-agent`；只要用户明确要求导师式精修，就不允许跳过 `advisor-line-edit-agent` 和 `evidence-anchored-rewrite-agent`。
@@ -420,7 +416,7 @@ description: 面向中文使用者操作的研究生毕业论文审查技能，�
 - `can_enter_line_editing`
 - `blockers`
 
-没有这份判断，或其中关键字段仍是 `no / pending / blocked` 时，不要默认产出执行清单、学生页、导师页、送审判断或全文原子改稿。
+没有这份判断，或其中关键字段仍是 `no / pending / blocked` 时，不要默认产出执行清单、学生页、导师页、送审判断或全文逐条改稿。
 
 大多数完整审查，先按“评审进行中”与“评审闭环后”两段产出，而不是一上来把所有执行面都做完：
 
@@ -459,9 +455,9 @@ description: 面向中文使用者操作的研究生毕业论文审查技能，�
 - 第三方建议复核意见
 - 下一轮研究升级路线
 
-进入导师式原子改稿模式时，再补 2-4 样精修材料：
+进入导师式逐条改稿模式时，再补 2-4 样精修材料：
 
-- 原子级修改建议卡 / 导师式逐段改稿
+- 逐条修改建议卡 / 导师式逐段改稿
 - 证据绑定改写表
 - 论断-引文核查表
 - 章节功能重构建议
@@ -591,7 +587,7 @@ HTML 不是把 Markdown 报告压缩一遍。普通项目可以偏概览；但�
 - 新接手者恢复现场的时间有没有下降
 - 图表、表格和关键结论的覆盖率有没有上升
 - 旧值、错链、旧路径和版本漂移的发现率有没有上升
-- 原子级改稿建议的可采纳性有没有提升
+- 逐条改稿建议的可采纳性有没有提升
 
 如果只是增加了文件数量，却没有减少人工步骤或提高证据绑定强度，就不算有效升级。
 
