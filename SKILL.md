@@ -86,7 +86,7 @@ description: 面向中文使用者操作的研究生毕业论文审查技能，�
 - 论文原文可能是中文或英文，但审查输出默认优先服务中文使用者的决策和执行习惯。
 - 如果任务混入了其他代理的 transcript、截图、建议或中间产出，先把它们标记为“二手输入”，不要直接当原文事实。
 - 如果有 DOCX，优先抽纯文本并加行号；在 macOS 上，`textutil -convert txt -stdout thesis.docx | nl -ba` 很适合做定位底稿。
-- 如果论文高度依赖图片、流程图、森林图、页图或截图，优先运行 `scripts/extract_docx_media.py` 抽出 `word/media`，并把结果写入对象层和资产索引，而不是临时在聊天里记路径。
+- 如果论文高度依赖图片、流程图、森林图、页图或截图，先判断图件来源类型，再决定走哪条结构化流水线：`docx_media` 图件可用 `scripts/extract_docx_media.py` 抽出 `word/media`；`Word shape / 文本框 / 版式渲染后成图` 这类图件应登记为 `shape_rendered`，并单独记录当前证据资产与渲染链路，不要把所有图件都当成同一条“抽图”流程。
 - 如果论文高度依赖 Word 原生表格、基线表、结果表或补充表，优先运行 `scripts/extract_docx_tables.py --docx <thesis.docx> --paper-dir <paperXX>`，把表格落到 `assets/tables/docx_csv/` 并同步 `objects/tables.json`。
 - 如果论文的方法学论断、讨论和文献综述明显依赖数字序号引用，优先运行 `scripts/extract_docx_citations.py --docx <thesis.docx> --paper-dir <paperXX>`，把“正文引用锚点 → 参考文献条目”先落到 `objects/citations.json`，不要继续只靠人工翻参考文献列表。
 - 用 `rg` 快速找：样本量、随机、盲法、结局、`P` 值、伦理、注册、设备参数、图号、表题。
@@ -103,6 +103,8 @@ description: 面向中文使用者操作的研究生毕业论文审查技能，�
    - `objects/tables.json`
    - `objects/citations.json`
    - `objects/assets_manifest.json`
+   - `objects/figures.json` 至少写明每个图件的 `source_kind`，例如 `docx_media` 或 `shape_rendered`，不要只在自然语言备注里临时解释
+   - `objects/assets_manifest.json` 至少写明 `source_kind` 和 `asset_type`，区分“图件原始来源是什么”与“当前证据资产是怎么取得的”
    - 对表格密集项目，优先用 `scripts/extract_docx_tables.py` 生成 `assets/tables/docx_csv/` 和 `objects/tables.json`，不要继续手工在 Markdown 里抄表号和列名
    - 对引文密集项目，优先用 `scripts/extract_docx_citations.py` 生成 `objects/citations.json` 和 `reviews/citation_extraction_manifest.json`，先把引用锚点结构化，再做引文法证
 3. 如果本轮依赖多个线程、多个代理、多个终端工具或多轮交接，先补 `reviews/process_projection.md`，统一记录 `goal / actions / findings / decisions / artifacts / status / next_step`
@@ -368,7 +370,7 @@ description: 面向中文使用者操作的研究生毕业论文审查技能，�
 - `objects/citations.json`
 - `objects/assets_manifest.json`
 
-这些对象文件优先承担“图号、caption、路径、证据角色、引用可达性”的慢变量。Markdown 台账继续保留，但默认承担 `execution_object`，不要再让它们同时兼任数据库和最终交付。
+这些对象文件优先承担“图号、caption、来源类型、证据资产路径、证据角色、引用可达性”的慢变量。Markdown 台账继续保留，但默认承担 `execution_object`，不要再让它们同时兼任数据库和最终交付。
 
 在把问题诊断升级成执行清单、导师决策或送审 / 答辩判断前，先补一份 `reviews/评审闭环与放行判断.md`，至少回答：
 
@@ -533,7 +535,7 @@ HTML 不是把 Markdown 报告压缩一遍。普通项目可以偏概览；但�
 - 目录和命名规则见 [references/file-structure.md](./references/file-structure.md)
 - 可以直接运行 `scripts/init_review_workspace.py` 初始化标准结构
 - 工作区建好后，优先跑 `scripts/check_review_workspace.py` 检查对象层、交付层和接手面是否齐全；如果本轮明确采用标准多页 `display_projection`，再补跑 `scripts/check_review_workspace.py --strict`
-- 如果原文是 DOCX，初始化后优先补三条结构化流水线：`scripts/extract_docx_media.py` 抽图，`scripts/extract_docx_tables.py --paper-dir <paperXX>` 抽表，`scripts/extract_docx_citations.py --paper-dir <paperXX>` 抽引文锚点
+- 如果原文是 DOCX，初始化后优先补三条结构化流水线，并按来源分流：`docx_media` 图件用 `scripts/extract_docx_media.py` 抽出 `word/media`；`shape_rendered` 图件先登记到 `objects/figures.json` 与 `objects/assets_manifest.json`，必要时再补页图、重导出页图或渲染链路审计；`scripts/extract_docx_tables.py --paper-dir <paperXX>` 抽表；`scripts/extract_docx_citations.py --paper-dir <paperXX>` 抽引文锚点
 - 脚手架只创建目录和占位文件，不改动用户原有论文文件
 
 ### 10. 交付前做一次交付物自审

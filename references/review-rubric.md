@@ -62,6 +62,11 @@
 3. `objects/citations.json`
 4. `objects/assets_manifest.json`
 
+对图件密集项目，再补两个最小判断：
+
+- `objects/figures.json` 中每个图件至少区分 `docx_media` 还是 `shape_rendered`
+- `objects/assets_manifest.json` 中每个资产至少区分 `source_kind` 和 `asset_type`，不要把 `pdf` 页图误写成“从源抽图”
+
 如果这些结构化资产缺失，并不等于不能审；但后续要主动收紧边界，避免把“路径记忆”和“线程记忆”误当成稳定证据。
 
 ## 0.5 代理来源与证据层级

@@ -150,10 +150,10 @@ project-root/
 
 放结构化慢变量，不放最终长文结论。
 
-- `figures.json`：图号、caption、图像路径、证据角色、摘要/结论可用性
+- `figures.json`：图号、caption、`source_kind`、当前证据路径、证据角色、摘要/结论可用性
 - `tables.json`：表号、caption、结果类型、主分析/敏感性角色
 - `citations.json`：关键引文、类型、一手/二手、绑定论断
-- `assets_manifest.json`：图片来源、输出路径、页图/裁图/关键图关系
+- `assets_manifest.json`：图片原始来源类型、当前证据资产类型、输出路径、页图/裁图/关键图关系
 
 ### `reviews/`
 
@@ -175,11 +175,11 @@ project-root/
 放所有图片资源。
 
 - `figures/`：拼图、汇总图
-- `figures/docx_media/`：从 `DOCX word/media` 直接抽出的原始图件
+- `figures/docx_media/`：从 `DOCX word/media` 直接抽出的原始图件；它只覆盖 `docx_media`，不代表全部图件来源
 - `figures/key/`：为引用和人工核查重命名后的关键图
 - `tables/docx_csv/`：从 `DOCX` 抽出的原始表格 CSV
 - `zoom/`：局部裁切放大图
-- `pdf_pages/`：PDF 整页导出图
+- `pdf_pages/`：PDF 整页导出图；可作为 `shape_rendered` 图件的当前证据资产，但不自动等于原始来源
 - `scans/`：扫描图或其他中间图像
 
 ### 论文根目录

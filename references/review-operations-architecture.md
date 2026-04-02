@@ -70,11 +70,23 @@
 - `id`
 - `figure_no`
 - `caption`
+- `source_kind`
 - `source_path`
 - `page_or_line_anchor`
 - `role`
 - `can_enter_abstract`
 - `can_enter_conclusion`
+
+图件来源类型至少区分：
+
+- `docx_media`：原始图件作为二进制图片存放在 `DOCX word/media`
+- `shape_rendered`：图件本体来自 `Word shape / 文本框 / SmartArt / 分组绘图 / 版式渲染`
+
+补充约束：
+
+- `source_kind` 表示图件原始来源类型，不表示当前证据文件是怎么取得的
+- `source_path` 表示当前默认引用的证据资产路径；如果图件属于 `shape_rendered`，这里可以指向页图、重导出页图或审计文件，但不能因此把 `source_kind` 改写成 `pdf_page_capture`
+- 对 `shape_rendered` 图件，建议补 `source_paths`、`status_note`、`render_chain_status` 或 `requires_render_audit`
 
 ### `objects/tables.json`
 
@@ -108,6 +120,17 @@
 - `output_path`
 - `linked_object_ids`
 
+字段边界：
+
+- `source_kind`：原始来源类型，当前至少区分 `docx_media`、`shape_rendered`
+- `asset_type`：当前证据资产的取得方式，当前至少区分 `docx_media_extract`、`pdf_page_capture`、`zoom_crop`
+
+约束：
+
+- 不要把 `pdf_page_capture` 混写成 `source_kind`
+- 对 `docx_media_extract`，`source_path` 可以是 `word/media/image7.png` 这类 `DOCX` 成员路径，并配合 `source_docx` 使用
+- 对 `shape_rendered` 图件，`assets_manifest.json` 应允许同时登记“页图证据”和“审计衍生资产”，而不是假装它们来自 `word/media`
+
 Markdown 台账继续保留，但默认只承担执行面，不再兼任结构化数据库。
 
 ## 4. `process_projection`
@@ -140,7 +163,7 @@ Markdown 台账继续保留，但默认只承担执行面，不再兼任结构�
 1. `textutil + nl + rg`
    - 建文本底稿和快速定位
 2. `scripts/extract_docx_media.py`
-   - 从 `DOCX word/media` 抽图
+   - 只从 `DOCX word/media` 抽取 `docx_media` 图件，并回写带 `source_kind = docx_media` 的资产清单
 3. `scripts/extract_docx_tables.py`
    - 从 `DOCX` 抽表到 `assets/tables/docx_csv` 并回写 `objects/tables.json`
 4. `scripts/extract_docx_citations.py`

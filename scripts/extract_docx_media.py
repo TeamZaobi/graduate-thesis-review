@@ -43,7 +43,11 @@ def main() -> int:
             destination.write_bytes(data)
             items.append(
                 {
+                    "id": f"docx_media_{filename.replace('.', '_')}",
+                    "asset_type": "docx_media_extract",
+                    "source_kind": "docx_media",
                     "source_docx": str(docx_path),
+                    "source_path": member.filename,
                     "member": member.filename,
                     "filename": filename,
                     "output_path": str(destination),
@@ -52,6 +56,7 @@ def main() -> int:
             )
 
     manifest = {
+        "kind": "assets_manifest",
         "source_docx": str(docx_path),
         "output_dir": str(output_dir),
         "item_count": len(items),

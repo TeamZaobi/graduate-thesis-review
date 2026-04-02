@@ -60,7 +60,7 @@ graduate-thesis-review/
 └── scripts/
     ├── init_review_workspace.py      # 初始化标准工作区与对象层
     ├── check_review_workspace.py     # 检查工作区结构合同
-    ├── extract_docx_media.py         # 抽取 DOCX word/media 图像资产
+    ├── extract_docx_media.py         # 抽取 DOCX word/media 图像资产，并标注 docx_media 来源类型
     ├── extract_docx_tables.py        # 抽取 DOCX 表格到 CSV 与 objects/tables.json
     ├── extract_docx_citations.py     # 抽取 DOCX 数字引文到 objects/citations.json
     ├── evaluate_review_toolchain.py  # 对单篇论文工作区做轻量工具链评估
@@ -107,6 +107,11 @@ graduate-thesis-review/
 - `objects/tables.json`
 - `objects/citations.json`
 - `objects/assets_manifest.json`
+
+对图件对象，至少同时回答两件事：
+
+- 图件原始来源类型是什么，例如 `docx_media` 还是 `shape_rendered`
+- 当前证据文件是怎么来的，例如 `docx_media_extract` 还是 `pdf_page_capture`
 
 如果 workflow 跨线程、跨工具或跨代理，再补：
 
