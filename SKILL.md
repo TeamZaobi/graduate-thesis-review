@@ -1,6 +1,6 @@
 ---
 name: graduate-thesis-review
-description: 面向中文使用者操作的研究生毕业论文审查技能，支持中文和英文工作对象。默认只用于硕士或博士学位论文、预答辩材料、开题材料、答辩稿及其配套 PDF、DOCX；尤其适合临床干预、随机对照、康复工程、神经工程，以及公共卫生与真实世界因果推断论文。可综合外审、导师和其他代理意见；从方法学、统计学、学术写作、工程实现与答辩风险等角度做多镜头复核，并在需要时输出证据绑定的原子级修改建议、答辩口径和必要的证据型附录。
+description: 面向中文使用者操作的研究生毕业论文审查技能，支持中文和英文工作对象。默认只用于硕士或博士学位论文、预答辩材料、开题材料、答辩稿及其配套 PDF、DOCX；尤其适合临床干预、随机对照、康复工程、神经工程，以及公共卫生与真实世界因果推断论文。可综合外审、导师和其他代理意见；从方法学、统计学、学术写作、工程实现与答辩风险等角度做多镜头复核，并在需要时输出证据绑定的原子级修改建议、答辩口径、必要的证据型附录，以及面向不同受众的多页网页展示。
 ---
 
 # Graduate Thesis Review
@@ -53,9 +53,9 @@ description: 面向中文使用者操作的研究生毕业论文审查技能，�
 
 图、表、引文和资产索引优先进入 `truth_source` 的结构化对象层，不要只活在 Markdown 台账里。多线程、多代理或多轮迁移时，再补一个统一接手用的 `process_projection`。
 
-在审查方法、统计、图表、外部建议时，加载 [references/review-rubric.md](./references/review-rubric.md)。在起草 Markdown 报告、修改清单、HTML 汇总页、答辩口径和导师式精修材料时，加载 [references/output-templates.md](./references/output-templates.md)。在规划目录、文件命名、交付物落点时，加载 [references/file-structure.md](./references/file-structure.md)。在判断工作区四层、对象层、默认读取顺序、图表/表格/引文结构化资产和多线程接手面时，加载 [references/review-operations-architecture.md](./references/review-operations-architecture.md)。当论文涉及统计图、结果图、脑图、连接图、表格重构或答辩 PPT 图表时，加载 [references/figure-table-standards.md](./references/figure-table-standards.md)。当需要区分干预研究、观察性研究、诊断研究、预测模型或系统综述时，加载 [references/clinical-study-types.md](./references/clinical-study-types.md)。当用户明确要求导师式逐段改稿、原子级修改建议或可直接替换的文字版本时，加载 [references/advisor-line-editing.md](./references/advisor-line-editing.md)。**每次审查任务开启，必须先加载 [references/specialty-router.md](./references/specialty-router.md) 识别专业领域，再加载 [references/specialty-manual-readiness-gate.md](./references/specialty-manual-readiness-gate.md) 判断当前专项手册是否 `complete / partial / missing`，然后再按路由结果决定加载哪些专项文件**：当论文属于康复医学、神经工程、脑机接口、神经影像或多模态设备研究时，加载 [references/rehab-neuroengineering.md](./references/rehab-neuroengineering.md)；当论文属于心血管内科/外科时，加载 [references/specialty-cardiology.md](./references/specialty-cardiology.md)；当论文属于中医或中西医结合时，加载 [references/specialty-tcm.md](./references/specialty-tcm.md)；当论文属于公共卫生、临床流行病学、真实世界队列、药物流行病学或目标试验模拟时，加载 [references/specialty-public-health-causal.md](./references/specialty-public-health-causal.md)；其他专业按 `specialty-router.md` 第6节流程处理。只有当需要新建或重写共享专项文件时，才加载 [references/specialty-manual-standard.md](./references/specialty-manual-standard.md)，并在完成后运行 `scripts/check_specialty_manual.py`。当论文属于临床干预、随机对照、康复工程交叉，或用户明确要求“更深的科学性/学术性检查”时，追加加载 [references/deep-review-gates.md](./references/deep-review-gates.md)。当任务需要综合 `Codex`、`Claude Code`、`AntiGrativity` 或其他代理的输出，或用户明确要求跨工具复核时，加载 [references/agent-tool-adaptation.md](./references/agent-tool-adaptation.md)。如果论文原文是英文，则用同样流程核查，只把术语、图题、结果层级和答辩口径切换为英文论文常见表达。
+在审查方法、统计、图表、外部建议时，加载 [references/review-rubric.md](./references/review-rubric.md)。在起草 Markdown 报告、修改清单、HTML / 网页展示层、答辩口径和导师式精修材料时，加载 [references/output-templates.md](./references/output-templates.md)。在规划目录、文件命名、交付物落点时，加载 [references/file-structure.md](./references/file-structure.md)。在判断工作区四层、对象层、默认读取顺序、图表/表格/引文结构化资产和多线程接手面时，加载 [references/review-operations-architecture.md](./references/review-operations-architecture.md)。当论文涉及统计图、结果图、脑图、连接图、表格重构或答辩 PPT 图表时，加载 [references/figure-table-standards.md](./references/figure-table-standards.md)。当需要区分干预研究、观察性研究、诊断研究、预测模型或系统综述时，加载 [references/clinical-study-types.md](./references/clinical-study-types.md)。当用户明确要求导师式逐段改稿、原子级修改建议或可直接替换的文字版本时，加载 [references/advisor-line-editing.md](./references/advisor-line-editing.md)。**每次审查任务开启，必须先加载 [references/specialty-router.md](./references/specialty-router.md) 识别专业领域，再加载 [references/specialty-manual-readiness-gate.md](./references/specialty-manual-readiness-gate.md) 判断当前专项手册是否 `complete / partial / missing`，然后再按路由结果决定加载哪些专项文件**：当论文属于康复医学、神经工程、脑机接口、神经影像或多模态设备研究时，加载 [references/rehab-neuroengineering.md](./references/rehab-neuroengineering.md)；当论文属于心血管内科/外科时，加载 [references/specialty-cardiology.md](./references/specialty-cardiology.md)；当论文属于中医或中西医结合时，加载 [references/specialty-tcm.md](./references/specialty-tcm.md)；当论文属于公共卫生、临床流行病学、真实世界队列、药物流行病学或目标试验模拟时，加载 [references/specialty-public-health-causal.md](./references/specialty-public-health-causal.md)；其他专业按 `specialty-router.md` 第6节流程处理。只有当需要新建或重写共享专项文件时，才加载 [references/specialty-manual-standard.md](./references/specialty-manual-standard.md)，并在完成后运行 `scripts/check_specialty_manual.py`。当论文属于临床干预、随机对照、康复工程交叉，或用户明确要求“更深的科学性/学术性检查”时，追加加载 [references/deep-review-gates.md](./references/deep-review-gates.md)。当任务需要综合 `Codex`、`Claude Code`、`AntiGrativity` 或其他代理的输出，或用户明确要求跨工具复核时，加载 [references/agent-tool-adaptation.md](./references/agent-tool-adaptation.md)。如果论文原文是英文，则用同样流程核查，只把术语、图题、结果层级和答辩口径切换为英文论文常见表达。
 
-如果任务需要核对最新指南、规范或对照研究，优先查官方或一手来源，并可配合 [$deep-research](/Users/jixiaokang/.agents/skills/deep-research/SKILL.md)。如果任务需要做结构清晰、适合打印和展示的 HTML 汇总页，可配合 [$design-taste-frontend](/Users/jixiaokang/.agents/skills/taste-skill/SKILL.md)。但视觉设计不能替代证据映射深度；HTML 的完整性、映射粒度和回归检查由本 Skill 本身负责。
+如果任务需要核对最新指南、规范或对照研究，优先查官方或一手来源，并可配合 [$deep-research](/Users/jixiaokang/.agents/skills/deep-research/SKILL.md)。如果任务需要做结构清晰、适合打印和展示的 HTML / 网页交付物，可配合 [$design-taste-frontend](/Users/jixiaokang/.agents/skills/taste-skill/SKILL.md)。但视觉设计不能替代证据映射深度；display_projection 的内容边界、拆页规则、映射粒度和回归检查由本 Skill 本身负责。
 
 ## 推荐触发语句
 
@@ -106,7 +106,7 @@ description: 面向中文使用者操作的研究生毕业论文审查技能，�
    - 对表格密集项目，优先用 `scripts/extract_docx_tables.py` 生成 `assets/tables/docx_csv/` 和 `objects/tables.json`，不要继续手工在 Markdown 里抄表号和列名
    - 对引文密集项目，优先用 `scripts/extract_docx_citations.py` 生成 `objects/citations.json` 和 `reviews/citation_extraction_manifest.json`，先把引用锚点结构化，再做引文法证
 3. 如果本轮依赖多个线程、多个代理、多个终端工具或多轮交接，先补 `reviews/process_projection.md`，统一记录 `goal / actions / findings / decisions / artifacts / status / next_step`
-4. 按固定读取顺序接手：原始论文与底稿 → 对象层 → 冻结与版本台账 → workflow 与执行台账 → HTML 与摘要
+4. 按固定读取顺序接手：原始论文与底稿 → 对象层 → 冻结与版本台账 → workflow 与执行台账 → display_projection 与摘要
 5. 对迁移过的项目或多轮改动项目，尽早跑一次 `scripts/check_review_workspace.py`、`scripts/scan_stale_paths.py`，必要时再跑 `scripts/evaluate_review_toolchain.py` 做轻量 readiness 评估，不要等到交付前才发现结构漂移
 
 如果对象层或接手面缺失，不代表不能审；但要先把本轮边界降清楚，避免后续反复手工补路径、补图号和补线程摘要。
@@ -346,11 +346,19 @@ description: 面向中文使用者操作的研究生毕业论文审查技能，�
 
 这些对象文件优先承担“图号、caption、路径、证据角色、引用可达性”的慢变量。Markdown 台账继续保留，但默认承担 `execution_object`，不要再让它们同时兼任数据库和最终交付。
 
-大多数完整审查，至少产出三样：
+大多数完整审查，至少产出三类：
 
 1. 综合审查报告
 2. 最终可执行修改清单
-3. HTML 汇总页（强烈推荐；强制深审项目默认要做）
+3. display_projection 展示层（强烈推荐；强制深审项目默认要做）
+
+如果进入网页 / HTML 交付模式，display_projection 默认不要压成单页。除非用户明确要求只做单页且项目极轻，否则至少产出一个入口页和四个子页：
+
+- `综合评审汇总.html`：入口页 / 总导航 / 当前状态总览
+- `display/问题清单页.html`
+- `display/完整评审页.html`
+- `display/学生执行页.html`
+- `display/导师汇报页.html`
 
 必要时补充：
 
@@ -372,39 +380,64 @@ description: 面向中文使用者操作的研究生毕业论文审查技能，�
 - 干预与对照矩阵
 - 图片法证核查底稿
 
-如果材料很多，建议再拆出两份轻量文档：
+如果材料很多，建议再拆出两份轻量文档；即使已经有多页网页，这两份 Markdown 也不应省略：
 
 - 学生执行版：只保留当前要改什么
 - 导师摘要版：只保留最高风险项、答辩定位和关键决策
 
 具体模板见 [references/output-templates.md](./references/output-templates.md)。
 
-### 6.5 对 HTML 汇总页做分阶段质量约束
+### 6.4 先判断是否进入多页 display_projection 模式
 
-HTML 不是把 Markdown 报告压缩一遍。普通项目可以偏概览；但只要进入“强制深审”，HTML 默认要承担“证据工作台”的职责。
+只要任务包含以下任一特征，就默认进入多页 display_projection 模式，而不是把所有内容压进一个 HTML：
+
+- 用户明确要求网页、HTML、可分享页面、完整评审页、学生页或导师页
+- 用户明确说“不要只列问题，要把完整结果都展示出来”
+- 同一套交付物同时面向学生、导师和内部接手者
+- 页面需要同时承载问题清单、完整判断、执行顺序和汇报决策
+
+进入多页模式后，先做两件事，再开始写页面：
+
+1. 先建立共享的问题映射台账或等价结构，作为所有页面共同上游
+2. 先判每一页的受众与职责边界，再决定内容落点
+
+四个子页的默认职责如下：
+
+- 问题清单页：按 `P0 / P1 / P2 / P3 / P4` 集中展示问题、证据和修法，不承担完整 workflow 解释
+- 完整评审页：展示总体判断、送审 readiness、审阅步骤、逐项核查结果、图表专项、执行顺序和终检
+- 学生执行页：只保留当前动作、顺序、完成标准、阻塞项和禁止事项，不堆长篇背景论证
+- 导师汇报页：只保留当前定位、是否建议送审 / 答辩、最高风险项、保留主线、关键决策和答辩口径
+
+不要把“问题清单页 / 完整评审页 / 学生执行页 / 导师汇报页”做成同一页里的四个 tab 再算完工；默认按多页 display_projection 处理。
+
+### 6.5 对多页 HTML / display_projection 做分阶段质量约束
+
+HTML 不是把 Markdown 报告压缩一遍。普通项目可以偏概览；但只要进入“强制深审”或多受众交付，display_projection 默认要承担“入口页 + 多页证据工作台”的职责。
 
 生成前先做三件事：
 
 - 先建立问题映射台账，至少包含 `问题 ID / 级别 / 原文或图表定位 / 证据路径 / 为什么危险 / 安全修法 / 答辩追问点 / 确认状态`
-- 没有进入台账的问题，不要直接写进 HTML
+- 没有进入台账的问题，不要直接写进任何网页子页
 - 尚未核实、但必须提醒用户人工回查的点，统一标成 `待人工回查`
 
 生成中固定约束：
 
-- `P0 / P1 / P2` 每条问题至少对应一张问题卡片
+- `P0 / P1 / P2` 每条问题至少在问题清单页或完整评审页出现一次
 - 图表问题直接嵌入本地图证、页图或裁图，不能只放“见附件”入口
 - 非图表问题也要给原文定位、摘录或文件行号，不能只写抽象判断
-- 每张卡片固定包含 `定位映射 / 证据 / 为什么危险 / 安全修法 / 答辩追问点 / 确认状态`
+- 问题卡片固定包含 `定位映射 / 证据 / 为什么危险 / 安全修法 / 答辩追问点 / 确认状态`
 - 当问题总数 `<= 15` 时默认全部展开；超过时至少把 `P0 / P1` 全展开，`P2` 才允许折叠
+- 四个子页要边界清楚：学生页不反向复制导师口径，导师页不反向承担学生逐项执行细则，完整评审页不退化成问题清单页，问题清单页也不代替完整评审页
 
 生成后固定回查：
 
-- HTML 首页计数、优先级矩阵、问题卡片数量要和综合报告、修改清单一致
+- 入口页和四个子页的计数、优先级矩阵、问题卡片数量要和综合报告、修改清单一致
 - 所有锚点、图片路径、图号、表号、证据链接都要能点通或能定位
-- HTML 中的结论强度不能弱化 `P0`，也不能为了页面简洁删掉关键映射字段
+- 完整评审页中的结论强度不能弱化 `P0`，也不能为了页面简洁删掉关键映射字段
+- 问题清单页 / 完整评审页 / 学生执行页 / 导师汇报页之间不能互相矛盾；如果一条问题被降级、关闭或改写，相关页面都要同步
 - 图像和表格路径优先从 `objects/assets_manifest.json` 或对象层索引生成，不要手写漂移中的绝对路径
 
-如果论文、清单、图证、图号或目录结构后来被二次改动，必须重新跑一轮 HTML 回归检查，不能默认旧页面仍然有效。
+如果论文、清单、图证、图号或目录结构后来被二次改动，必须重新跑一轮多页 HTML 回归检查，不能默认旧页面仍然有效。
 
 ### 7. 做版本回归审查，防止“越改越乱”
 
@@ -413,8 +446,8 @@ HTML 不是把 Markdown 报告压缩一遍。普通项目可以偏概览；但�
 - 新增内容是否真的修复了问题，还是只是改了表面措辞
 - 是否引入了新的错号、错引、脏字符、路径错误、过时内容
 - README、CHANGELOG、实际目录结构是否一致
-- HTML 的锚点、图片路径、指标数量是否与正文同步
-- HTML 是否仍完整覆盖当前版本的 `P0 / P1 / P2`，而不是停留在旧版摘要
+- 入口页与各子页的锚点、图片路径、指标数量是否与正文同步
+- 完整评审页与问题清单页是否仍完整覆盖当前版本的 `P0 / P1 / P2`，而不是停留在旧版摘要
 - 清单里的“终检动作”是否仍然对应当前版本，而不是旧版本残留
 - 如果项目经过目录迁移或跨项目搬运，优先跑 `scripts/scan_stale_paths.py` 抓旧绝对路径和路径漂移
 - 如果这一轮还改了对象层、表格资产、引文锚点或接手面，再跑 `scripts/evaluate_review_toolchain.py`，确认不是只多了文件而没有提升准备度
@@ -427,7 +460,7 @@ HTML 不是把 Markdown 报告压缩一遍。普通项目可以偏概览；但�
 - 说明文档是否和实际文件落点一致
 - 是否有明显过期文件、重复文件或误导性副本
 - 长清单是否已经膨胀到需要拆版
-- “完整版 / 学生版 / 导师版”是否边界清楚
+- “问题清单页 / 完整评审页 / 学生页 / 导师页 / Markdown 版”是否边界清楚
 
 ### 9. 对新论文优先先建标准工作区
 
@@ -441,7 +474,7 @@ HTML 不是把 Markdown 报告压缩一遍。普通项目可以偏概览；但�
 
 ### 10. 交付前做一次交付物自审
 
-审查报告本身也可能出错。在综合报告、修改清单、HTML 汇总页、学生版、导师版全部完成后，加载 [references/self-audit.md](./references/self-audit.md) 做一轮自检。
+审查报告本身也可能出错。在综合报告、修改清单、网页入口页与子页、学生版、导师版全部完成后，加载 [references/self-audit.md](./references/self-audit.md) 做一轮自检。
 
 重点不是重新审一遍论文，而是快速验证我们自己的产出：引用是否准确、分级是否一致、多份交付物之间是否同步、有没有越过事实边界。
 

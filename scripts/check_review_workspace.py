@@ -22,6 +22,13 @@ REQUIRED_OBJECT_FILES = [
     "assets_manifest.json",
 ]
 
+REQUIRED_DISPLAY_FILES = [
+    "问题清单页.html",
+    "完整评审页.html",
+    "学生执行页.html",
+    "导师汇报页.html",
+]
+
 
 def main() -> int:
     parser = argparse.ArgumentParser(
@@ -34,6 +41,7 @@ def main() -> int:
     reviews_dir = paper_dir / "reviews"
     objects_dir = paper_dir / "objects"
     assets_dir = paper_dir / "assets"
+    display_dir = paper_dir / "display"
 
     errors: list[str] = []
     warnings: list[str] = []
@@ -46,8 +54,10 @@ def main() -> int:
         errors.append(f"Missing objects directory: {objects_dir}")
     if not assets_dir.exists():
         errors.append(f"Missing assets directory: {assets_dir}")
+    if not display_dir.exists():
+        errors.append(f"Missing display directory: {display_dir}")
     if not (paper_dir / "综合评审汇总.html").exists():
-        errors.append(f"Missing HTML workspace: {paper_dir / '综合评审汇总.html'}")
+        errors.append(f"Missing display entry page: {paper_dir / '综合评审汇总.html'}")
 
     thesis_files = list(paper_dir.glob("*.docx")) + list(paper_dir.glob("*.pdf"))
     if not thesis_files:
@@ -70,6 +80,11 @@ def main() -> int:
             continue
         if "items" not in payload or not isinstance(payload["items"], list):
             errors.append(f"Object file missing list-shaped 'items': {path}")
+
+    for name in REQUIRED_DISPLAY_FILES:
+        path = display_dir / name
+        if not path.exists():
+            errors.append(f"Missing display page: {path}")
 
     if not (assets_dir / "figures").exists():
         errors.append(f"Missing figures directory: {assets_dir / 'figures'}")
