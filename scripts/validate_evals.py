@@ -26,10 +26,19 @@ REQUIRED_THEMES = {
     "toolchain_evaluation": ["evaluate_review_toolchain.py", "准备时间", "接手", "覆盖率"],
     "citation_pipeline": ["extract_docx_citations.py", "citations.json", "claim_anchor", "参考文献"],
     "specialty_readiness": ["complete", "partial", "missing", "专业手册", "专项补充"],
+    "structured_specialty_gate": ["review_version_manifest.json", "specialty_gate", "专业手册完备性判断", "专业专项补充说明"],
     "entry_mode_manifest": ["review_version_manifest.json", "entry_mode", "version_rebase", "historical_sources"],
     "template_gate": ["tainted", "READY", "PARTIAL", "BLOCKED", "脚手架"],
+    "execution_release_gate": ["评审闭环与放行判断", "can_emit_execution_outputs", "学生执行页", "导师汇报页"],
+    "readiness_release_gate": ["评审闭环与放行判断", "can_issue_readiness_verdict", "建议送审", "建议答辩"],
+    "line_editing_release_gate": ["评审闭环与放行判断", "can_enter_line_editing", "定向改稿", "逐条改稿"],
+    "scoped_rewrite_contract": ["task_exceptions", "scoped_rewrite", "局部改写任务卡", "局部改写"],
+    "structured_release_gate": ["review_version_manifest.json", "release_gate", "allowed_next_steps", "forbidden_outputs"],
+    "formal_review_scope": ["形式审查", "学校模板", "目录", "页码", "页眉页脚"],
+    "formal_word_mechanics": ["修订记录", "批注", "目录域", "页码域", "交叉引用"],
+    "formal_blind_pdf": ["盲审", "匿名", "PDF", "导出", "元数据"],
+    "formal_numbering": ["公式编号", "图号", "表号", "互引", "caption"],
 }
-
 
 def fail(message: str) -> None:
     print(f"FAIL: {message}", file=sys.stderr)

@@ -10,8 +10,27 @@
 project-root/
   papers/
     paper01/
-      原论文.docx / 原论文.pdf
+      原论文.docx / 原论文.wps / 原论文.pdf
       综合评审汇总.html
+      governance/
+        review-workspace-pack/
+      evidence/
+        criteria-coverage.json
+        evidence-ledger.jsonl
+        review-verdict.json
+        limitations.json
+      outputs/
+      notes/
+        legacy-review-manifest.json
+        process_projection.md
+        评审闭环与放行判断.md
+        专业手册完备性判断.md
+        专业专项补充说明.md
+        审阅对象冻结说明.md
+        版本冻结与依赖回归台账.md
+        关键数值与复算准入台账.md
+        图表索引台账.md
+        图表专项核查.md
       display/
         问题清单页.html
         完整评审页.html
@@ -23,18 +42,7 @@ project-root/
         citations.json
         assets_manifest.json
       reviews/
-        process_projection.md
-        review_version_manifest.json
-        评审闭环与放行判断.md
-        audience_language_contract.md
-        display_projection_schema.md
-        专业手册完备性判断.md
-        专业专项补充说明.md
-        审阅对象冻结说明.md
-        版本冻结与依赖回归台账.md
-        关键数值与复算准入台账.md
-        图表索引台账.md
-        图表专项核查.md
+        ...                          # 仅保留兼容 alias 或仍未迁走的历史交付物
         伦理合规与数据追溯审计表.md
         主文补充附录交叉索引台账.md
         文献对标与引文法证.md
@@ -50,7 +58,8 @@ project-root/
         tables/
           docx_csv/
         zoom/
-        pdf_pages/
+        page_renders/
+        pdf_pages/          # 仅兼容历史项目
         scans/
     paper02/
       ...
@@ -58,7 +67,12 @@ project-root/
   CHANGELOG.md
 ```
 
-如果用户已有别的目录体系，不必强行重构，但至少保证“原文、对象层、评审文档、图像资源、网页入口页与子页”彼此可追踪。
+如果用户已有别的目录体系，不必强行重构，但至少保证“原文、runtime、evidence、对象层、图像资源、网页入口页与子页”彼此可追踪。
+
+兼容说明：
+
+- `reviews/review_version_manifest.json` 当前默认是 `notes/legacy-review-manifest.json` 的 alias
+- `reviews/process_projection.md`、`reviews/评审闭环与放行判断.md`、`reviews/专业手册完备性判断.md` 等路径当前仍可用，但 canonical 内容已迁入 `notes/`
 
 ## 2. 命名规则
 
@@ -137,11 +151,11 @@ project-root/
 
 同一类文件要有唯一落点，不要在 workflow 里写模糊路径如 `reviews/...`。应始终写成精确文件名，必要时在 README 里注明哪个文件是该类信息的唯一真源。
 
-### `review_version_manifest.json`
+### `legacy-review-manifest.json`
 
-这是版本治理的机器可读锚点，放在 `reviews/` 下，与 Markdown 台账并列维护。
+这是 thesis-specific 的补充执行对象，canonical 路径是 `notes/legacy-review-manifest.json`；`reviews/review_version_manifest.json` 当前只保留 alias 兼容。
 
-最少字段：
+当前常用字段：
 
 - `template_status`
 - `entry_mode`
@@ -152,17 +166,26 @@ project-root/
 - `dependents`
 - `readiness`
 - `handoff`
+- `release_gate`
 
 用途：
 
 - 让 `initial_review / version_rebase / evidence_upgrade / display_regression / handoff_resume` 五种入口模式有统一落点
 - 把 `current source / historical sources / deprecated anchors / impacted artifacts` 固定为可检查结构
+- 把 `can_emit_problem_list / can_emit_execution_outputs / can_issue_readiness_verdict / can_enter_line_editing / allowed_next_steps / forbidden_outputs` 固定为机器可读 release gate
 - 给 `check_review_workspace.py`、`evaluate_review_toolchain.py` 和多线程接手提供稳定锚点
+
+但它不再是长期唯一 runtime 真源。当前 machine-readable 中枢是：
+
+- `governance/review-workspace-pack/`
+- `evidence/review-verdict.json`
+- `knowledge/output-policies/advice-output-policy.json`
 
 默认规则：
 
 - 新工作区初始化后，`template_status = tainted`
 - 只有在写入当前版本事实、入口模式和当前 readiness 后，才允许清掉 `tainted`
+- 如果原文来自 `Word / WPS`，建议在 `review_object` 中同步冻结 `visual_truth_source`，记录本轮渲染器与页面渲染资产目录
 - 它不代替 `审阅对象冻结说明.md` 和 `版本冻结与依赖回归台账.md`；前者偏机器读写，后两者偏人类判断与证据叙述
 
 ## 3. 结构分工
@@ -185,21 +208,25 @@ project-root/
 - `citations.json`：关键引文、类型、一手/二手、绑定论断
 - `assets_manifest.json`：图片原始来源类型、当前证据资产类型、输出路径、页图/裁图/关键图关系
 
+### `notes/`
+
+放 legacy manifest 与按需人工说明。
+
+- `process_projection.md`
+- `评审闭环与放行判断.md`
+- `专业手册完备性判断.md`
+- `专业专项补充说明.md`
+- `审阅对象冻结说明.md`
+- 其他说明性台账
+
 ### `reviews/`
 
-放 Markdown 文本交付物。
+当前主要用于：
 
-- 详细长文档放这里
-- 学生版和导师版也放这里
-- 外部评审原文或复核意见也放这里
-- 证据型中间台账也默认放这里，除非项目已经约定单独的 `reviews/evidence/`
-- `process_projection.md` 也放这里，用作多线程、多代理接手面；它是过程投影，不是真源
-- `review_version_manifest.json` 也放这里，用作版本入口、rebase 和 readiness 的机器锚点；它不是最终判断正文
-- `评审闭环与放行判断.md` 也放这里，用作进入执行清单、导师摘要、网页决策页和逐条改稿前的最小放行锚点
-- `audience_language_contract.md` 放这里，用作网页展示层的受众语言合同
-- `display_projection_schema.md` 放这里，用作网页展示层的内容扩增合同
-- `专业手册完备性判断.md` 和 `专业专项补充说明.md` 也放这里；它们属于当前论文的执行对象，不回写共享专项
-- `citation_extraction_manifest.json` 可作为机器生成的引文抽取摘要放这里，用于人工快速回查
+- 学生版和导师版 Markdown 交付物
+- 外部评审原文或复核意见
+- 仍未迁走的历史交付物
+- `notes/` canonical 文件的兼容 alias
 
 ### `assets/`
 
@@ -210,8 +237,11 @@ project-root/
 - `figures/key/`：为引用和人工核查重命名后的关键图
 - `tables/docx_csv/`：从 `DOCX` 抽出的原始表格 CSV
 - `zoom/`：局部裁切放大图
-- `pdf_pages/`：PDF 整页导出图；可作为 `shape_rendered` 图件的当前证据资产，但不自动等于原始来源
+- `page_renders/`：受控渲染器导出的整页渲染图；优先来自 `Word / WPS` 原生导出或受控网页渲染，也可以是本轮冻结的 PDF 导出快照
+- `pdf_pages/`：历史兼容目录；旧项目已存在时可继续引用，但新工作区默认不再把它作为唯一标准目录
 - `scans/`：扫描图或其他中间图像
+
+如果导入的是旧项目且已经稳定使用 `pdf_pages/`，不必强行重命名；但新工作区优先统一到 `page_renders/`，避免把“页面渲染资产”误缩成“PDF 资产”。
 
 ### 论文根目录
 
@@ -219,6 +249,10 @@ project-root/
 
 - 原论文
 - `综合评审汇总.html`
+- `governance/`
+- `evidence/`
+- `outputs/`
+- `notes/`
 - `display/`
 - `objects/`
 - `reviews/`
@@ -284,11 +318,11 @@ project-root/
 
 1. HTML 图片路径是否都有效
 2. README 描述是否仍然对应真实结构
-3. CHANGELOG 是否记录了这轮结构性变动
+3. CHANGELOG 或 release note 是否记录了这轮结构性变动
 4. `reviews/` 中是否已有完整版、学生版、导师版
 5. `display/` 中是否已有问题清单页、完整评审页、学生执行页、导师汇报页
 6. `reviews/` 中是否已有 `audience_language_contract.md` 与 `display_projection_schema.md`
-7. `reviews/review_version_manifest.json` 是否已清除 `tainted`，并写明当前 `entry_mode`
+7. `notes/legacy-review-manifest.json` 是否已清除 `tainted`，并写明当前 `entry_mode`
 8. 新建的台账文件是否已有实填内容，而不是只停留在空骨架
 9. 结果真源、版本冻结和图表核查文件是否各自只有一个权威落点
 10. `objects/` 是否存在，且图表密集项目不再只依赖手写 Markdown 路径
@@ -297,5 +331,5 @@ project-root/
 补充说明：
 
 - `scripts/check_review_workspace.py` 默认输出 `READY / PARTIAL / BLOCKED`
-- 兼容模式下，缺少 `display/` 子页或展示层合同文件仍可能只是 warning，但 `review_version_manifest.json` 缺失、模板污点未清、占位 HTML 未清或核心台账仍为空会直接落到 `BLOCKED`
+- 兼容模式下，缺少 `display/` 子页或展示层合同文件仍可能只是 warning，但 `legacy-review-manifest.json` 缺失、模板污点未清、占位 HTML 未清或核心台账仍为空会直接落到 `BLOCKED`
 - 只有在明确采用标准多页 `display_projection` 时，才建议使用 `scripts/check_review_workspace.py --strict`

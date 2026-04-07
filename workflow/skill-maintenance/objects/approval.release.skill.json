@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "object_id": "approval.release.skill",
+  "family": "object",
+  "version_anchor": "v1",
+  "kind": "approval_type",
+  "fields": [
+    {
+      "field_id": "approval_id",
+      "type": "string",
+      "required": true
+    }
+  ],
+  "semantics": [
+    {
+      "value": "skill-release",
+      "meaning": "The maintenance run has enough evidence to release or project the skill changes."
+    }
+  ]
+}

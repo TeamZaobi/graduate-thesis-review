@@ -2,15 +2,24 @@
 
 当需要把论文审查结果落成具体交付物时，加载此文件。默认以中文交付为主；若原文是英文论文，也优先用中文给出判断和执行建议，除非用户明确要求英文版成品。
 
+当前优先级说明：
+
+1. `evidence/review-verdict.json + knowledge/output-policies/advice-output-policy.json`
+   - 控制 `导师/学生` 高风险输出是否允许出现
+2. `notes/legacy-review-manifest.json.release_gate + notes/评审闭环与放行判断.md`
+   - 当前只保留 readiness 等 legacy 兼容语义
+
+后文如继续出现 `reviews/review_version_manifest.json` 或 `reviews/评审闭环与放行判断.md`，默认把它理解为 `notes/` canonical 文件的兼容 alias。
+
 ## 0. 先出证据型中间产物，再出总结材料
 
 复杂或高风险论文，不要一上来只写综合报告。先产出并实填证据型中间文件，再汇总成最终交付物。
 
 常用的证据型中间文件包括：
 
-- `process_projection.md`
-- `review_version_manifest.json`
-- `评审闭环与放行判断.md`
+- `notes/process_projection.md`
+- `notes/legacy-review-manifest.json`
+- `notes/评审闭环与放行判断.md`
 - `audience_language_contract.md`
 - `display_projection_schema.md`
 - `审阅对象冻结说明.md`
@@ -24,17 +33,19 @@
 - `主文补充附录交叉索引台账.md`
 - `文献对标与引文法证.md`
 - `上下文隔离反思.md`
+- `局部改写任务卡.md`
 
 这些文件不要求每篇论文全开，但至少要覆盖本轮最主要的风险源。空模板、只写标题的骨架文件，不算“已完成审查”。
 如果文件来自 `init_review_workspace.py` 的默认脚手架，先清掉 `tainted` 标记，再把它视为可交付对象。
 
-`review_version_manifest.json` 最少要能回答：
+`legacy-review-manifest.json` 当前最少要能回答：
 
 - 这次进入工作区的 `entry_mode` 是什么
 - 当前唯一审阅对象和真源是什么
 - 历史版本、废弃锚点和 rebase 状态是什么
 - 当前 slow variables 和 dependents 是什么
 - 当前工作区 readiness 处于 `blocked / partial / ready` 哪一档
+- 当前 `release_gate` 是否允许问题清单和 readiness 兼容语义
 
 如果论文高度依赖图、表、引文或多线程接手，再补对象层真源：
 
@@ -83,7 +94,12 @@
 
 ### B. 评审闭环后可产出
 
-只有先写完 `reviews/评审闭环与放行判断.md`，并且其中至少明确：
+只有先满足两条条件，才默认补执行或决策型材料：
+
+1. `review-verdict + output policy` 已允许对应 advice/student outputs
+2. 如需送审 / 答辩判断，再补 `notes/评审闭环与放行判断.md` 并同步更新 `legacy-review-manifest.json.release_gate`
+
+legacy gate 至少明确：
 
 - `can_emit_execution_outputs = yes`
 - `can_issue_readiness_verdict = yes` 或明确为 `no`
@@ -112,6 +128,11 @@
 - `原子级修改建议.md`
 - `论断-引文核查表.md`
 - `证据绑定改写表.md`
+
+如果完整评审尚未闭环，但只允许处理用户明确指定的局部高风险段落，此时不要直接打开上述全文改稿材料；只允许补：
+
+- `legacy-review-manifest.json.task_exceptions.scoped_rewrite`
+- `notes/局部改写任务卡.md`
 
 如果论文进入“强制深审”模式，建议再固定补三份证据型材料，或将其合并为综合报告附录：
 

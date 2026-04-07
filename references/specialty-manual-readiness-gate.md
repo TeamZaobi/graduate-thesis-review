@@ -7,6 +7,12 @@
 1. 手册不够用，却直接按“已覆盖”进入深审
 2. 单篇论文的偶然特征，反向污染共享专项手册
 
+路径说明：
+
+1. 当前 canonical 机器锚点是 `notes/legacy-review-manifest.json.specialty_gate`
+2. 当前 canonical 人类记录是 `notes/专业手册完备性判断.md`
+3. `reviews/` 下的同名路径当前视作兼容 alias
+
 ## 1. 什么时候必须过这个 gate
 
 以下任一情况满足，都必须先做完备性判断：
@@ -126,7 +132,8 @@
 
 ### 必交付
 
-- `reviews/专业手册完备性判断.md`
+- `notes/专业手册完备性判断.md`
+- `notes/legacy-review-manifest.json.specialty_gate`
 
 建议至少记录：
 
@@ -140,6 +147,12 @@
 - `required_expert_checks`：本轮至少需要哪些专家切面
 - 结论依据：命中的检查项和缺口
 - 下一动作：直接深审，还是先补专项
+
+其中：
+
+- `legacy-review-manifest.json.specialty_gate` 负责机器可读 gate
+- `专业手册完备性判断.md` 负责人类可读判断记录和论证过程
+- 如果 manifest 仍是占位，可以短暂回退读取 Markdown，但回合内应尽快同步回 manifest
 
 ### 条件性交付
 

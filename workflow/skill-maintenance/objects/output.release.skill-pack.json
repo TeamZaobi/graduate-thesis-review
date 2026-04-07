@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "object_id": "output.release.skill-pack",
+  "family": "object",
+  "version_anchor": "v1",
+  "kind": "output_type",
+  "fields": [
+    {
+      "field_id": "output_id",
+      "type": "string",
+      "required": true
+    }
+  ]
+}

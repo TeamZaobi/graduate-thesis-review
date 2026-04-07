@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "object_id": "action.maintain",
+  "family": "object",
+  "version_anchor": "v1",
+  "kind": "action_class",
+  "fields": [
+    {
+      "field_id": "action_id",
+      "type": "string",
+      "required": true
+    },
+    {
+      "field_id": "maintenance_scope",
+      "type": "string",
+      "required": true
+    }
+  ]
+}

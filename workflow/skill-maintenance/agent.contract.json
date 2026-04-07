@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "agent_id": "agent.skill-maintenance",
+  "family": "agent",
+  "version_anchor": "v1",
+  "roles": [
+    {
+      "role_id": "role.design-owner",
+      "can_execute_refs": [
+        "action.maintain"
+      ],
+      "can_review_refs": [
+        "action.maintain"
+      ],
+      "can_approve_refs": [
+        "approval.release.skill"
+      ]
+    },
+    {
+      "role_id": "role.release-approver",
+      "can_execute_refs": [
+        "action.release"
+      ],
+      "can_review_refs": [
+        "action.release"
+      ],
+      "can_approve_refs": [
+        "approval.release.skill"
+      ]
+    },
+    {
+      "role_id": "role.audit-executor",
+      "can_execute_refs": [
+        "action.maintain"
+      ],
+      "can_review_refs": [
+        "action.maintain"
+      ]
+    },
+    {
+      "role_id": "role.regression-reviewer",
+      "can_execute_refs": [
+        "action.maintain"
+      ],
+      "can_review_refs": [
+        "action.release"
+      ]
+    }
+  ]
+}

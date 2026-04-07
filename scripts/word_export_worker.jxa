@@ -1,0 +1,129 @@
+#!/usr/bin/osascript -l JavaScript
+
+ObjC.import("stdlib");
+ObjC.import("Foundation");
+
+var stdin = $.NSFileHandle.fileHandleWithStandardInput;
+var stdout = $.NSFileHandle.fileHandleWithStandardOutput;
+var word = null;
+
+function writeln(payload) {
+  stdout.writeData(
+    $(JSON.stringify(payload) + "\n").dataUsingEncoding($.NSUTF8StringEncoding)
+  );
+}
+
+function fail(message) {
+  writeln({ result: "error", error: String(message) });
+}
+
+function ensureWord() {
+  if (word !== null) {
+    return word;
+  }
+  word = Application("Microsoft Word");
+  if (!word.running()) {
+    word.activate();
+    delay(1);
+  } else {
+    word.launch();
+  }
+  return word;
+}
+
+function closeActiveDocumentSafely() {
+  try {
+    ensureWord().activeDocument.close({ saving: "no" });
+  } catch (error) {}
+}
+
+function handleExport(request) {
+  if (!request.input_path || !request.output_path) {
+    fail("Missing input_path or output_path");
+    return;
+  }
+
+  try {
+    var app = ensureWord();
+    app.open(request.input_path);
+    var doc = app.activeDocument;
+    doc.saveAs({
+      fileName: request.output_path,
+      fileFormat: "format PDF",
+    });
+    doc.close({ saving: "no" });
+    writeln({
+      result: "success",
+      input: request.input_path,
+      output: request.output_path,
+      renderer: "word_native_daemon",
+      pid: $.NSProcessInfo.processInfo.processIdentifier,
+    });
+  } catch (error) {
+    closeActiveDocumentSafely();
+    fail(error);
+  }
+}
+
+function handleRequest(line) {
+  var request = null;
+  try {
+    request = JSON.parse(line);
+  } catch (error) {
+    fail("Invalid JSON request: " + line);
+    return false;
+  }
+
+  var command = request.command || "export";
+  if (command === "ping") {
+    writeln({
+      result: "success",
+      command: "ping",
+      renderer: "word_native_daemon",
+      pid: $.NSProcessInfo.processInfo.processIdentifier,
+    });
+    return false;
+  }
+  if (command === "stop") {
+    try {
+      if (word !== null) {
+        word.quit();
+      }
+    } catch (error) {}
+    writeln({ result: "success", command: "stop" });
+    return true;
+  }
+  if (command === "export") {
+    handleExport(request);
+    return false;
+  }
+
+  fail("Unknown command: " + command);
+  return false;
+}
+
+while (true) {
+  var data = stdin.availableData;
+  if (!data || data.length === 0) {
+    break;
+  }
+
+  var text = $.NSString.alloc.initWithDataEncoding(
+    data,
+    $.NSUTF8StringEncoding
+  ).js;
+  if (!text) {
+    continue;
+  }
+
+  var lines = text.split(/\n/);
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i].trim();
+    if (!line) {
+      continue;
+    }
+    if (handleRequest(line)) {
+      $.exit(0);
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "name": "scoped_rewrite_enabled_allows_task_card",
+  "paper_id": "paper03",
+  "manifest_updates": {
+    "template_status": "ready",
+    "entry_mode": "initial_review",
+    "release_gate": {
+      "can_enter_line_editing": "no"
+    },
+    "task_exceptions": {
+      "scoped_rewrite": {
+        "enabled": true,
+        "targets": [
+          "摘要第2段",
+          "结论第1段"
+        ],
+        "reason": "用户明确要求先处理局部高风险结论"
+      }
+    }
+  },
+  "file_overrides": {
+    "reviews/局部改写任务卡.md": "# 局部改写任务卡\n\n## 触发原因\n用户要求先处理局部高风险结论。\n\n## 允许处理范围\n- 摘要第2段\n- 结论第1段\n\n## 本轮禁止扩展\n- 不扩展到全文逐条改稿\n- 不产出执行清单或 readiness 判断\n\n## 改写卡片\n- 摘要第2段：先收紧因果语气。\n"
+  },
+  "expected": {
+    "check_status": "PARTIAL",
+    "check_not_contains": [
+      "Scoped rewrite task card exists before scoped exception is enabled"
+    ],
+    "report_equals": {
+      "task_exceptions.scoped_rewrite_enabled": true
+    }
+  }
+}

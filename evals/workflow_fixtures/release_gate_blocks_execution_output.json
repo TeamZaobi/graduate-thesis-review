@@ -1,0 +1,23 @@
+{
+  "name": "release_gate_blocks_execution_output",
+  "paper_id": "paper04",
+  "manifest_updates": {
+    "template_status": "ready",
+    "entry_mode": "initial_review",
+    "release_gate": {
+      "can_emit_execution_outputs": "no"
+    }
+  },
+  "file_overrides": {
+    "reviews/学生执行版修改清单.md": "# 学生执行版修改清单\n\n请直接开始按以下步骤改稿。\n"
+  },
+  "expected": {
+    "check_status": "BLOCKED",
+    "check_contains": [
+      "Advice output exists before review-verdict/output policy allows it"
+    ],
+    "report_equals": {
+      "release_gate.source": "manifest"
+    }
+  }
+}

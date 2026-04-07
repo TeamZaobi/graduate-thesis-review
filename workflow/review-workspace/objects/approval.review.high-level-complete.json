@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "object_id": "approval.review.high-level-complete",
+  "family": "object",
+  "version_anchor": "v1",
+  "kind": "approval_type",
+  "fields": [
+    {
+      "field_id": "approval_id",
+      "type": "string",
+      "required": true
+    }
+  ],
+  "semantics": [
+    {
+      "value": "high-level-review-complete",
+      "meaning": "The review has met the minimum evidence threshold required before advice."
+    }
+  ]
+}
