@@ -230,6 +230,10 @@ REVIEW_PLACEHOLDERS = {
 <!-- clear this marker after the release gate allows advisor-facing outputs -->
 # 导师汇报版摘要
 """,
+    "答辩口径.md": """<!-- review-template: tainted -->
+<!-- clear this marker after the review verdict/output policy allows advisor defense outputs -->
+# 答辩口径
+""",
     "第三方建议复核意见.md": """<!-- review-template: tainted -->
 <!-- clear this marker after third-party inputs are actually reviewed -->
 # 第三方建议复核意见

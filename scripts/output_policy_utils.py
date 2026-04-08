@@ -24,10 +24,12 @@ CLAIM_CEILING_ALLOWED_OUTPUTS = {
     "advisor_only": {
         "output.advisor.line-editing",
         "output.advisor.summary",
+        "output.advisor.defense-talking-points",
     },
     "execution_ready": {
         "output.advisor.line-editing",
         "output.advisor.summary",
+        "output.advisor.defense-talking-points",
         "output.student.execution-pack",
     },
 }

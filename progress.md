@@ -279,3 +279,15 @@
   - `python3 -m py_compile scripts/extract_docx_citations.py scripts/check_docx_formal_rules.py scripts/evaluate_review_toolchain.py scripts/check_review_workspace.py scripts/init_review_workspace.py scripts/run_workflow_regression.py`
   - `python3 scripts/run_workflow_regression.py`
   - `python3 scripts/validate_evals.py`
+- 在 draft PR focused review 阶段又发现一个阻断级漏口：
+  - `workflow/rules` 已声明 `output.advisor.defense-talking-points` 属于高风险 advisor 输出
+  - 但 `knowledge/output-policies/advice-output-policy.json` 与当前检查链还没有把它纳入授权面
+- 已修正：
+  - `advice-output-policy.json` 已新增 `output.advisor.defense-talking-points -> reviews/答辩口径.md`
+  - `claim_ceiling` 的 `advisor_only / execution_ready` 允许集合已同步纳入该输出
+  - `init_review_workspace.py` 已补 `答辩口径.md` 占位文件
+  - `check_review_workspace.py` 在 policy unavailable fallback 下也会把 `答辩口径.md` 视作 execution/advisor 输出
+- 阻断修复验收：
+  - `python3 -m py_compile scripts/output_policy_utils.py scripts/check_review_workspace.py scripts/init_review_workspace.py`
+  - `python3 scripts/run_workflow_regression.py`
+  - targeted replay：fresh workspace 下手工写入 `reviews/答辩口径.md`，`check_review_workspace.py` 会明确报出 `Advice output exists before review-verdict/output policy allows it`

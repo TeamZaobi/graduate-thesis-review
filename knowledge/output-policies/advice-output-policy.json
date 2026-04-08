@@ -28,6 +28,13 @@
       ]
     },
     {
+      "output_ref": "output.advisor.defense-talking-points",
+      "route_family": "execution_outputs",
+      "artifact_paths": [
+        "reviews/答辩口径.md"
+      ]
+    },
+    {
       "output_ref": "output.student.execution-pack",
       "route_family": "execution_outputs",
       "artifact_paths": [

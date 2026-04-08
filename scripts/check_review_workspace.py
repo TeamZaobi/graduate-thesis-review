@@ -113,6 +113,7 @@ EXECUTION_OUTPUT_FILES = [
     "最终可执行修改清单.md",
     "学生执行版修改清单.md",
     "导师汇报版摘要.md",
+    "答辩口径.md",
 ]
 
 LINE_EDITING_FILES = [
