@@ -158,7 +158,7 @@
 
 当结论是 `partial` 或 `missing` 时，再补：
 
-- `reviews/专业专项补充说明.md`
+- `notes/专业专项补充说明.md`
 
 建议至少记录：
 

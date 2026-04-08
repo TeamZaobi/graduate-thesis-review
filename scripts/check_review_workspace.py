@@ -8,6 +8,7 @@ from pathlib import Path
 
 from legacy_asset_paths import (
     canonical_manifest_path,
+    inspect_legacy_compatibility,
     migrated_note_path,
     notes_dir,
     resolve_manifest_path,
@@ -17,6 +18,7 @@ from output_policy_utils import (
     forbidden_transformation_rules,
     load_output_policy,
     load_review_verdict,
+    validate_claim_ceiling_alignment,
     validate_output_policy,
 )
 from release_gate_utils import (
@@ -452,6 +454,11 @@ def inspect_stage_promotion(
     output_policy = load_output_policy()
     output_policy_errors = validate_output_policy(output_policy)
     review_verdict = load_review_verdict(paper_dir)
+    verdict_alignment_errors = (
+        validate_claim_ceiling_alignment(output_policy, review_verdict)
+        if not output_policy_errors
+        else []
+    )
     advice_decisions = (
         advice_output_decisions(output_policy, review_verdict)
         if not output_policy_errors
@@ -463,6 +470,11 @@ def inspect_stage_promotion(
         partial.append(
             "Policy-driven advice output gate is unavailable: "
             + "; ".join(output_policy_errors)
+        )
+    elif verdict_alignment_errors:
+        partial.append(
+            "Review verdict/output policy alignment is incomplete: "
+            + "; ".join(verdict_alignment_errors)
         )
     if review_verdict is None:
         partial.append(
@@ -1226,6 +1238,7 @@ def main() -> int:
     assets_dir = paper_dir / "assets"
     display_dir = paper_dir / "display"
     manifest_path = resolve_manifest_path(paper_dir)
+    legacy_compatibility = inspect_legacy_compatibility(paper_dir)
 
     blocked: list[str] = []
     partial: list[str] = []
@@ -1276,6 +1289,8 @@ def main() -> int:
             )
         )
         (blocked if args.strict else warnings).append(message)
+    partial.extend(legacy_compatibility["partial"])
+    warnings.extend(legacy_compatibility["warnings"])
 
     thesis_files = (
         list(paper_dir.glob("*.docx"))

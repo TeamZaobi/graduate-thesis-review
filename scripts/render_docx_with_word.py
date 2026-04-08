@@ -11,6 +11,8 @@ import sys
 import time
 from pathlib import Path
 
+from legacy_asset_paths import canonical_manifest_path
+
 
 ROOT = Path(__file__).resolve().parents[1]
 WORD_EXPORT_SCRIPT = ROOT / "scripts" / "export_docx_to_pdf_word.jxa"
@@ -290,7 +292,7 @@ def main() -> int:
         "--paper-dir",
         help=(
             "Paper workspace root. Outputs PDF and page renders to "
-            "assets/page_renders/ and updates reviews/review_version_manifest.json"
+            "assets/page_renders/ and updates notes/legacy-review-manifest.json"
         ),
     )
     target_group.add_argument(
@@ -338,7 +340,7 @@ def main() -> int:
         output_dir = paper_dir / "assets" / "page_renders"
         default_pdf = output_dir / f"{docx_path.stem}.word-native.pdf"
         default_manifest = output_dir / "manifest.json"
-        review_manifest_path = paper_dir / "reviews" / "review_version_manifest.json"
+        review_manifest_path = canonical_manifest_path(paper_dir)
     else:
         output_dir = Path(args.output_dir).expanduser().resolve()
         default_pdf = output_dir / f"{docx_path.stem}.word-native.pdf"

@@ -10,7 +10,7 @@
 
 - 用户明确说“导师视角”“逐段改”“逐句改”“逐条修改建议”“可直接替换”
 - 用户要求按摘要、结果、讨论、结论逐段提出修改动作
-- `reviews/评审闭环与放行判断.md` 已明确 `can_enter_line_editing = yes`
+- `notes/评审闭环与放行判断.md` 已明确 `can_enter_line_editing = yes`
 
 以下情况只提高改稿优先级，不单独构成进入条件：
 
@@ -34,8 +34,8 @@
 如果完整评审尚未闭环，但用户明确只要求先改某个局部高风险段落，当前仍按自然语言边界处理：
 
 - 保持 `can_enter_line_editing = no`
-- 在 `review_version_manifest.json.task_exceptions.scoped_rewrite` 里明确当前只允许处理的章节、段落或句群
-- 同步补一份 `reviews/局部改写任务卡.md`
+- 在 `notes/legacy-review-manifest.json.task_exceptions.scoped_rewrite` 里明确当前只允许处理的章节、段落或句群
+- 同步补一份 `notes/局部改写任务卡.md`
 - 不得顺势扩展成全文逐条改稿、执行清单或 readiness 判断
 
 ## 3. 逐条修改卡片格式

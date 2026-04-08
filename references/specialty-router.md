@@ -93,7 +93,7 @@
 - `independent_audit_required`
 - `required_expert_checks`
 
-这些字段默认写入 `reviews/专业手册完备性判断.md`。如果当前没有对应共享专项，则在 `reviews/专业专项补充说明.md` 中补齐缺失闭环。
+这些字段默认写入 `notes/专业手册完备性判断.md`。如果当前没有对应共享专项，则在 `notes/专业专项补充说明.md` 中补齐缺失闭环。
 
 如果 `independent_audit_required = yes`，进入深审前先确定：
 
@@ -112,8 +112,8 @@
 
 - 加载对应专项文件
 - 继续用通用框架做快筛
-- 同时补 `reviews/专业手册完备性判断.md`
-- 再补 `reviews/专业专项补充说明.md`
+- 同时补 `notes/专业手册完备性判断.md`
+- 再补 `notes/专业专项补充说明.md`
 - 同时补本学科常用审查用语和建议替换词
 - 本轮先用论文级补充支撑深审，回合结束后再判断是否升级共享专项
 
@@ -121,8 +121,8 @@
 
 - 不强套相邻专项
 - 先用 `clinical-study-types.md + review-rubric.md` 做通用快筛
-- 生成 `reviews/专业手册完备性判断.md`
-- 再补 `reviews/专业专项补充说明.md`
+- 生成 `notes/专业手册完备性判断.md`
+- 再补 `notes/专业专项补充说明.md`
 - 如内容具有可复用性，再新建共享 `specialty-*.md`
 
 ### 多专项并载
@@ -181,7 +181,7 @@
 
 ### 第三步：决定落点
 
-- 只够当前论文使用：写入 `reviews/专业专项补充说明.md`
+- 只够当前论文使用：写入 `notes/专业专项补充说明.md`
 - 已具备跨论文复用性：升级为共享 `references/specialty-[领域名].md`
 
 ### 第四步：共享专项升级后回跑

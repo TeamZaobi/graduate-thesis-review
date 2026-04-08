@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -12,6 +13,7 @@ from pathlib import Path
 from evidence_workspace_utils import validate_evidence_workspace
 from legacy_asset_paths import (
     canonical_manifest_path,
+    inspect_legacy_compatibility,
     legacy_manifest_alias_path,
     migrated_note_path,
     notes_dir,
@@ -41,7 +43,18 @@ from workflow_route_registry import derive_workflow_route_from_entry_mode
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS_DIR = ROOT / "scripts"
-GOVERNANCE_VALIDATOR = Path("/Users/jixiaokang/.agents/skills/files-driven/scripts/validate_governance_assets.py")
+
+
+def resolve_governance_validator() -> Path | None:
+    env_path = os.environ.get("FILES_DRIVEN_VALIDATOR")
+    candidates = []
+    if env_path:
+        candidates.append(Path(env_path).expanduser())
+    candidates.append(ROOT.parent / "files-driven" / "scripts" / "validate_governance_assets.py")
+    for candidate in candidates:
+        if candidate.exists():
+            return candidate.resolve()
+    return None
 
 
 def run_cmd(args: list[str]) -> subprocess.CompletedProcess[str]:
@@ -207,6 +220,8 @@ def main() -> int:
     objects_dir = paper_dir / "objects"
     assets_dir = paper_dir / "assets"
     manifest_path = resolve_manifest_path(paper_dir)
+    governance_validator = resolve_governance_validator()
+    legacy_compatibility = inspect_legacy_compatibility(paper_dir)
     manifest_payload = load_manifest(manifest_path)
     entry_mode = manifest_payload.get("entry_mode") if isinstance(manifest_payload, dict) else None
     workflow_route_source, workflow_route = extract_workflow_route(manifest_payload)
@@ -241,6 +256,7 @@ def main() -> int:
             "canonical": manifest_path == canonical_manifest_path(paper_dir),
             "legacy_alias_path": str(legacy_manifest_alias_path(paper_dir)),
         },
+        "legacy_compatibility": legacy_compatibility,
         "workspace_contract_ok": None,
         "workspace_contract_status": None,
         "docx_lines_present": any(reviews_dir.glob("*docx_lines.txt")),
@@ -260,6 +276,7 @@ def main() -> int:
         "runtime_pack": {
             "path": str(runtime_pack_dir),
             "present": runtime_pack_dir.exists(),
+            "validator_path": str(governance_validator) if governance_validator else None,
             "validator": None,
         },
         "evidence_workspace": validate_evidence_workspace(evidence_dir),
@@ -333,12 +350,12 @@ def main() -> int:
     report["workspace_contract_status"] = workspace_status
     report["workspace_contract_output"] = contract_output
 
-    if runtime_pack_dir.exists() and GOVERNANCE_VALIDATOR.exists():
+    if runtime_pack_dir.exists() and governance_validator is not None:
         started = time.perf_counter()
         runtime_validation = run_cmd(
             [
                 sys.executable,
-                str(GOVERNANCE_VALIDATOR),
+                str(governance_validator),
                 str(runtime_pack_dir),
             ]
         )
@@ -463,11 +480,14 @@ def main() -> int:
         ),
         "output_policy_present": report["output_policy"]["present"],
         "output_policy_shape_ok": report["output_policy"]["shape_ok"],
+        "output_policy_alignment_ok": report["output_policy"]["alignment_ok"],
         "policy_high_risk_outputs_allowed": [
             item["output_ref"]
             for item in report["output_policy"]["verdict_required_high_risk"]
             if isinstance(item, dict) and item.get("allowed") is True
         ],
+        "legacy_manifest_status": report["legacy_compatibility"]["manifest"]["status"],
+        "legacy_note_issue_count": report["legacy_compatibility"]["note_issue_count"],
         "has_process_projection": report["process_projection_present"],
         "process_projection_required": report["process_projection_required"],
         "release_gate_source": report["release_gate"]["source"],

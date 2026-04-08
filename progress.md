@@ -239,3 +239,35 @@
   - 不全文重写 `SKILL.md`
   - 只纠正 authority、canonical 路径、mission hierarchy 和 advice gate
   - 更完整的实现叙事统一收口到 implementation note 与 release note
+- 已结合 `audit_report_2026-04-08.md` 与 `governance_audit_report_2026-04-08.md` 启动一轮“溢出 / 漂移 / 过度设计”质询-收敛
+- 本轮收敛主稿已落到：`governance/design/2026-04-overflow-drift-overdesign-cross-audit-decision.md`
+- 当前统一裁定：
+  - 当前最真实的问题不是 `overflow`，而是 `drift`
+  - 立即应修的是：硬编码路径、references canonical-path 口径、`claim_ceiling` 执行约束、legacy sunset/drift 检查
+  - 当前最该冻结的是：`agent.contract` 执行化、`knowledge/criteria/` 家族、全量 schema 扩展、对象层深度整合、附加治理型文档扩张
+- 本轮已明确增加执行护栏：
+  - 不允许把任何“下一代 greenfield 资产”伪装成“当前 release 的必要修复”
+  - 下一轮只有能直接降低 `drift / portability / 字段只记录不执行` 这三类风险的改动，才允许进入补丁合同
+- 本轮对两个并行裁定稿做了二次收口：
+  - 保留 `governance/design/2026-04-overflow-drift-overdesign-cross-audit-decision.md` 作为唯一 canonical 决策稿
+  - 删除重复生成的 `challenge-decision` 草稿，避免本轮收敛自己制造 drift
+- 已按 cross-audit 决策启动并完成一轮窄范围 `P0 remediation`，合同落到：
+  - `governance/proposals/2026-04-p0-remediation-contract.md`
+- 本轮只处理 4 项 drift：
+  - 去掉 `evaluate_review_toolchain.py` 的硬编码 validator 绝对路径，改为 sibling `files-driven` 自动发现
+  - 给 `claim_ceiling` 增加最小执行约束，并接入 `check_review_workspace.py` / `evaluate_review_toolchain.py`
+  - 新增 legacy canonical/alias 健康检查，显式报告 `legacy_primary / dual_track_regular_file / alias_target_mismatch`
+  - 修正 `README.md`、`SKILL.md`、关键 references 和 release/design 文档中的高频 canonical path 漂移
+- 本轮执行中顺手暴露并修正了一处真实旧漏项：
+  - `init_review_workspace.py` 之前误把用户项目根目录当成 skill repo 根目录，导致 paper runtime pack fresh init 时没有复制 repo truth pack
+  - 已改为固定从当前 skill 仓库复制 `workflow/review-workspace/` 骨架；fresh workspace 现在会正确预填 runtime pack 与 `review-verdict.forbidden_output_refs`
+- 本轮验收已完成：
+  - `python3 -m py_compile scripts/init_review_workspace.py scripts/check_review_workspace.py scripts/evaluate_review_toolchain.py scripts/output_policy_utils.py scripts/legacy_asset_paths.py scripts/run_workflow_regression.py scripts/render_docx_with_word.py`
+  - `python3 scripts/validate_evals.py`
+  - `python3 scripts/run_workflow_regression.py`
+  - `python3 ../files-driven/scripts/validate_governance_assets.py workflow/review-workspace`
+  - `python3 ../files-driven/scripts/validate_governance_assets.py workflow/skill-maintenance`
+- 本轮 targeted replay 结果：
+  - fresh workspace 现在能正确复制 runtime pack，`evaluate_review_toolchain.py` 报告 `runtime_pack.validator.ok = true`、`output_policy.alignment_ok = true`
+  - 当 `review-verdict.claim_ceiling = advisor_only` 却试图放行 `output.student.execution-pack` 时，`check_review_workspace.py` 会明确报出 `Advice output exists before review-verdict/output policy allows it`
+  - 当 `reviews/review_version_manifest.json` 被改成与 `notes/legacy-review-manifest.json` 并存的常规文件时，`check_review_workspace.py` 与 `evaluate_review_toolchain.py` 都会显式报出 `dual-track drift`

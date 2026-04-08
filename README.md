@@ -300,8 +300,8 @@ claude skill install https://github.com/TeamZaobi/graduate-thesis-review
 `evals/evals.json` 包含常规场景和失败模式回归样例。修改 skill 后，至少运行：
 
 ```bash
-python /Users/jixiaokang/.agents/skills/graduate-thesis-review/scripts/validate_evals.py
-python /Users/jixiaokang/.agents/skills/graduate-thesis-review/scripts/run_workflow_regression.py
+python3 scripts/validate_evals.py
+python3 scripts/run_workflow_regression.py
 ```
 
 这会检查：
@@ -316,33 +316,33 @@ python /Users/jixiaokang/.agents/skills/graduate-thesis-review/scripts/run_workf
 如果要校验 repo truth packs 和 paper runtime pack，额外运行：
 
 ```bash
-python /Users/jixiaokang/.agents/skills/files-driven/scripts/validate_governance_assets.py \
-  /Users/jixiaokang/.agents/skills/graduate-thesis-review/workflow/review-workspace
-python /Users/jixiaokang/.agents/skills/files-driven/scripts/validate_governance_assets.py \
-  /Users/jixiaokang/.agents/skills/graduate-thesis-review/workflow/skill-maintenance
-python /Users/jixiaokang/.agents/skills/files-driven/scripts/validate_governance_assets.py \
+python3 ../files-driven/scripts/validate_governance_assets.py \
+  workflow/review-workspace
+python3 ../files-driven/scripts/validate_governance_assets.py \
+  workflow/skill-maintenance
+python3 ../files-driven/scripts/validate_governance_assets.py \
   /path/to/project-root/papers/paper01/governance/review-workspace-pack
 ```
 
 如需校验共享专项手册结构，额外运行：
 
 ```bash
-python /Users/jixiaokang/.agents/skills/graduate-thesis-review/scripts/check_specialty_manual.py \
-  --file /Users/jixiaokang/.agents/skills/graduate-thesis-review/references/rehab-neuroengineering.md \
-  --file /Users/jixiaokang/.agents/skills/graduate-thesis-review/references/specialty-cardiology.md \
-  --file /Users/jixiaokang/.agents/skills/graduate-thesis-review/references/specialty-tcm.md \
-  --file /Users/jixiaokang/.agents/skills/graduate-thesis-review/references/specialty-public-health-causal.md
+python3 scripts/check_specialty_manual.py \
+  --file references/rehab-neuroengineering.md \
+  --file references/specialty-cardiology.md \
+  --file references/specialty-tcm.md \
+  --file references/specialty-public-health-causal.md
 ```
 
 如需校验工作区和结构合同，额外运行：
 
 ```bash
-python /Users/jixiaokang/.agents/skills/graduate-thesis-review/scripts/check_review_workspace.py --paper-dir /path/to/project-root/papers/paper01
-python /Users/jixiaokang/.agents/skills/graduate-thesis-review/scripts/extract_docx_tables.py --docx /path/to/project-root/papers/paper01/thesis.docx --paper-dir /path/to/project-root/papers/paper01
-python /Users/jixiaokang/.agents/skills/graduate-thesis-review/scripts/extract_docx_citations.py --docx /path/to/project-root/papers/paper01/thesis.docx --paper-dir /path/to/project-root/papers/paper01
-python /Users/jixiaokang/.agents/skills/graduate-thesis-review/scripts/check_docx_formal_rules.py --docx /path/to/project-root/papers/paper01/thesis.docx --paper-dir /path/to/project-root/papers/paper01
-python /Users/jixiaokang/.agents/skills/graduate-thesis-review/scripts/scan_stale_paths.py --root /path/to/project-root --match-root /old/absolute/root
-python /Users/jixiaokang/.agents/skills/graduate-thesis-review/scripts/evaluate_review_toolchain.py --paper-dir /path/to/project-root/papers/paper01 --docx /path/to/project-root/papers/paper01/thesis.docx
+python3 scripts/check_review_workspace.py --paper-dir /path/to/project-root/papers/paper01
+python3 scripts/extract_docx_tables.py --docx /path/to/project-root/papers/paper01/thesis.docx --paper-dir /path/to/project-root/papers/paper01
+python3 scripts/extract_docx_citations.py --docx /path/to/project-root/papers/paper01/thesis.docx --paper-dir /path/to/project-root/papers/paper01
+python3 scripts/check_docx_formal_rules.py --docx /path/to/project-root/papers/paper01/thesis.docx --paper-dir /path/to/project-root/papers/paper01
+python3 scripts/scan_stale_paths.py --root /path/to/project-root --match-root /old/absolute/root
+python3 scripts/evaluate_review_toolchain.py --paper-dir /path/to/project-root/papers/paper01 --docx /path/to/project-root/papers/paper01/thesis.docx
 ```
 
 其中 `check_review_workspace.py` 默认输出三态：

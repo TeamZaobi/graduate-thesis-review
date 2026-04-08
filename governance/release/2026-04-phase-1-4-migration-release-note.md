@@ -92,7 +92,7 @@
 对已有 paper workspace，推荐至少执行一次：
 
 ```bash
-python3 /Users/jixiaokang/.agents/skills/graduate-thesis-review/scripts/init_review_workspace.py \
+python3 scripts/init_review_workspace.py \
   --root /path/to/project-root \
   --paper-id paper01
 ```
@@ -102,11 +102,11 @@ python3 /Users/jixiaokang/.agents/skills/graduate-thesis-review/scripts/init_rev
 建议同时运行：
 
 ```bash
-python3 /Users/jixiaokang/.agents/skills/files-driven/scripts/validate_governance_assets.py \
+python3 ../files-driven/scripts/validate_governance_assets.py \
   /path/to/project-root/papers/paper01/governance/review-workspace-pack
-python3 /Users/jixiaokang/.agents/skills/graduate-thesis-review/scripts/evaluate_review_toolchain.py \
+python3 scripts/evaluate_review_toolchain.py \
   --paper-dir /path/to/project-root/papers/paper01
-python3 /Users/jixiaokang/.agents/skills/graduate-thesis-review/scripts/check_review_workspace.py \
+python3 scripts/check_review_workspace.py \
   --paper-dir /path/to/project-root/papers/paper01
 ```
 

@@ -23,6 +23,8 @@ from legacy_asset_paths import (
 from workflow_route_registry import WORKFLOW_ROUTE_CONTRACT_VERSION
 
 
+SKILL_ROOT = Path(__file__).resolve().parents[1]
+
 README_TEXT = """# 论文审查项目整理说明
 
 本目录按“论文原文 + 对象层 + 评审材料 + 多页展示层就近放置”的原则整理。每篇论文的主要原文、结构化对象、评审材料、图片资源和网页入口 / 子页尽量放在同一棵子目录下。
@@ -603,7 +605,7 @@ def main() -> int:
             ensure_file(reviews_dir / filename, content)
 
     ensure_manifest_file(paper_dir, REVIEW_VERSION_MANIFEST)
-    runtime_pack_meta = ensure_runtime_pack(root, paper_dir)
+    runtime_pack_meta = ensure_runtime_pack(SKILL_ROOT, paper_dir)
     ensure_evidence_workspace(
         paper_dir,
         runtime_pack_meta.get("required_evidence_refs", []),

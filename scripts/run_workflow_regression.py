@@ -9,6 +9,7 @@ import sys
 import tempfile
 from pathlib import Path
 
+from legacy_asset_paths import migrated_note_path, resolve_manifest_path
 from workflow_route_registry import ENTRY_MODE_SET, build_workflow_route
 
 
@@ -22,7 +23,7 @@ CORE_REVIEW_CONTENT = {
     "关键数值与复算准入台账.md": "# 关键数值与复算准入台账\n\n当前按非复算审查边界处理。\n",
     "图表索引台账.md": "# 图表索引台账\n\n已建立图表索引。\n",
     "图表专项核查.md": "# 图表专项核查\n\n已记录图表核查入口。\n",
-    "process_projection.md": "# process_projection\n\n## goal\n维持当前工作流。\n\n## actions\n- 继续按当前阶段处理。\n\n## findings\n- 已冻结最小工作区合同。\n\n## decisions\n- 暂不越权推进。\n\n## artifacts\n- review_version_manifest.json\n\n## status\n进行中。\n\n## next_step\n继续当前阶段。\n",
+    "process_projection.md": "# process_projection\n\n## goal\n维持当前工作流。\n\n## actions\n- 继续按当前阶段处理。\n\n## findings\n- 已冻结最小工作区合同。\n\n## decisions\n- 暂不越权推进。\n\n## artifacts\n- notes/legacy-review-manifest.json\n\n## status\n进行中。\n\n## next_step\n继续当前阶段。\n",
 }
 
 
@@ -89,7 +90,7 @@ def prepare_workspace(root: Path, fixture: dict) -> Path:
 
     paper_dir = root / "papers" / paper_id
     reviews_dir = paper_dir / "reviews"
-    manifest_path = reviews_dir / "review_version_manifest.json"
+    manifest_path = resolve_manifest_path(paper_dir)
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
 
     manifest_updates = fixture.get("manifest_updates", {})
@@ -109,7 +110,7 @@ def prepare_workspace(root: Path, fixture: dict) -> Path:
     )
 
     for filename, content in CORE_REVIEW_CONTENT.items():
-        (reviews_dir / filename).write_text(content, encoding="utf-8")
+        migrated_note_path(paper_dir, filename).write_text(content, encoding="utf-8")
 
     file_overrides = fixture.get("file_overrides", {})
     if not isinstance(file_overrides, dict):

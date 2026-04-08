@@ -11,7 +11,7 @@
 1. 是否明确记录了本轮审阅对象、当前版本基线和唯一真源？
 2. 是否区分了 `已存在但待重写 / 确实缺失 / 已完成但需回归`，而不是混成一个“未完成”？
 3. 模板文件和实填证据是否已经分清，没有把空骨架当成“已完成审查”？
-4. `review_version_manifest.json` 是否已经更新到当前版本，并明确写了 `entry_mode / readiness / handoff`？
+4. `notes/legacy-review-manifest.json` 是否已经更新到当前版本，并明确写了 `entry_mode / readiness / handoff`？
 
 ### 2. 专项与边界
 
@@ -28,7 +28,7 @@
 
 ### 4. 分级、放行与同步
 
-12. 如果已经生成执行清单、学生版、导师版或 readiness 判断，是否先写了 `评审闭环与放行判断.md`，同步更新了 `review_version_manifest.json.release_gate`，并且放行结论与交付物一致？
+12. 如果已经生成执行清单、学生版、导师版或 readiness 判断，是否先写了 `notes/评审闭环与放行判断.md`，同步更新了 `notes/legacy-review-manifest.json.release_gate`，并且放行结论与交付物一致？
 13. 同一个问题在综合报告、清单、HTML 中的 `P0 / P1 / P2` 级别是否一致？
 14. HTML 的问题数量、优先级和卡片内容，是否与清单和综合报告同步？
 15. 学生版是否完整保留了所有 `P0`，导师版的总体判断是否与综合报告一致？

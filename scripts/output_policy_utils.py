@@ -19,6 +19,19 @@ OUTPUT_POLICY_REQUIRED_FIELDS = [
     "forbidden_transformations",
 ]
 
+CLAIM_CEILING_ALLOWED_OUTPUTS = {
+    "none": set(),
+    "advisor_only": {
+        "output.advisor.line-editing",
+        "output.advisor.summary",
+    },
+    "execution_ready": {
+        "output.advisor.line-editing",
+        "output.advisor.summary",
+        "output.student.execution-pack",
+    },
+}
+
 
 def load_json(path: Path) -> dict[str, object] | None:
     try:
@@ -89,10 +102,88 @@ def forbidden_transformation_rules(
     return rules
 
 
+def high_risk_output_refs(policy: dict[str, object] | None) -> set[str]:
+    refs: set[str] = set()
+    for entry in output_policy_entries(policy):
+        output_ref = entry.get("output_ref")
+        if isinstance(output_ref, str):
+            refs.add(output_ref)
+    return refs
+
+
+def claim_ceiling_allowed_refs(claim_ceiling: object) -> set[str] | None:
+    if not isinstance(claim_ceiling, str):
+        return None
+    return CLAIM_CEILING_ALLOWED_OUTPUTS.get(claim_ceiling)
+
+
+def validate_claim_ceiling_alignment(
+    policy: dict[str, object] | None,
+    verdict: dict[str, object] | None,
+) -> list[str]:
+    if not isinstance(verdict, dict):
+        return ["review verdict is missing or unreadable"]
+
+    claim_ceiling = verdict.get("claim_ceiling")
+    ceiling_allowed = claim_ceiling_allowed_refs(claim_ceiling)
+    if ceiling_allowed is None:
+        supported = ", ".join(sorted(CLAIM_CEILING_ALLOWED_OUTPUTS))
+        return [
+            "review verdict claim_ceiling is missing or unsupported "
+            f"({claim_ceiling!r}); supported values: {supported}"
+        ]
+
+    high_risk_refs = high_risk_output_refs(policy)
+    allowed_output_refs = (
+        {
+            item
+            for item in verdict.get("allowed_output_refs", [])
+            if isinstance(item, str) and item in high_risk_refs
+        }
+        if isinstance(verdict.get("allowed_output_refs"), list)
+        else set()
+    )
+    forbidden_output_refs = (
+        {
+            item
+            for item in verdict.get("forbidden_output_refs", [])
+            if isinstance(item, str) and item in high_risk_refs
+        }
+        if isinstance(verdict.get("forbidden_output_refs"), list)
+        else set()
+    )
+
+    errors: list[str] = []
+    overflow = sorted(allowed_output_refs - ceiling_allowed)
+    if overflow:
+        errors.append(
+            "review verdict allowed outputs exceed claim_ceiling: "
+            + ", ".join(overflow)
+        )
+
+    missing_forbidden = sorted((high_risk_refs - ceiling_allowed) - forbidden_output_refs)
+    if missing_forbidden:
+        errors.append(
+            "review verdict does not explicitly forbid outputs above claim_ceiling: "
+            + ", ".join(missing_forbidden)
+        )
+
+    conflicts = sorted(allowed_output_refs & forbidden_output_refs)
+    if conflicts:
+        errors.append(
+            "review verdict marks the same output as both allowed and forbidden: "
+            + ", ".join(conflicts)
+        )
+
+    return errors
+
+
 def advice_output_decisions(
     policy: dict[str, object] | None,
     verdict: dict[str, object] | None,
 ) -> list[dict[str, object]]:
+    claim_ceiling = verdict.get("claim_ceiling") if isinstance(verdict, dict) else None
+    ceiling_allowed = claim_ceiling_allowed_refs(claim_ceiling)
     allowed_output_refs = (
         set(verdict.get("allowed_output_refs", []))
         if isinstance(verdict, dict) and isinstance(verdict.get("allowed_output_refs"), list)
@@ -111,7 +202,13 @@ def advice_output_decisions(
         artifact_paths = entry.get("artifact_paths")
         if not isinstance(output_ref, str):
             continue
-        if output_ref in forbidden_output_refs:
+        if ceiling_allowed is None:
+            allowed = False
+            reason = "claim ceiling is missing or invalid"
+        elif output_ref not in ceiling_allowed:
+            allowed = False
+            reason = f"claim ceiling {claim_ceiling!r} does not permit this output"
+        elif output_ref in forbidden_output_refs:
             allowed = False
             reason = "forbidden by review verdict"
         elif output_ref in allowed_output_refs:
@@ -137,12 +234,15 @@ def build_output_policy_status(paper_dir: Path) -> dict[str, object]:
     policy = load_output_policy(policy_path)
     verdict = load_review_verdict(paper_dir)
     errors = validate_output_policy(policy)
+    alignment_errors = validate_claim_ceiling_alignment(policy, verdict) if not errors else []
     decisions = advice_output_decisions(policy, verdict) if not errors else []
     return {
         "path": str(policy_path),
         "present": policy_path.exists(),
         "shape_ok": not errors,
         "errors": errors,
+        "alignment_ok": not alignment_errors,
+        "alignment_errors": alignment_errors,
         "policy_id": policy.get("policy_id") if isinstance(policy, dict) else None,
         "claim_ceiling": verdict.get("claim_ceiling") if isinstance(verdict, dict) else None,
         "allowed_low_risk": (

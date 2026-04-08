@@ -389,9 +389,9 @@ greenfield 版本里，这些最多只作为迁移兼容层临时存在，不进
 
 repo truth 与 paper runtime 都必须从第一天接入 upstream validator：
 
-1. `python3 /Users/jixiaokang/.agents/skills/files-driven/scripts/validate_governance_assets.py workflow/review-workspace`
-2. `python3 /Users/jixiaokang/.agents/skills/files-driven/scripts/validate_governance_assets.py workflow/skill-maintenance`
-3. `python3 /Users/jixiaokang/.agents/skills/files-driven/scripts/validate_governance_assets.py papers/<paper-id>/governance/review-workspace-pack`
+1. `python3 ../files-driven/scripts/validate_governance_assets.py workflow/review-workspace`
+2. `python3 ../files-driven/scripts/validate_governance_assets.py workflow/skill-maintenance`
+3. `python3 ../files-driven/scripts/validate_governance_assets.py papers/<paper-id>/governance/review-workspace-pack`
 
 不做：
 

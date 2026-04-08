@@ -18,7 +18,7 @@
 
 先回答“这页现在有没有资格承载执行动作或最终判断”，再决定是否继续写页面。
 
-在生成页面前，先看 `review_version_manifest.json.release_gate`，并回查 `reviews/评审闭环与放行判断.md` 是否与之同步，至少确认：
+在生成页面前，先看 `notes/legacy-review-manifest.json.release_gate`，并回查 `notes/评审闭环与放行判断.md` 是否与之同步，至少确认：
 
 - `can_emit_problem_list`
 - `can_emit_execution_outputs`

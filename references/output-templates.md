@@ -194,7 +194,7 @@ legacy gate 至少明确：
 
 开始写网页前，先固定检查一份放行判断，再补两份合同文件：
 
-- `reviews/评审闭环与放行判断.md`
+- `notes/评审闭环与放行判断.md`
 
 - `reviews/audience_language_contract.md`
 - `reviews/display_projection_schema.md`

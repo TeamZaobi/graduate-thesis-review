@@ -171,7 +171,7 @@
 
 ## Schema Alignment With `files-driven` Governance Capability v1
 
-本稿后续所有关于 schema 的设计，统一参考 `/Users/jixiaokang/.agents/skills/files-driven` 当前 `codex/governance-capability-v1` 分支上的 governed-pack 方案。
+本稿后续所有关于 schema 的设计，统一参考 sibling `files-driven` skill 当前 `codex/governance-capability-v1` 分支上的 governed-pack 方案。
 
 这条线上已经明确的硬要求是：
 
@@ -1031,9 +1031,9 @@ graduate-thesis-review/
 
 并把 validator 接进最小回归链：
 
-- `python3 /Users/jixiaokang/.agents/skills/files-driven/scripts/validate_governance_assets.py workflow/review-workspace`
-- `python3 /Users/jixiaokang/.agents/skills/files-driven/scripts/validate_governance_assets.py workflow/skill-maintenance`
-- `python3 /Users/jixiaokang/.agents/skills/files-driven/scripts/validate_governance_assets.py papers/<paper-id>/reviews/governed/review-workspace-pack`
+- `python3 ../files-driven/scripts/validate_governance_assets.py workflow/review-workspace`
+- `python3 ../files-driven/scripts/validate_governance_assets.py workflow/skill-maintenance`
+- `python3 ../files-driven/scripts/validate_governance_assets.py papers/<paper-id>/reviews/governed/review-workspace-pack`
 
 ### Phase 2: Review Knowledge Upgrade
 

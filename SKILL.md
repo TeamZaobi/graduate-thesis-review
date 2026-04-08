@@ -159,9 +159,9 @@ description: 面向中文使用者操作的研究生毕业论文审查技能，�
    - `objects/assets_manifest.json` 至少写明 `source_kind` 和 `asset_type`，区分“图件原始来源是什么”与“当前证据资产是怎么取得的”
    - 对表格密集项目，优先用 `scripts/extract_docx_tables.py` 生成 `assets/tables/docx_csv/` 和 `objects/tables.json`，不要继续手工在 Markdown 里抄表号和列名
    - 对引文密集项目，优先用 `scripts/extract_docx_citations.py` 生成 `objects/citations.json` 和 `reviews/citation_extraction_manifest.json`，先把引用锚点结构化，再做引文法证
-3. 先建立或刷新 `reviews/review_version_manifest.json`，把本轮 `entry_mode / review_object / truth_source / rebase / slow_variables / dependents / readiness / handoff` 固定下来
-4. 如果本轮依赖多个线程、多个代理、多个终端工具或多轮交接，先补 `reviews/process_projection.md`，统一记录 `goal / actions / findings / decisions / artifacts / status / next_step`
-5. 按固定读取顺序接手：原始论文与底稿 → 对象层 → `review_version_manifest.json` → 冻结与版本台账 → workflow 与执行台账 → display_projection 与摘要
+3. 先建立或刷新 `notes/legacy-review-manifest.json`，把本轮 `entry_mode / review_object / truth_source / rebase / slow_variables / dependents / readiness / handoff` 固定下来
+4. 如果本轮依赖多个线程、多个代理、多个终端工具或多轮交接，先补 `notes/process_projection.md`，统一记录 `goal / actions / findings / decisions / artifacts / status / next_step`
+5. 按固定读取顺序接手：原始论文与底稿 → 对象层 → `legacy-review-manifest.json` → 冻结与版本台账 → workflow 与执行台账 → display_projection 与摘要
 6. 对迁移过的项目或多轮改动项目，尽早跑一次 `scripts/check_review_workspace.py`、`scripts/scan_stale_paths.py`，必要时再跑 `scripts/evaluate_review_toolchain.py` 做轻量 readiness 评估，不要等到交付前才发现结构漂移
 
 补充说明：
@@ -177,7 +177,7 @@ description: 面向中文使用者操作的研究生毕业论文审查技能，�
 
 ### 1.0.1 先判这次到底是哪种进入方式
 
-不要把所有任务都当成“从零开始审新论文”。在正式冻结版本前，先给 `review_version_manifest.json` 写明 `entry_mode`。
+不要把所有任务都当成“从零开始审新论文”。在正式冻结版本前，先给 `notes/legacy-review-manifest.json` 写明 `entry_mode`。
 
 当前默认只用五种：
 
@@ -196,7 +196,7 @@ description: 面向中文使用者操作的研究生毕业论文审查技能，�
 1. 记录唯一审阅对象：文件路径、文件名、最近修改时间，以及可用时的页数或行号底稿；如果原文来自 `Word / WPS`，再同步记录本轮 `visual_truth_source` 的渲染器与导出方式。
 2. 对照学生、导师或其他代理给出的进度描述，逐项标记为 `已存在但待重写`、`确实缺失`、`已完成但需回归`、`不可判定`。
 3. 把原论文、抽取文本、页面渲染图/页图/裁图、补充材料和当前工作区中间产物分成“原始证据”和“派生产物”。
-4. 同步把这些判断回写到 `reviews/review_version_manifest.json` 的 `review_object / truth_source / historical_sources / readiness`
+4. 同步把这些判断回写到 `notes/legacy-review-manifest.json` 的 `review_object / truth_source / historical_sources / readiness`
 5. 先写一份 `审阅对象冻结说明`，再进入深审、逐条改稿或综合结论阶段。
 
 没有版本基线时，不要直接下“这一章还没写/已经完成”的结论；尤其不要把学生自述、旧截图或旧 HTML 当成当前版本事实。
@@ -210,10 +210,10 @@ description: 面向中文使用者操作的研究生毕业论文审查技能，�
 1. 加载 [references/specialty-router.md](./references/specialty-router.md)，从封面、摘要、关键词、研究对象中识别**大学科 + 小学科**
 2. 加载 [references/specialty-manual-readiness-gate.md](./references/specialty-manual-readiness-gate.md)，把当前专项状态判成 `complete / partial / missing`
 3. 只有在 `complete` 时，才直接加载对应专项进入深审
-4. 如果是 `partial`，先生成 `reviews/专业手册完备性判断.md` 和 `reviews/专业专项补充说明.md`，再用“专项 + 论文级补充”进入深审
+4. 如果是 `partial`，先生成 `notes/专业手册完备性判断.md` 和 `notes/专业专项补充说明.md`，再用“专项 + 论文级补充”进入深审
 5. 如果是 `missing`，先用通用框架快筛，同时触发 deep-research 获取该领域当前规范；只有当补充内容具备跨论文复用性时，才加载 [references/specialty-manual-standard.md](./references/specialty-manual-standard.md) 新建或重写共享专项
 
-专项 gate 一旦形成结论，要把机器状态同步回 `reviews/review_version_manifest.json.specialty_gate`；`reviews/专业手册完备性判断.md` 保留为人类可读投影与判断记录，不能只留口头说明。
+专项 gate 一旦形成结论，要把机器状态同步回 `notes/legacy-review-manifest.json.specialty_gate`；`notes/专业手册完备性判断.md` 保留为人类可读投影与判断记录，不能只留口头说明。
 
 这一步不只判断“方法学规则够不够”，还要同步判断“学科语域够不够”：
 
@@ -250,7 +250,7 @@ description: 面向中文使用者操作的研究生毕业论文审查技能，�
 - 论文同时跨“观察性因果推断 + 专病终点”或“临床干预 + 设备/信号处理”两条以上主线
 - 外部专家、不同 agent 或不同台账对同一核心结论出现跨领域冲突
 
-启动时，至少先明确五件事，并写进 `reviews/专业手册完备性判断.md`；如果现有共享专项不够，再同步写入 `reviews/专业专项补充说明.md`：
+启动时，至少先明确五件事，并写进 `notes/专业手册完备性判断.md`；如果现有共享专项不够，再同步写入 `notes/专业专项补充说明.md`：
 
 1. `domain_stack`：这篇论文到底命中了哪些闭环，例如 `流行病学 / 生物统计 / 心血管临床`
 2. `primary_loop`：哪条闭环负责定义主判断边界
@@ -312,7 +312,7 @@ description: 面向中文使用者操作的研究生毕业论文审查技能，�
 4. 没有真源、真源互相冲突、或只来自二手转述的数字，不得写入最终结论或“可直接替换文本”。
 
 复杂项目默认补一份 `版本冻结与依赖回归台账.md`；没有这一步，就容易把旧版结果继续带进摘要、结论和答辩口径。
-如果已经进入 `version_rebase`，再把 `from_version / to_version / deprecated_anchors / impacted_artifacts` 同步回写到 `review_version_manifest.json`，不要只在 Markdown 里口头说明。
+如果已经进入 `version_rebase`，再把 `from_version / to_version / deprecated_anchors / impacted_artifacts` 同步回写到 `legacy-review-manifest.json`，不要只在 Markdown 里口头说明。
 
 ### 1.5 先判断是不是跨代理协作场景
 
@@ -463,7 +463,7 @@ description: 面向中文使用者操作的研究生毕业论文审查技能，�
 先产出证据型中间文件，再产出总结型交付物。对复杂或高风险论文，至少先完成与本项目相关的几类台账：
 
 - `process_projection`
-- `review_version_manifest.json`
+- `legacy-review-manifest.json`
 - `审阅对象冻结说明`
 - `版本冻结与依赖回归台账`
 - `关键数值与复算准入台账`
@@ -513,7 +513,7 @@ legacy gate 至少回答：
 2. 证据型台账、问题映射或问题清单页
 3. display_projection 展示层中的入口页 / 问题清单页 / 完整评审页（如果用户需要网页）
 
-只有 `reviews/评审闭环与放行判断.md` 明确放行后，才默认补以下执行或决策型产物：
+只有 `notes/评审闭环与放行判断.md` 明确放行后，才默认补以下执行或决策型产物：
 
 1. 最终可执行修改清单
 2. 学生执行版 / 导师摘要版
@@ -530,7 +530,7 @@ legacy gate 至少回答：
 
 只要进入网页 / HTML 交付模式，先固定检查一份放行判断，再补两份展示层合同文件：
 
-- `reviews/评审闭环与放行判断.md`
+- `notes/评审闭环与放行判断.md`
 
 - `reviews/audience_language_contract.md`
 - `reviews/display_projection_schema.md`
@@ -573,7 +573,7 @@ legacy gate 至少回答：
 
 进入多页模式后，先做五件事，再开始写页面：
 
-1. 先看 `reviews/评审闭环与放行判断.md`，明确当前是否只允许展示“评审进行中”，还是已经放行到执行 / 决策层
+1. 先看 `notes/评审闭环与放行判断.md`，明确当前是否只允许展示“评审进行中”，还是已经放行到执行 / 决策层
 2. 先建立共享的问题映射台账或等价结构，作为所有页面共同上游
 3. 先判每一页的受众与职责边界，再决定内容落点
 4. 先写 `reviews/audience_language_contract.md`，冻结各页的受众语言合同
@@ -668,7 +668,7 @@ HTML 不是把 Markdown 报告压缩一遍。普通项目可以偏概览；但�
 
 - 目录和命名规则见 [references/file-structure.md](./references/file-structure.md)
 - 可以直接运行 `scripts/init_review_workspace.py` 初始化标准结构
-- 工作区建好后，优先先清理 `review_version_manifest.json` 和首批核心模板的 `tainted` 标记，再跑 `scripts/check_review_workspace.py`
+- 工作区建好后，优先先清理 `legacy-review-manifest.json` 和首批核心模板的 `tainted` 标记，再跑 `scripts/check_review_workspace.py`
 - `scripts/check_review_workspace.py` 输出 `READY / PARTIAL / BLOCKED`；如果本轮明确采用标准多页 `display_projection`，再补跑 `scripts/check_review_workspace.py --strict`
 - 如果原文是 `DOCX / WPS` 稿件，初始化后优先补四条结构化流水线，并按来源分流：先建立 `assets/page_renders/`，优先运行 `scripts/render_docx_with_word.py --docx <thesis.docx> --paper-dir <paperXX> --overwrite` 固定 `Word 原生导出 PDF -> page_renders` 这条稳健路线；`docx_media` 图件用 `scripts/extract_docx_media.py` 抽出 `word/media`；`shape_rendered` 图件先登记到 `objects/figures.json` 与 `objects/assets_manifest.json`，必要时再补页图、重导出页图或渲染链路审计；`scripts/extract_docx_tables.py --paper-dir <paperXX>` 抽表；`scripts/extract_docx_citations.py --paper-dir <paperXX>` 抽引文锚点
 - 脚手架只创建目录和占位文件，不改动用户原有论文文件
