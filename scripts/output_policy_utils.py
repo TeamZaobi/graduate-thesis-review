@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 
 
@@ -43,8 +44,17 @@ def load_json(path: Path) -> dict[str, object] | None:
     return payload if isinstance(payload, dict) else None
 
 
+def resolve_output_policy_path(path: Path | None = None) -> Path:
+    if path is not None:
+        return path
+    env_path = os.environ.get("THESIS_REVIEW_OUTPUT_POLICY")
+    if env_path:
+        return Path(env_path).expanduser()
+    return DEFAULT_OUTPUT_POLICY_PATH
+
+
 def load_output_policy(path: Path | None = None) -> dict[str, object] | None:
-    return load_json(path or DEFAULT_OUTPUT_POLICY_PATH)
+    return load_json(resolve_output_policy_path(path))
 
 
 def load_review_verdict(paper_dir: Path) -> dict[str, object] | None:
@@ -68,6 +78,94 @@ def validate_output_policy(policy: dict[str, object] | None) -> list[str]:
         value = policy.get(field)
         if field in policy and not isinstance(value, list):
             errors.append(f"field {field} is not list-shaped")
+
+    allowed_low_risk = policy.get("allowed_low_risk")
+    if isinstance(allowed_low_risk, list):
+        for index, entry in enumerate(allowed_low_risk, start=1):
+            if not isinstance(entry, dict):
+                errors.append(f"allowed_low_risk[{index}] is not object-shaped")
+                continue
+            output_class = entry.get("output_class")
+            description = entry.get("description")
+            if not isinstance(output_class, str) or not output_class.strip():
+                errors.append(
+                    f"allowed_low_risk[{index}] is missing non-empty output_class"
+                )
+            if not isinstance(description, str) or not description.strip():
+                errors.append(
+                    f"allowed_low_risk[{index}] is missing non-empty description"
+                )
+
+    verdict_required_high_risk = policy.get("verdict_required_high_risk")
+    seen_output_refs: set[str] = set()
+    if isinstance(verdict_required_high_risk, list):
+        for index, entry in enumerate(verdict_required_high_risk, start=1):
+            if not isinstance(entry, dict):
+                errors.append(
+                    f"verdict_required_high_risk[{index}] is not object-shaped"
+                )
+                continue
+            output_ref = entry.get("output_ref")
+            route_family = entry.get("route_family")
+            artifact_paths = entry.get("artifact_paths")
+            if not isinstance(output_ref, str) or not output_ref.strip():
+                errors.append(
+                    f"verdict_required_high_risk[{index}] is missing non-empty output_ref"
+                )
+            elif output_ref in seen_output_refs:
+                errors.append(
+                    f"verdict_required_high_risk[{index}] duplicates output_ref {output_ref}"
+                )
+            else:
+                seen_output_refs.add(output_ref)
+            if not isinstance(route_family, str) or not route_family.strip():
+                errors.append(
+                    f"verdict_required_high_risk[{index}] is missing non-empty route_family"
+                )
+            if not isinstance(artifact_paths, list) or not artifact_paths:
+                errors.append(
+                    f"verdict_required_high_risk[{index}] is missing non-empty artifact_paths"
+                )
+            elif any(
+                not isinstance(path, str) or not path.strip()
+                for path in artifact_paths
+            ):
+                errors.append(
+                    f"verdict_required_high_risk[{index}] has invalid artifact_paths entries"
+                )
+
+    forbidden_transformations = policy.get("forbidden_transformations")
+    seen_rule_ids: set[str] = set()
+    if isinstance(forbidden_transformations, list):
+        for index, entry in enumerate(forbidden_transformations, start=1):
+            if not isinstance(entry, dict):
+                errors.append(
+                    f"forbidden_transformations[{index}] is not object-shaped"
+                )
+                continue
+            rule_id = entry.get("rule_id")
+            patterns = entry.get("patterns")
+            if not isinstance(rule_id, str) or not rule_id.strip():
+                errors.append(
+                    f"forbidden_transformations[{index}] is missing non-empty rule_id"
+                )
+            elif rule_id in seen_rule_ids:
+                errors.append(
+                    f"forbidden_transformations[{index}] duplicates rule_id {rule_id}"
+                )
+            else:
+                seen_rule_ids.add(rule_id)
+            if not isinstance(patterns, list) or not patterns:
+                errors.append(
+                    f"forbidden_transformations[{index}] is missing non-empty patterns"
+                )
+            elif any(
+                not isinstance(pattern, str) or not pattern.strip()
+                for pattern in patterns
+            ):
+                errors.append(
+                    f"forbidden_transformations[{index}] has invalid patterns entries"
+                )
     return errors
 
 
@@ -232,7 +330,7 @@ def advice_output_decisions(
 
 
 def build_output_policy_status(paper_dir: Path) -> dict[str, object]:
-    policy_path = DEFAULT_OUTPUT_POLICY_PATH
+    policy_path = resolve_output_policy_path()
     policy = load_output_policy(policy_path)
     verdict = load_review_verdict(paper_dir)
     errors = validate_output_policy(policy)
@@ -243,7 +341,7 @@ def build_output_policy_status(paper_dir: Path) -> dict[str, object]:
         "present": policy_path.exists(),
         "shape_ok": not errors,
         "errors": errors,
-        "alignment_ok": not alignment_errors,
+        "alignment_ok": not errors and not alignment_errors,
         "alignment_errors": alignment_errors,
         "policy_id": policy.get("policy_id") if isinstance(policy, dict) else None,
         "claim_ceiling": verdict.get("claim_ceiling") if isinstance(verdict, dict) else None,

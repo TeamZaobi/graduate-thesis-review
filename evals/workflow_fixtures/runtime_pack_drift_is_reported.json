@@ -1,0 +1,26 @@
+{
+  "name": "runtime_pack_drift_is_reported",
+  "paper_id": "paper06",
+  "manifest_updates": {
+    "template_status": "ready",
+    "entry_mode": "initial_review"
+  },
+  "json_overrides": {
+    "governance/review-workspace-pack/workflow.contract.json": {
+      "version_anchor": "stale-v999"
+    }
+  },
+  "expected": {
+    "check_status": "PARTIAL",
+    "check_contains": [
+      "Runtime pack drift from repo truth pack"
+    ],
+    "report_equals": {
+      "runtime_pack.drift.ok": false,
+      "runtime_pack.drift.mismatched_files": [
+        "workflow.contract.json"
+      ],
+      "runtime_pack.validator.ok": true
+    }
+  }
+}
