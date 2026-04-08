@@ -9,6 +9,8 @@ from typing import Any
 from zipfile import ZipFile
 import xml.etree.ElementTree as ET
 
+from legacy_asset_paths import notes_dir
+
 
 NS = {"w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main"}
 IN_TEXT_NUMERIC_RE = re.compile(r"\[(\d+(?:\s*[-,，、]\s*\d+)*)\]")
@@ -215,11 +217,11 @@ def main() -> int:
     )
     target_group.add_argument(
         "--paper-dir",
-        help="Paper workspace root. Defaults manifest to reviews/citation_extraction_manifest.json and objects to objects/citations.json",
+        help="Paper workspace root. Defaults manifest to notes/citation_extraction_manifest.json and objects to objects/citations.json",
     )
     parser.add_argument(
         "--manifest",
-        help="Optional manifest path. Defaults to <output-dir>/manifest.json or <paper-dir>/reviews/citation_extraction_manifest.json",
+        help="Optional manifest path. Defaults to <output-dir>/manifest.json or <paper-dir>/notes/citation_extraction_manifest.json",
     )
     parser.add_argument(
         "--objects-path",
@@ -231,8 +233,8 @@ def main() -> int:
     paper_dir = Path(args.paper_dir).expanduser().resolve() if args.paper_dir else None
 
     if paper_dir is not None:
-        output_dir = paper_dir / "reviews"
-        default_manifest = paper_dir / "reviews" / "citation_extraction_manifest.json"
+        output_dir = notes_dir(paper_dir)
+        default_manifest = notes_dir(paper_dir) / "citation_extraction_manifest.json"
         default_objects = paper_dir / "objects" / "citations.json"
         paper_id = paper_dir.name
     else:

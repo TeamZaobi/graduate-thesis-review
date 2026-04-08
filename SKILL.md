@@ -158,7 +158,7 @@ description: 面向中文使用者操作的研究生毕业论文审查技能，�
    - `objects/figures.json` 至少写明每个图件的 `source_kind`，例如 `docx_media` 或 `shape_rendered`，不要只在自然语言备注里临时解释
    - `objects/assets_manifest.json` 至少写明 `source_kind` 和 `asset_type`，区分“图件原始来源是什么”与“当前证据资产是怎么取得的”
    - 对表格密集项目，优先用 `scripts/extract_docx_tables.py` 生成 `assets/tables/docx_csv/` 和 `objects/tables.json`，不要继续手工在 Markdown 里抄表号和列名
-   - 对引文密集项目，优先用 `scripts/extract_docx_citations.py` 生成 `objects/citations.json` 和 `reviews/citation_extraction_manifest.json`，先把引用锚点结构化，再做引文法证
+   - 对引文密集项目，优先用 `scripts/extract_docx_citations.py` 生成 `objects/citations.json` 和 `notes/citation_extraction_manifest.json`，先把引用锚点结构化，再做引文法证
 3. 先建立或刷新 `notes/legacy-review-manifest.json`，把本轮 `entry_mode / review_object / truth_source / rebase / slow_variables / dependents / readiness / handoff` 固定下来
 4. 如果本轮依赖多个线程、多个代理、多个终端工具或多轮交接，先补 `notes/process_projection.md`，统一记录 `goal / actions / findings / decisions / artifacts / status / next_step`
 5. 按固定读取顺序接手：原始论文与底稿 → 对象层 → `legacy-review-manifest.json` → 冻结与版本台账 → workflow 与执行台账 → display_projection 与摘要

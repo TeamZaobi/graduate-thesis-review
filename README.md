@@ -230,7 +230,7 @@ python3 scripts/render_docx_with_word.py --docx thesis.docx --paper-dir papers/p
 如果文献综述、讨论和方法学论断高度依赖引用，建议尽早补：
 
 - `objects/citations.json`
-- `reviews/citation_extraction_manifest.json`
+- `notes/citation_extraction_manifest.json`
 
 ## 专业领域支持
 

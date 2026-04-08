@@ -271,3 +271,11 @@
   - fresh workspace 现在能正确复制 runtime pack，`evaluate_review_toolchain.py` 报告 `runtime_pack.validator.ok = true`、`output_policy.alignment_ok = true`
   - 当 `review-verdict.claim_ceiling = advisor_only` 却试图放行 `output.student.execution-pack` 时，`check_review_workspace.py` 会明确报出 `Advice output exists before review-verdict/output policy allows it`
   - 当 `reviews/review_version_manifest.json` 被改成与 `notes/legacy-review-manifest.json` 并存的常规文件时，`check_review_workspace.py` 与 `evaluate_review_toolchain.py` 都会显式报出 `dual-track drift`
+- 用户要求“先完成修改再推”后，又补做了一轮 residual drift 清理：
+  - `scripts/extract_docx_citations.py` 默认 manifest 已从 `reviews/citation_extraction_manifest.json` 改到 `notes/citation_extraction_manifest.json`
+  - `scripts/check_docx_formal_rules.py` 默认 manifest 已从 `reviews/formal_review_manifest.json` 改到 `notes/formal_review_manifest.json`
+  - `README.md`、`SKILL.md` 和 `2026-04-files-driven-workflow-multirole-design.md` 中对应的高频示例路径已同步到当前 canonical
+- 补完后再次验收：
+  - `python3 -m py_compile scripts/extract_docx_citations.py scripts/check_docx_formal_rules.py scripts/evaluate_review_toolchain.py scripts/check_review_workspace.py scripts/init_review_workspace.py scripts/run_workflow_regression.py`
+  - `python3 scripts/run_workflow_regression.py`
+  - `python3 scripts/validate_evals.py`

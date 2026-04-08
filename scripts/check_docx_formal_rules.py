@@ -11,6 +11,8 @@ from typing import Any
 from zipfile import BadZipFile, ZipFile
 import xml.etree.ElementTree as ET
 
+from legacy_asset_paths import notes_dir
+
 
 W_NS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
 M_NS = "http://schemas.openxmlformats.org/officeDocument/2006/math"
@@ -462,7 +464,7 @@ def main() -> int:
     target_group.add_argument("--paper-dir", help="Paper workspace root")
     parser.add_argument(
         "--manifest",
-        help="Optional manifest path. Defaults to <output-dir>/manifest.json or <paper-dir>/reviews/formal_review_manifest.json",
+        help="Optional manifest path. Defaults to <output-dir>/manifest.json or <paper-dir>/notes/formal_review_manifest.json",
     )
     parser.add_argument(
         "--objects-path",
@@ -485,8 +487,8 @@ def main() -> int:
 
     paper_dir = Path(args.paper_dir).expanduser().resolve() if args.paper_dir else None
     if paper_dir is not None:
-        output_dir = paper_dir / "reviews"
-        default_manifest = paper_dir / "reviews" / "formal_review_manifest.json"
+        output_dir = notes_dir(paper_dir)
+        default_manifest = notes_dir(paper_dir) / "formal_review_manifest.json"
         default_objects = paper_dir / "objects" / "formal_findings.json"
         paper_id = paper_dir.name
     else:

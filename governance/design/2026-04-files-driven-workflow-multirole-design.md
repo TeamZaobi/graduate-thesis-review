@@ -231,7 +231,7 @@ repo 级真源固定放在：
 
 单篇论文运行时，不直接把 repo 级真源当运行目录修改，而是在论文工作区生成冻结快照：
 
-- `papers/<paper-id>/reviews/governed/review-workspace-pack/`
+- `papers/<paper-id>/governance/review-workspace-pack/`
 
 该目录作为 runtime pack，承载：
 
@@ -252,9 +252,9 @@ repo 级真源固定放在：
 
 ### 3. Thesis-Review Supplemental Runtime
 
-以下 thesis-review 特有慢变量，短期仍保留在 paper 工作区 `reviews/` 下，不强塞进 governed-pack v1：
+以下 thesis-review 特有慢变量，短期仍保留在 paper 工作区 `notes/` 下，不强塞进 governed-pack v1：
 
-- `review_version_manifest.json`
+- `legacy-review-manifest.json`
 - `审阅对象冻结说明.md`
 - `专业手册完备性判断.md`
 - `专业专项补充说明.md`
@@ -274,7 +274,7 @@ validator 分两层：
 1. repo 层 smoke validation
    - 用最小 smoke pack 验证 truth pack 形状与 schema 对齐
 2. paper 层 runtime validation
-   - 直接对 `papers/<paper-id>/reviews/governed/review-workspace-pack/` 运行 upstream validator
+   - 直接对 `papers/<paper-id>/governance/review-workspace-pack/` 运行 upstream validator
 
 这一步必须成为第一批实施的一部分，否则 schema 对齐只停留在文档层。
 
@@ -448,7 +448,7 @@ repo 级业务知识建议单列：
    - 不再承担结构化 criteria 真源职责
 2. `knowledge/`
    - 成为后续 `criteria -> evidence -> outputs` 主线的 canonical 业务知识层
-3. `papers/<paper-id>/reviews/evidence/`
+3. `papers/<paper-id>/evidence/`
    - 作为单篇论文的 evidence 实例层
    - 绑定具体 `criteria` 引用，不反向定义 criteria
 
@@ -536,21 +536,21 @@ repo 级业务知识建议单列：
   - 仓库级 `agent` 真源
 - `workflow/review-workspace/objects/`
   - 仓库级控制对象真源
-- `papers/<paper-id>/reviews/governed/review-workspace-pack/workflow.state.json`
+- `papers/<paper-id>/governance/review-workspace-pack/workflow.state.json`
   - thesis-review 的 canonical 控制 runtime slice
   - 持有 `current_node_id / gate_state / required_evidence_refs / missing_evidence_refs / allowed_next_step_refs / forbidden_output_refs`
-- `papers/<paper-id>/reviews/governed/review-workspace-pack/workflow.events.jsonl`
+- `papers/<paper-id>/governance/review-workspace-pack/workflow.events.jsonl`
   - 事件轨迹
-- `papers/<paper-id>/reviews/governed/review-workspace-pack/status.projection.json`
+- `papers/<paper-id>/governance/review-workspace-pack/status.projection.json`
   - 最小机读状态投影
   - 只允许复述派生状态，不再生成放行权
-- `papers/<paper-id>/reviews/review_version_manifest.json`
+- `papers/<paper-id>/notes/legacy-review-manifest.json`
   - thesis-review 兼容层与补充执行对象
   - 暂存 `truth_source / rebase / slow_variables / specialty_gate / task_exceptions / handoff` 等尚未迁入 upstream governed-pack 的项目特有字段
-- `papers/<paper-id>/reviews/评审闭环与放行判断.md`
+- `papers/<paper-id>/notes/评审闭环与放行判断.md`
   - `status_projection`
   - 人类可读投影
-- `papers/<paper-id>/reviews/process_projection.md`
+- `papers/<paper-id>/notes/process_projection.md`
   - 条件型 `process_projection`
   - 只在 handoff / 多代理 / 多工具复杂度足够高时启用
 
@@ -727,7 +727,7 @@ graduate-thesis-review/
 
 运行实例仍保留在：
 
-- `papers/<paper-id>/reviews/review_version_manifest.json.workflow_route`
+- `papers/<paper-id>/notes/legacy-review-manifest.json.workflow_route`
 
 ### Gate 2: `evidence_gate`
 
@@ -779,10 +779,10 @@ graduate-thesis-review/
 
 运行实例仍保留在：
 
-- `papers/<paper-id>/reviews/review_version_manifest.json`
-- `papers/<paper-id>/reviews/专业手册完备性判断.md`
-- `papers/<paper-id>/reviews/专业专项补充说明.md`
-- `papers/<paper-id>/reviews/审阅对象冻结说明.md`
+- `papers/<paper-id>/notes/legacy-review-manifest.json`
+- `papers/<paper-id>/notes/专业手册完备性判断.md`
+- `papers/<paper-id>/notes/专业专项补充说明.md`
+- `papers/<paper-id>/notes/审阅对象冻结说明.md`
 
 ### Gate 3: `write_gate`
 
@@ -819,8 +819,8 @@ graduate-thesis-review/
 
 运行实例仍保留在：
 
-- `papers/<paper-id>/reviews/review_version_manifest.json.release_gate`
-- `papers/<paper-id>/reviews/review_version_manifest.json.task_exceptions.scoped_rewrite`
+- `papers/<paper-id>/notes/legacy-review-manifest.json.release_gate`
+- `papers/<paper-id>/notes/legacy-review-manifest.json.task_exceptions.scoped_rewrite`
 
 其中与本项目使命层级直接相关的一条硬规则应写成：
 
@@ -1023,9 +1023,9 @@ graduate-thesis-review/
 
 - `governance/execution/workflow-audit-2026-04/`
 - `governance/status/`
-- `papers/<paper-id>/reviews/governed/review-workspace-pack/workflow.state.json`
-- `papers/<paper-id>/reviews/governed/review-workspace-pack/workflow.events.jsonl`
-- `papers/<paper-id>/reviews/governed/review-workspace-pack/status.projection.json`
+- `papers/<paper-id>/governance/review-workspace-pack/workflow.state.json`
+- `papers/<paper-id>/governance/review-workspace-pack/workflow.events.jsonl`
+- `papers/<paper-id>/governance/review-workspace-pack/status.projection.json`
 
 然后迁移现有审计文件。
 
@@ -1033,7 +1033,7 @@ graduate-thesis-review/
 
 - `python3 ../files-driven/scripts/validate_governance_assets.py workflow/review-workspace`
 - `python3 ../files-driven/scripts/validate_governance_assets.py workflow/skill-maintenance`
-- `python3 ../files-driven/scripts/validate_governance_assets.py papers/<paper-id>/reviews/governed/review-workspace-pack`
+- `python3 ../files-driven/scripts/validate_governance_assets.py papers/<paper-id>/governance/review-workspace-pack`
 
 ### Phase 2: Review Knowledge Upgrade
 
@@ -1045,7 +1045,7 @@ graduate-thesis-review/
 
 - `knowledge/criteria/`
 - `knowledge/evidence-templates/`
-- `papers/<paper-id>/reviews/evidence/` 或其等价实例层
+- `papers/<paper-id>/evidence/` 或其等价实例层
 - agent 对 criteria 的显式消费边界
 - `high_level_review_completed` 的可检查证据集合
 
