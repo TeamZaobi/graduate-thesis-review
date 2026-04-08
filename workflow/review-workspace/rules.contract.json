@@ -1,0 +1,67 @@
+{
+  "schema_version": "1.0",
+  "policy_id": "policy.review-workspace.guard",
+  "family": "policy_or_rules",
+  "version_anchor": "v1",
+  "risk_level": "critical",
+  "scope": "workflow",
+  "applies_to_refs": [
+    "workflow.review-workspace"
+  ],
+  "rules": [
+    {
+      "rule_id": "rule.require-high-level-review-before-advice",
+      "effect": "require_evidence",
+      "target_refs": [
+        "transition.review-to-advice"
+      ],
+      "required_refs": [
+        "evidence.review_object.frozen",
+        "evidence.specialty_route.completed",
+        "evidence.core_evidence.covered",
+        "evidence.core_loops.reviewed",
+        "evidence.limitations.explicit",
+        "evidence.output_authority.defined"
+      ]
+    },
+    {
+      "rule_id": "rule.deny-advisor-output-when-partial",
+      "effect": "deny",
+      "condition_ref": "state.review.partial",
+      "target_refs": [
+        "output.advisor.line-editing",
+        "output.advisor.summary",
+        "output.advisor.defense-talking-points",
+        "output.student.execution-pack"
+      ]
+    },
+    {
+      "rule_id": "rule.require-review-promotion-for-high-risk-targets",
+      "effect": "require_review",
+      "target_refs": [
+        "action.advice",
+        "output.advisor.line-editing",
+        "output.advisor.summary"
+      ]
+    },
+    {
+      "rule_id": "rule.deny-claim-strength-upgrade-without-review",
+      "effect": "deny",
+      "condition_ref": "state.review.partial",
+      "target_refs": [
+        "output.advisor.summary",
+        "output.student.execution-pack"
+      ]
+    },
+    {
+      "rule_id": "rule.require-rollback-before-reopen",
+      "effect": "require_rollback",
+      "target_refs": [
+        "transition.advice-to-review"
+      ],
+      "required_refs": [
+        "approval.review.rollback"
+      ]
+    }
+  ]
+}

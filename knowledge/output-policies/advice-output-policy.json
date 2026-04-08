@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "policy_id": "policy.advice-output-governor",
+  "family": "output_policy",
+  "version_anchor": "v1",
+  "allowed_low_risk": [
+    {
+      "output_class": "low-risk.language-smoothing",
+      "description": "Pure language smoothing, term normalization, or local compression without changing scientific meaning."
+    }
+  ],
+  "verdict_required_high_risk": [
+    {
+      "output_ref": "output.advisor.line-editing",
+      "route_family": "advisor_line_editing",
+      "artifact_paths": [
+        "reviews/原子级修改建议.md",
+        "reviews/证据绑定改写表.md",
+        "reviews/论断-引文核查表.md"
+      ]
+    },
+    {
+      "output_ref": "output.advisor.summary",
+      "route_family": "execution_outputs",
+      "artifact_paths": [
+        "reviews/导师汇报版摘要.md",
+        "display/导师汇报页.html"
+      ]
+    },
+    {
+      "output_ref": "output.advisor.defense-talking-points",
+      "route_family": "execution_outputs",
+      "artifact_paths": [
+        "reviews/答辩口径.md"
+      ]
+    },
+    {
+      "output_ref": "output.student.execution-pack",
+      "route_family": "execution_outputs",
+      "artifact_paths": [
+        "reviews/最终可执行修改清单.md",
+        "reviews/学生执行版修改清单.md",
+        "display/学生执行页.html"
+      ]
+    }
+  ],
+  "forbidden_transformations": [
+    {
+      "rule_id": "forbid.fabricated-blinding",
+      "patterns": [
+        "补造盲法",
+        "新增盲法"
+      ]
+    },
+    {
+      "rule_id": "forbid.fabricated-registration",
+      "patterns": [
+        "补造注册",
+        "新增注册号"
+      ]
+    },
+    {
+      "rule_id": "forbid.certainty-causal-upgrade",
+      "patterns": [
+        "证明了因果",
+        "确证因果",
+        "已证实因果"
+      ]
+    }
+  ]
+}

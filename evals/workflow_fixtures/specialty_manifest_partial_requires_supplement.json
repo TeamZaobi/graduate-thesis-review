@@ -1,0 +1,43 @@
+{
+  "name": "specialty_manifest_partial_requires_supplement",
+  "paper_id": "paper02",
+  "manifest_updates": {
+    "template_status": "ready",
+    "entry_mode": "initial_review",
+    "specialty_gate": {
+      "domain_stack": [
+        "心脏康复",
+        "可穿戴传感"
+      ],
+      "primary_loop": "疗效与依从性闭环",
+      "supporting_loops": [
+        "设备一致性"
+      ],
+      "matched_manuals": [
+        "specialty-cardiology.md"
+      ],
+      "specialty_readiness": "partial",
+      "discipline_register_status": "partial",
+      "independent_audit_required": "yes",
+      "required_expert_checks": [
+        "临床结局",
+        "设备依从性"
+      ],
+      "next_action": "先补论文级专项补充"
+    }
+  },
+  "file_overrides": {
+    "reviews/专业手册完备性判断.md": "# 专业手册完备性判断\n\n## domain_stack\n- 心脏康复\n\n## primary_loop\n疗效闭环\n\n## 完备性结论\ncomplete\n\n## discipline_register_status\ncomplete\n\n## independent_audit_required\nno\n\n## required_expert_checks\n- 临床结局\n\n## 下一动作\n直接进入深审\n"
+  },
+  "expected": {
+    "check_status": "PARTIAL",
+    "check_contains": [
+      "Specialty gate projection drift",
+      "专业专项补充说明.md"
+    ],
+    "report_equals": {
+      "specialty.source": "manifest",
+      "specialty.specialty_readiness": "partial"
+    }
+  }
+}

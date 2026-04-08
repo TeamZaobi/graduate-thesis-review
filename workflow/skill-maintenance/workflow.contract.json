@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0",
+  "workflow_id": "workflow.skill-maintenance",
+  "family": "workflow",
+  "governance_level": "controlled",
+  "execution_mode": "gated",
+  "version_anchor": "v1",
+  "explanation_ref": "workflow/skill-maintenance/WORKFLOW.md",
+  "policy_refs": [
+    "policy.skill-maintenance.guard"
+  ],
+  "object_refs": [
+    "state.maintenance.partial",
+    "state.release.partial",
+    "action.maintain",
+    "action.release",
+    "evidence.maintenance.audit-note",
+    "approval.release.skill",
+    "output.release.skill-pack"
+  ],
+  "agent_refs": [
+    "agent.skill-maintenance"
+  ],
+  "entry_intents": [
+    {
+      "intent_id": "intent.maintenance",
+      "entry_node": "node.maintain",
+      "aliases": [
+        "audit skill",
+        "upgrade skill",
+        "refactor skill"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "node_id": "node.maintain",
+      "state_ref": "state.maintenance.partial",
+      "action_ref": "action.maintain",
+      "evidence_refs": [
+        "evidence.maintenance.audit-note"
+      ],
+      "output_policy_refs": [
+        "policy.skill-maintenance.guard"
+      ],
+      "approver_ref": "role.release-approver"
+    },
+    {
+      "node_id": "node.release",
+      "state_ref": "state.release.partial",
+      "action_ref": "action.release",
+      "output_policy_refs": [
+        "policy.skill-maintenance.guard"
+      ],
+      "approver_ref": "role.release-approver"
+    }
+  ],
+  "transitions": [
+    {
+      "transition_id": "transition.maintain-to-release",
+      "from_node": "node.maintain",
+      "to_node": "node.release",
+      "guard_policy_refs": [
+        "policy.skill-maintenance.guard"
+      ],
+      "approval_ref": "approval.release.skill"
+    }
+  ],
+  "checks": {
+    "route": [
+      "check.route.skill-maintenance"
+    ],
+    "evidence": [
+      "check.evidence.skill-maintenance"
+    ],
+    "write": [
+      "check.write.skill-maintenance"
+    ],
+    "stop": [
+      "check.stop.skill-maintenance"
+    ]
+  }
+}

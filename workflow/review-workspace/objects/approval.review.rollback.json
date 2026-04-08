@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "object_id": "approval.review.rollback",
+  "family": "object",
+  "version_anchor": "v1",
+  "kind": "approval_type",
+  "fields": [
+    {
+      "field_id": "approval_id",
+      "type": "string",
+      "required": true
+    }
+  ],
+  "semantics": [
+    {
+      "value": "rollback",
+      "meaning": "Advice must return to review before further downstream output is allowed."
+    }
+  ]
+}

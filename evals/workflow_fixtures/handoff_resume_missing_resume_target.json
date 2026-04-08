@@ -1,0 +1,21 @@
+{
+  "name": "handoff_resume_missing_resume_target",
+  "paper_id": "paper01",
+  "manifest_updates": {
+    "template_status": "ready",
+    "entry_mode": "handoff_resume",
+    "handoff": {
+      "next_gate": "resume_display_projection"
+    }
+  },
+  "expected": {
+    "check_status": "PARTIAL",
+    "check_contains": [
+      "workflow_route.resume_to_mode"
+    ],
+    "report_equals": {
+      "workflow_route.mode": "handoff_resume",
+      "process_projection_required": true
+    }
+  }
+}

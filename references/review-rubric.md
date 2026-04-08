@@ -47,6 +47,7 @@
 - 当前工作区里哪些只是模板文件，哪些已经填入了可回查证据
 
 如果这三件事没搞清，后面的“深审”很容易只是对着旧版本或空骨架做推演。
+同时检查 `notes/legacy-review-manifest.json` 是否已写明当前 `entry_mode / truth_source / readiness`；如果它仍是 `tainted`，先清 manifest，再继续深审。
 
 ## 0.4 先判断结构化资产和接手面是否存在
 
@@ -61,6 +62,11 @@
 2. `objects/tables.json`
 3. `objects/citations.json`
 4. `objects/assets_manifest.json`
+
+对图件密集项目，再补两个最小判断：
+
+- `objects/figures.json` 中每个图件至少区分 `docx_media` 还是 `shape_rendered`
+- `objects/assets_manifest.json` 中每个资产至少区分 `source_kind` 和 `asset_type`，不要把页面渲染图误写成“从源抽图”
 
 如果这些结构化资产缺失，并不等于不能审；但后续要主动收紧边界，避免把“路径记忆”和“线程记忆”误当成稳定证据。
 
@@ -230,6 +236,7 @@
 - 新改动有没有引入脏字符、错链、旧版本残留
 - 清单是否已经膨胀到需要拆出学生版和导师版
 - 多线程项目的接手信息是否已经被压进 `process_projection`，还是只能靠聊天回放恢复
+- `review_version_manifest.json` 是否已经同步更新 `entry_mode / rebase / dependents / readiness`
 
 ## 2. 多镜头提问模板
 

@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "policy_id": "policy.skill-maintenance.guard",
+  "family": "policy_or_rules",
+  "version_anchor": "v1",
+  "risk_level": "high",
+  "scope": "workflow",
+  "applies_to_refs": [
+    "workflow.skill-maintenance"
+  ],
+  "rules": [
+    {
+      "rule_id": "rule.require-audit-evidence-before-release",
+      "effect": "require_evidence",
+      "target_refs": [
+        "transition.maintain-to-release"
+      ],
+      "required_refs": [
+        "evidence.maintenance.audit-note"
+      ]
+    },
+    {
+      "rule_id": "rule.deny-release-output-when-partial",
+      "effect": "deny",
+      "condition_ref": "state.maintenance.partial",
+      "target_refs": [
+        "output.release.skill-pack"
+      ]
+    },
+    {
+      "rule_id": "rule.require-review-before-release",
+      "effect": "require_review",
+      "target_refs": [
+        "action.release"
+      ]
+    }
+  ]
+}

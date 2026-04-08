@@ -27,8 +27,8 @@
     },
     {
       "id": 5,
-      "prompt": "用户说：不要只给我问题清单，用导师视角把摘要和结论逐句改到可直接替换，但不能补造数据。请用 $graduate-thesis-review 输出原子级修改建议。",
-      "expected_output": "应进入导师式原子改稿模式，调用原子改稿与证据绑定改写能力，输出带有定位、原句、证据锚点、建议改写、禁止改法和待人工回查标记的修改卡片。",
+      "prompt": "用户说：不要只给我问题清单，用导师视角把摘要和结论逐句改到可直接替换，但不能补造数据。请用 $graduate-thesis-review 输出逐条修改建议。",
+      "expected_output": "应进入导师式逐条改稿模式，调用逐条改稿与证据绑定改写能力，输出带有定位、原句、证据锚点、建议改写、禁止改法和待人工回查标记的修改卡片。",
       "files": []
     },
     {
@@ -125,6 +125,126 @@
       "id": 21,
       "prompt": "用户给来一篇肿瘤科真实世界论文，主轴是免疫治疗联合化疗的目标试验模拟，现有 `references/` 里没有肿瘤专项。请用 $graduate-thesis-review 开始处理。",
       "expected_output": "应先把专项状态判为 `missing`，用通用框架快筛，再形成 `专业手册完备性判断` 和论文级 `专项补充`；只有在补充内容具备跨论文复用性时，才按高标准新建共享专项文件。",
+      "files": []
+    },
+    {
+      "id": 22,
+      "prompt": "同一篇论文昨天刚完成首轮审阅，今天用户又上传了 6.2 版 DOCX。当前工作区还保留 6.1 的底稿、旧行号和旧 HTML。请用 $graduate-thesis-review 继续处理。",
+      "expected_output": "应先把本轮判成 `version_rebase`，更新 `review_version_manifest.json` 的 `entry_mode / truth_source / historical_sources / rebase / impacted_artifacts`，再处理旧锚点和旧摘要回归，而不是直接沿用 6.1 行号继续深审。",
+      "files": []
+    },
+    {
+      "id": 23,
+      "prompt": "用户刚用初始化脚本搭了新论文工作区，`reviews/` 下已经有很多文件和 HTML 页面，但都还是默认占位。用户问现在能不能直接开始写综合报告和学生执行页。请用 $graduate-thesis-review 处理。",
+      "expected_output": "应先识别这些文件仍带模板污点，要求更新 `review_version_manifest.json`、清掉 `tainted` 标记，并用 `check_review_workspace.py` 的 `READY / PARTIAL / BLOCKED` gate 判当前状态，而不是把脚手架当成已完成工作区。",
+      "files": []
+    },
+    {
+      "id": 24,
+      "prompt": "这轮深审还没闭环，但 `reviews/评审闭环与放行判断.md` 已明确 `can_emit_execution_outputs = no`。与此同时，`process_projection.md` 却把“先出学生执行页和导师汇报页”写成下一步。请用 $graduate-thesis-review 处理。",
+      "expected_output": "应识别这是 release gate 阶段越权：在 `can_emit_execution_outputs = no` 时，不得把 `学生执行页`、`导师汇报页` 或同等执行面产物写成当前默认下一步，只能继续补证据型中间文件或问题清单。",
+      "files": []
+    },
+    {
+      "id": 25,
+      "prompt": "工作区里的 `reviews/评审闭环与放行判断.md` 写明 `can_issue_readiness_verdict = no`，但综合报告和导师页已经出现“建议送审”“建议答辩”这样的表述。请用 $graduate-thesis-review 处理。",
+      "expected_output": "应判定这是 readiness 阶段越权：在 `can_issue_readiness_verdict = no` 时，不得提前写“建议送审 / 建议答辩”，而应统一回退为“评审进行中 / 暂不放行”。",
+      "files": []
+    },
+    {
+      "id": 26,
+      "prompt": "用户催你直接开始改稿，但 `reviews/评审闭环与放行判断.md` 仍写着 `can_enter_line_editing = no`，`process_projection.md` 却写了“优先处理 P1 主线的定向改稿”。请用 $graduate-thesis-review 处理。",
+      "expected_output": "应识别 line-editing 阶段越权：在 `can_enter_line_editing = no` 时，不得把 `定向改稿` 或 `逐条改稿` 列成当前默认 next_step，只能继续补深审证据、问题映射或局部待回查卡片。",
+      "files": []
+    },
+    {
+      "id": 27,
+      "prompt": "这篇论文的主文和版本基线都没变，但学生新补了几张关键表格 CSV、两张图件原始文件和一份引文映射，用户让你继续严谨推进这轮审查。请用 $graduate-thesis-review 处理。",
+      "expected_output": "应把本轮判成 `evidence_upgrade`：先把新增表格、图件和引文锚点回写到对象层与 `review_version_manifest.json`，再只对受影响的判断、依赖台账和展示层做增量回归，而不是把整个项目误当作从零重审或直接推进放行。",
+      "files": []
+    },
+    {
+      "id": 28,
+      "prompt": "论文真源、核心结论和 release gate 都没变，但用户发现 `display/完整评审页.html`、`学生执行版修改清单.md` 和 `导师汇报版摘要.md` 仍残留旧版措辞，要求你回归这批交付物。请用 $graduate-thesis-review 处理。",
+      "expected_output": "应把本轮判成 `display_regression`：先固定真源未换与放行状态未变，再回归 display_projection 和轻量交付物的一致性，不得因为展示层过时就反向重跑整套深审、重写主判断或偷偷改变 release gate。",
+      "files": []
+    },
+    {
+      "id": 29,
+      "prompt": "当前工作区的 `review_version_manifest.json` 已写明 `entry_mode = initial_review`，而且项目还没有跨线程接手；此时 `reviews/process_projection.md` 不存在。用户问这会不会阻断本轮正常启动。请用 $graduate-thesis-review 处理。",
+      "expected_output": "应识别 `process_projection` 不是全局刚需：在非 `handoff_resume` 且当前不依赖多线程恢复时，缺少 `process_projection.md` 不应被当成全局 blocker；应继续按当前入口模式推进其余必需冻结与 gate。",
+      "files": []
+    },
+    {
+      "id": 30,
+      "prompt": "当前 `review_version_manifest.json` 已明确 `entry_mode = handoff_resume`，项目也确实跨了多个线程和代理，但 `reviews/process_projection.md` 仍缺失。请用 $graduate-thesis-review 处理。",
+      "expected_output": "应把这判成接手恢复链缺口：在 `handoff_resume` 下，`process_projection.md` 必须存在并记录 `goal / actions / findings / decisions / artifacts / status / next_step`，否则不能把接手恢复当成已完成。",
+      "files": []
+    },
+    {
+      "id": 31,
+      "prompt": "专项完备性判断已经把当前共享专项判成 `partial`，`reviews/专业手册完备性判断.md` 也写好了，但 `reviews/专业专项补充说明.md` 还没补。用户问能不能先跳过这一步直接进入深审。请用 $graduate-thesis-review 处理。",
+      "expected_output": "应拒绝跳过专项补充：当专项状态是 `partial` 或 `missing` 时，必须先补 `专业专项补充说明.md`，把本论文缺的规则、语域替换词和临时承担的闭环写清，再进入深审。",
+      "files": []
+    },
+    {
+      "id": 32,
+      "prompt": "当前工作区里 `review_version_manifest.json` 已经写了 `release_gate`，其中 `can_emit_execution_outputs = no`，`allowed_next_steps` 只允许继续补证据；但旧版 `评审闭环与放行判断.md` 还残留了放行后的措辞。请用 $graduate-thesis-review 处理。",
+      "expected_output": "应把 `review_version_manifest.json.release_gate` 视为机器可读 gate，并把 `评审闭环与放行判断.md` 作为需要同步修正的人类可读投影；在 `release_gate` 未放行时，不得因为旧 Markdown 残留就继续产出执行面。",
+      "files": []
+    },
+    {
+      "id": 33,
+      "prompt": "完整评审还没闭环，`can_enter_line_editing = no`，但用户明确只要求先把摘要中两段高风险结论做局部改写。请用 $graduate-thesis-review 处理，并把 gate 写清。",
+      "expected_output": "应把这判成未闭环前的受限局部处理：保持全文 `can_enter_line_editing = no`，只在任务说明或过程记录里明确允许处理的指定段落，不得顺势扩展成全文逐条改稿、执行清单或 readiness 判断。",
+      "files": []
+    },
+    {
+      "id": 34,
+      "prompt": "用户明确要求做送审前形式审查。当前 DOCX 的目录和页码不稳，页眉页脚在不同节里还混乱，学校模板又要求摘要页和目录页单独起页。请用 $graduate-thesis-review 处理。",
+      "expected_output": "应加载形式审查清单，先区分通用形式项和学校模板项，优先核对目录、页码、页眉页脚、分节和单独起页规则，而不是把这类问题混成方法学深审。",
+      "files": []
+    },
+    {
+      "id": 35,
+      "prompt": "用户说论文正文基本能看，但担心 Word 里还残留修订记录、批注、目录域和页码域问题，交叉引用偶尔还报错。请用 $graduate-thesis-review 处理。",
+      "expected_output": "应把这判成 Word / WPS 机械健康检查：优先清理修订记录、批注、目录域、页码域和交叉引用错误，并建议先用结构化脚本做初筛。",
+      "files": []
+    },
+    {
+      "id": 36,
+      "prompt": "用户要导出盲审 PDF。当前致谢没删，文档元数据里还保留作者名，担心匿名和 PDF 导出后信息泄露。请用 $graduate-thesis-review 处理。",
+      "expected_output": "应把这判成盲审与 PDF 提交卫生问题，优先检查匿名化、元数据清理、PDF 导出一致性，而不是只盯正文内容。",
+      "files": []
+    },
+    {
+      "id": 37,
+      "prompt": "论文里图号和表号都按章节编号，但有两个 `图3-2`，正文互引还把 `式(2-3)` 写成了 `式(3-2)`。用户要你做形式审查。请用 $graduate-thesis-review 处理。",
+      "expected_output": "应把这类问题视为编号与互引错误，优先核对图号、表号、公式编号、caption 和正文互引一致性，并把重复编号提升为高优先级形式问题。",
+      "files": []
+    },
+    {
+      "id": 38,
+      "prompt": "当前工作区已经把 `review_version_manifest.json.specialty_gate.specialty_readiness = partial`，并列出了 `required_expert_checks` 和下一动作；但 `专业手册完备性判断.md` 还是旧结论，`专业专项补充说明.md` 也还没补齐。请用 $graduate-thesis-review 处理。",
+      "expected_output": "应把 `review_version_manifest.json.specialty_gate` 视为机器可读专项 gate，并把 `专业手册完备性判断.md` 当成需要同步修正的人类可读投影；当专项结论是 `partial` 或 `missing` 时，不得跳过 `专业专项补充说明.md`。",
+      "files": []
+    },
+    {
+      "id": 39,
+      "prompt": "老工作区里还没有 `review_version_manifest.json.specialty_gate`，但 `专业手册完备性判断.md` 已明确写了 `complete`，并记录了 `domain_stack / primary_loop / required_expert_checks`。请用 $graduate-thesis-review 处理。",
+      "expected_output": "应允许脚本暂时回退读取 `专业手册完备性判断.md` 作为 legacy specialty gate，同时提示尽快把结论迁移进 `review_version_manifest.json.specialty_gate`，避免长期只靠 Markdown 解析。",
+      "files": []
+    },
+    {
+      "id": 40,
+      "prompt": "完整评审还没闭环，`can_enter_line_editing = no`，但用户明确只要求先改摘要里两段高风险结论。当前工作区已经在 `review_version_manifest.json.task_exceptions.scoped_rewrite` 写了目标段落和原因，并补了 `局部改写任务卡.md`。请用 $graduate-thesis-review 处理。",
+      "expected_output": "应把这判成受限局部改写例外：保留全文 `can_enter_line_editing = no`，只允许沿 `task_exceptions.scoped_rewrite` 和 `局部改写任务卡.md` 处理指定段落，不得扩展成全文逐条改稿、执行清单或 readiness 判断。",
+      "files": []
+    },
+    {
+      "id": 41,
+      "prompt": "工作区里已经出现了实填的 `局部改写任务卡.md`，但 `review_version_manifest.json` 里没有 `task_exceptions.scoped_rewrite`，`can_enter_line_editing` 也还没放行。请用 $graduate-thesis-review 处理。",
+      "expected_output": "应把这识别为局部改写越权：没有 `task_exceptions.scoped_rewrite` 的明确授权时，`局部改写任务卡.md` 不应提前实填；要么补齐受限例外合同，要么撤回到普通评审，不得默认继续改写。",
       "files": []
     }
   ]

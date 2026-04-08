@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "object_id": "state.advice.partial",
+  "family": "object",
+  "version_anchor": "v1",
+  "kind": "state_profile",
+  "fields": [
+    {
+      "field_id": "gate_state",
+      "type": "string",
+      "required": true,
+      "enum": [
+        "blocked",
+        "partial",
+        "ready"
+      ]
+    },
+    {
+      "field_id": "current_node_id",
+      "type": "string",
+      "required": true
+    }
+  ],
+  "semantics": [
+    {
+      "value": "partial",
+      "meaning": "Advisor work is in progress and may still roll back to review."
+    }
+  ]
+}

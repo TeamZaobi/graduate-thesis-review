@@ -1,0 +1,293 @@
+# Workflow Audit Progress
+
+## 2026-04-07
+
+- 已启动一轮面向“最新 Files Driven 流程治理”的多角色详设，角色拆分为 `Workflow Architect / Files-Driven Repo Architect / Control & QA Architect / Maintenance Flow Architect`
+- 主线程本轮不先改核心脚本，先固定一份统一收敛骨架，避免各角色建议再次散落在对话和临时摘要里
+- 已新增 `design/files-driven-workflow-redesign.md`，把 repo 级四层拆分、双 workflow 家族、合同位置、目录重构和迁移顺序先落成一份主线程设计稿
+- 本轮设计重点不再只是“论文工作区怎么管”，而是把 skill 仓库自身也按 `workflow / execution_object / status_projection / display_projection` 分层
+- 下一步：继续补齐各角色输入，并在统一收敛后决定是否进入第一批结构性改造：`workflow/` 家族建模、根目录审计文件迁移、README/SKILL 降级、脚本合同化消费
+
+## 2026-04-02
+
+- 启动整个 `graduate-thesis-review` skill workflow 严格审计
+- 选择 `files-driven + planning-with-files-zh` 作为本轮治理框架
+- 建立持久化审计文件：`task_plan.md`、`findings.md`、`progress.md`
+- 下一步：做结构家族 inventory，并核查 gate 真源与脚本落点
+- 已完成结构家族 inventory，确认当前 release gate 真源仍主要落在 `评审闭环与放行判断.md`
+- 已完成首轮 control audit，发现 `scripts/check_review_workspace.py` 在缺少 release gate 文件时存在 `UnboundLocalError` 级别实 bug
+- 已完成首轮 drift audit，确认 `validate_evals.py` / `evals.json` 尚未覆盖“未放行时不得提前改稿或给 readiness”这类新回归主题
+- 下一步：按发现优先级收敛修复顺序，决定是否把 release gate 升级为结构化 object 真源
+- 已开始第一轮修复：先处理 `check_review_workspace.py` 的缺失 gate 崩溃，再补 release gate 的负向 eval 覆盖
+- 第一轮修复已完成基本回归：`python3 -m py_compile scripts/check_review_workspace.py scripts/validate_evals.py` 通过
+- `python3 scripts/validate_evals.py` 已通过，当前覆盖数为 26 条 eval，新增 execution/readiness/line-editing 三类 release gate 负向主题
+- 缺失 `评审闭环与放行判断.md` 的最小复现已不再崩溃，`check_review_workspace.py` 现在返回正常的 `BLOCKED/PARTIAL/WARN` 输出
+- 已撤回一轮因误解需求而产生的附加实现：不再让 `evals.json` 承担 `workflow_entry_modes / user_stories / regressions` 元数据，也不再让 `validate_evals.py` 依赖这些字段
+- 已完成一轮“真实需求 -> 合适流程 -> 实现保障”的需求驱动审计，并新增 `workflow_requirements_audit.md`
+- 撤回后已复验：`python3 scripts/validate_evals.py` 继续通过，保留 28 条 eval 与 release gate 负向场景覆盖
+- 已开始第二轮合同修正：把 `check_review_workspace.py` 从“全局要求 process_projection”改为“按 `entry_mode` 条件要求”，并把专项完备性 gate 纳入脚本合同
+- 第二轮修正已完成首轮验证：`initial_review` 缺少 `process_projection.md` 不再被全局 `BLOCKED`，`handoff_resume` 缺失同文件会明确 `BLOCKED`
+- 已把 `专业手册完备性判断.md / 专业专项补充说明.md` 的 `partial / missing` 路由落进 `check_review_workspace.py`，缺少论文级专项补充时会明确报出
+- 已同步更新 `init_review_workspace.py`，新工作区会直接创建 `专业手册完备性判断.md` 与 `专业专项补充说明.md` 占位文件，降低脚手架与脚本合同漂移
+- 已补充 29-31 三条 eval，分别覆盖“非 handoff 不强制 process_projection”“handoff_resume 必需 process_projection”“专项 partial 不得跳过论文级补充”
+- 已开始第三轮合同修正：把 release gate 结构化进 `review_version_manifest.json.release_gate`，并让脚本优先读取结构化 gate
+- 第三轮修正已完成兼容回归：manifest gate 会优先于旧 Markdown 残留生效；旧项目若只保留 `评审闭环与放行判断.md`，当前会收到迁移提示但仍可继续使用
+- 已补充第 32 条 eval，并把 `validate_evals.py` 扩展到 `structured_release_gate` 主题，防止再次退回“只扫 Markdown can_*”
+- `evaluate_review_toolchain.py` 已同步输出结构化 `release_gate` 摘要，包括 `source / can_* / allowed_next_steps / forbidden_outputs`
+- 已完成一次面向全进程对话的上下文隔离复盘，并新增 `context_isolation_retrospective.md`，把稳定结论、失效路径和剩余 open items 重新拆开
+- 已完成一轮过度设计清理：半实现的 `scoped line editing` 已从 manifest/runtime contract 回退，只保留为自然语言边界，不再维持“写了字段但脚本不消费”的假合同
+- `release_gate` 解析已抽到 `scripts/release_gate_utils.py` 共享，`check_review_workspace.py` 与 `evaluate_review_toolchain.py` 不再各自维护一套提取逻辑
+- 已补齐兼容迁移边界：当 `review_version_manifest.json.release_gate` 仍是全 `pending` 占位时，脚本会回退使用 `评审闭环与放行判断.md`，只报迁移提示，不再误判成 manifest/Markdown 漂移
+- 本轮复验已通过：`python3 -m py_compile scripts/check_review_workspace.py scripts/evaluate_review_toolchain.py scripts/init_review_workspace.py scripts/validate_evals.py scripts/release_gate_utils.py` 与 `python3 scripts/validate_evals.py` 均通过；临时工作区回放也确认“placeholder manifest -> Markdown fallback”与“显式 manifest -> 漂移告警”都符合预期
+- 已按用户要求把剩余四项 open items 重写成新一轮推进计划，并固化进 `task_plan.md`
+- 已完成一轮多角色质询收敛：`需求负责人 / Workflow Architect / Contract Guardian / QA` 四个角色一致确认后续实施顺序固定为 `A(entry_mode 状态机) -> B(专项结构化真源) -> C(局部改写例外合同) -> D(执行型 regression runner)`
+- 本轮明确排除“节点级 Agents/Skills 总表”这条支线，避免把主控制链实现再次扩成第二主线
+- 已启动首批 explorer subagents 进入四项计划的设计澄清阶段；当前主线程保持只做计划、边界和后续集成，不并发改核心文件
+- 下一步：继续回收 explorer 结果，并按 `A -> B -> C -> D` 决定第一批 worker 实施
+- explorer 结果已部分收敛：A 产出 `workflow_route registry + resume_to_mode` 方案，B 产出 `manifest.specialty_gate` 方案，D 产出“保留静态 coverage、增设执行型 runner”方案
+- C 线第一次 explorer 回包未提供有效合同设计，主线程已判定不采纳该回包，并单独纠偏该工作流
+- 已启动 A 线第一批 worker：只授权其修改 `workflow_route_registry.py / check_review_workspace.py / init_review_workspace.py / evaluate_review_toolchain.py`，优先落状态机最小可行版本
+- C 线纠偏后的第二次 explorer 已给出有效方案：采用 `task_exceptions.scoped_rewrite.targets + reviews/局部改写任务卡.md` 的最小合同，不再把 scoped 例外塞回 `release_gate`
+- A 线第一位 worker 实际未交付任何 `workflow_route` 相关代码，只返回了阶段摘要；该回包已被判为无效，不计入推进成果
+- 已重新派发 A 线 worker，并再次核对当前代码中确实不存在 `workflow_route` / `resume_to_mode` / `required_steps` 等实现痕迹，避免被历史 diff 误导
+- A 线第二位 worker 交付仍然无效：再次只返回计划/阶段摘要，没有提交任何 `workflow_route` 代码实现；该回包也已判废
+- 当前阶段结论：本轮“计划 + 质询 + 收敛 + Subagents 启动”已完成，`A/B/C/D` 的设计收敛也已完成；但 A 线代码实施尚未真正落地，后续如继续推进，应改由主线程接管 A 线第一批实现，或重新拆成更窄的 worker 子任务
+- 主线程已接管 A 线第一批实现，并新增 `scripts/workflow_route_registry.py`；`workflow_route` 现已进入 `review_version_manifest.json` 脚手架，同时被 `check_review_workspace.py` 和 `evaluate_review_toolchain.py` 消费
+- A 线当前行为已完成最小验证：当 manifest 里的 `workflow_route` 仍是占位时，`evaluate_review_toolchain.py` 会从 `entry_mode` 派生默认路由；`handoff_resume` 缺少 `resume_to_mode` 时，`check_review_workspace.py` 会明确报出阶段合同缺口
+- 已开始并完成 B 线第一批实现：新增 `scripts/specialty_gate_utils.py` 作为共享解析层，把专项完备性 gate 结构化进 `review_version_manifest.json.specialty_gate`
+- `init_review_workspace.py` 现会直接创建 `specialty_gate` 占位；`check_review_workspace.py` 改为优先读取 manifest gate，在 placeholder 时回退 `专业手册完备性判断.md`，并对 manifest / Markdown 漂移给出显式提示
+- `evaluate_review_toolchain.py` 已同步输出 `specialty.source / specialty_readiness / discipline_register_status / independent_audit_required / required_expert_checks`
+- README、`SKILL.md` 与 `references/specialty-manual-readiness-gate.md` 已同步声明：`specialty_gate` 是机器真源，`专业手册完备性判断.md` 是人类可读投影；placeholder manifest 允许短暂 Markdown fallback，但应尽快迁回 manifest
+- 已补充 `eval 38-39` 和 `structured_specialty_gate` 主题，覆盖“manifest 显式 specialty gate 压过旧 Markdown”和“legacy Markdown gate 回退迁移”两类回归
+- 本轮复验已通过：`python3 -m py_compile scripts/specialty_gate_utils.py scripts/workflow_route_registry.py scripts/check_review_workspace.py scripts/init_review_workspace.py scripts/evaluate_review_toolchain.py scripts/validate_evals.py` 与 `python3 scripts/validate_evals.py` 均通过，当前共 39 条 eval
+- 临时工作区回放已确认两点：其一，`specialty_gate` 仍是占位时会正确回退到 Markdown 并识别 `complete`；其二，manifest 显式 `partial` 时会压过旧 Markdown，`check_review_workspace.py` 会同时报出 projection drift 和 `专业专项补充说明.md` 未完成
+- 已完成 C 线第一批实现：`init_review_workspace.py` 新增 `reviews/局部改写任务卡.md` 占位，以及 `review_version_manifest.json.task_exceptions.scoped_rewrite`
+- `check_review_workspace.py` 现会消费 `task_exceptions.scoped_rewrite`；当 `can_enter_line_editing != yes` 且例外已授权时，只允许受限的 `局部改写任务卡.md` 存在；没有例外授权时，实填任务卡会被直接判为越权
+- `evaluate_review_toolchain.py` 已同步输出 `task_exceptions.scoped_rewrite_enabled / scoped_rewrite_targets / scoped_rewrite_reason`
+- README、`SKILL.md`、`references/advisor-line-editing.md`、`references/output-templates.md` 已同步声明：未闭环时的局部改写只能通过 `task_exceptions.scoped_rewrite + 局部改写任务卡.md` 落地，不能顺势扩展成全文逐条改稿
+- 已补充 `eval 40-41` 和 `scoped_rewrite_contract` 主题，覆盖“已授权的受限局部改写”和“无授权任务卡越权”两类回归；`python3 scripts/validate_evals.py` 继续通过，当前共 41 条 eval
+- C 线临时工作区回放已确认两点：其一，`can_enter_line_editing = no` 且 `task_exceptions.scoped_rewrite.enabled = true` 时，工作区状态保持 `PARTIAL` 而不会因 `局部改写任务卡.md` 被误判越权；其二，没有例外授权时，同一份实填任务卡会被直接拦成 `BLOCKED`
+- 已完成 D 线第一批实现：新增 `scripts/run_workflow_regression.py`，通过真实脚手架初始化临时工作区、注入 fixture 差异，再调用现有 `check_review_workspace.py` 与 `evaluate_review_toolchain.py` 做执行型断言
+- 已新增 4 条 execution fixture：`handoff_resume_missing_resume_target`、`specialty_manifest_partial_requires_supplement`、`scoped_rewrite_enabled_allows_task_card`、`release_gate_blocks_execution_output`
+- README 测试说明已同步加入 `run_workflow_regression.py`；当前静态 coverage 与执行型 runner 的分工已明确拆开
+- D 线复验已通过：`python3 -m py_compile scripts/run_workflow_regression.py` 通过；`python3 scripts/run_workflow_regression.py` 通过，4/4 fixture 全部 PASS
+- 本轮四条 open items 已全部完成第一批落地：A `workflow_route`、B `specialty_gate`、C `task_exceptions.scoped_rewrite`、D `workflow regression runner` 均已进入脚手架、脚本或回归链
+- 已启动并收敛一轮新的 Files Driven 多角色详设，目标从“论文工作区已部分 Files Driven”推进到“skill 仓库自身 workflow 也进入独立结构家族”
+- 本轮详设按 `Workflow Architect / Files-Driven Repo Architect / Control & QA Architect / Maintenance Flow Architect` 四个视角统一设计下一阶段流程治理改造
+- 本轮详设已落成正式设计稿：`governance/design/2026-04-files-driven-workflow-multirole-design.md`
+- 当前统一结论已固定：下一批改动优先级为 `先补 workflow 家族 -> 再抽合同真源 -> 再迁 execution/status 文件 -> 最后扩 regression`
+- 已结合后续两份补充讨论重新收口主稿：当前系统性方案改为“先做 repo governance cleanup，再做 criteria/evidence 主线升级，最后按触发条件决定是否把 review-workspace 提升成独立 workflow.contract 真源”
+- 当前明确不把 `review-workspace workflow.contract` 作为第一批强制动作；第一批只优先落 `workflow/skill-maintenance/` 与根目录治理收口
+- 用户已明确判定当前问题严重度足以触发立即升级；主稿已据此改写为“两条 workflow 同步进入第一批实施”，不再把 `review-workspace workflow.contract` 作为条件动作延后
+- 当前固定实施顺序改为：`先同时建立 review-workspace / skill-maintenance 两条 workflow 真源 -> 再抽 review-workspace 合同 -> 再迁 execution/status 文件 -> 最后扩 regression`
+- 已参考 `/Users/jixiaokang/.agents/skills/files-driven` 的 `codex/governance-capability-v1` 分支，把 thesis-review 主稿里的 contract 形状改为向 upstream governed-pack schema 对齐
+- 当前明确不再以 thesis-review 私有 top-level `entry_modes / steps / gates / output_families` 作为正式 schema 目标；后续正式 shape 以 `workflow.contract / rules.contract / agent.contract / objects / workflow.state / workflow.events / status.projection` 为准
+- 已将用户补充的最高原则写回主稿：导师职责的合法前提不是“已经开始评审”，而是“已经完成高水平评审”；后续 gate 与 workflow 设计必须体现这一层级关系
+- 已继续把该原则下沉成可执行设计：主稿现已补“高水平评审完成标准”“简单请求的强制升级规则”“有限例外边界”，并要求后续以显式 `review-before-advice` 规则落到 review pack
+- 已按新一轮覆盖性审计继续收口主稿：补入 `runtime authority map`，明确 repo truth pack、paper runtime pack 与 thesis-review supplemental runtime 的边界，避免 `workflow.contract / workflow.state / review_version_manifest` 再次形成多重真源
+- 已把“先高水平评审，后导师职责”进一步落成最小规则集：现已定义 `review-before-advice`、`deny-advisor-output-when-partial`、高风险简单请求强制 promotion、无评审不得强化结论四类核心 rule
+- 已把 `high_level_review_completed` 从抽象原则改写成 evidence contract 设计，当前以最小 `evidence refs` 组合判定，而不是单个布尔字段
+- 已补 `agent.contract` 角色覆盖设计，并按 upstream validator 收敛为“单 `agent_id` + 多 `role`”模式：`review-workspace` 使用 `agent.review-workspace`，`skill-maintenance` 使用 `agent.skill-maintenance`；现有 `agents/*.md` 只作为执行/提示层，不直接充当 approval 真源
+- 已补 `review_knowledge` 落点：后续 `criteria -> evidence -> outputs` 主线收口到 `knowledge/criteria / knowledge/evidence-templates / knowledge/output-guides`，paper 级 evidence 实例落到 `papers/<paper-id>/reviews/evidence/`
+- 已修正主稿内部漂移：`Target Repo Tree` 现已对齐 governed-pack 形状与 paper runtime snapshot；批次编号已收敛为 `Batch A-C / D / E`
+- 已把 upstream validator 的实际接入方式写入第一批实施说明，后续需显式对 `workflow/review-workspace`、`workflow/skill-maintenance` 与 `papers/<paper-id>/reviews/governed/review-workspace-pack` 跑 `validate_governance_assets.py`
+- 已开始进入 `Batch A` 实施，而不是继续停留在设计层；当前已在仓库内新增两套 repo truth packs：`workflow/review-workspace/` 与 `workflow/skill-maintenance/`
+- `workflow/review-workspace/` 已落最小可验证骨架：`WORKFLOW.md`、`READ_ORDER.md`、`workflow.contract.json`、`rules.contract.json`、`agent.contract.json` 与 `objects/`
+- `workflow/skill-maintenance/` 已落最小可验证骨架：`WORKFLOW.md`、`READ_ORDER.md`、`workflow.contract.json`、`rules.contract.json`、`agent.contract.json` 与 `objects/`
+- `review-workspace` truth pack 已通过 upstream validator：`python3 /Users/jixiaokang/.agents/skills/files-driven/scripts/validate_governance_assets.py workflow/review-workspace`
+- `skill-maintenance` truth pack 已通过 upstream validator：`python3 /Users/jixiaokang/.agents/skills/files-driven/scripts/validate_governance_assets.py workflow/skill-maintenance`
+- 这一步只建立 repo-level truth packs，尚未开始 `Batch B` 的脚本合同抽取，也尚未生成 paper-level `review-workspace-pack` runtime snapshot
+- 已按用户要求启动一轮“彻底反思 + subagents 隔离上下文”的 greenfield 重建设计，不再以现有 skill 为默认蓝本，而是假设今天按最新 Files Driven 从零重写一个新的毕业论文评审 Skill
+- 本轮已回收两路有效 subagent 结论：一路聚焦 governed-pack 与 runtime authority map，一路聚焦 `criteria -> evidence -> verdict -> advice` 的知识层；第三路 mission/user-story 线程未返回有效结果，改由主线程直接收敛
+- 已新增 greenfield 主稿：`governance/design/2026-04-greenfield-files-driven-thesis-review-skill-design.md`
+- 新主稿已把系统主轴重写为 `criteria -> evidence -> verdict -> advice`，并把分层固定为 `repo truth pack -> paper runtime pack -> paper evidence workspace -> outputs`
+- 新主稿已明确：`review_version_manifest.json`、`评审闭环与放行判断.md`、`process_projection.md` 在 greenfield 里不再进入架构中心，最多只作为迁移兼容或按需人工说明资产存在
+- 新主稿已把 paper-level runtime pack 位置改成 `papers/<paper-id>/governance/review-workspace-pack/`，并把 `notes/` 设为按需生成，而非默认大批量 Markdown 台账
+- 已启动一轮“多角色 subagents-质询-答辩-反思-收敛”来裁定旧封口方案如何改进；有效回收了 runtime/schema 与 knowledge/verdict 两路结论，两路未形成有效输出后关闭
+- 已新增正式决策稿：`governance/design/2026-04-closure-plan-improvement-decision.md`
+- 当前正式裁定为：旧封口方案不再视为目标架构主稿，而降级为“迁移到 greenfield 架构的过渡方案”
+- 决策稿已固定 5 个必须改写项：拆 `reviews/` 总伞、降级 `review_version_manifest.json`、新增 `review-verdict.json`、把 `knowledge/` 升级成 canonical 家族、把导师职责改成 output-policy 驱动
+- 已继续在决策稿中加入执行约束，专门防止迁移过程中再次发生漂移、溢出和过度设计；当前已固定 `single-phase rule`、`narrow change budget`、`compatibility must expire`、`no new authority in Markdown`、`per-phase contracts` 与 `stop conditions`
+- 已正式进入 `Phase 1: Reclassify Runtime`，并先写出短合同：`governance/proposals/2026-04-phase-1-runtime-reclassify-contract.md`
+- 本轮严格按 `Phase 1` 边界执行：只触碰 `governance/` 与 `scripts/`，不改 `README/SKILL/references`，不改 release/advice 业务语义，不引入 `review-verdict`
+- `init_review_workspace.py` 已新增 paper-level runtime pack 脚手架：初始化新工作区时会生成 `papers/<paper-id>/governance/review-workspace-pack/`，并写入 frozen contracts、`workflow.state.json`、`workflow.events.jsonl`、`status.projection.json`
+- `evaluate_review_toolchain.py` 已新增 runtime pack 探测与 validator 对齐：当前会报告 `runtime_pack.present` 与 `runtime_pack.validator`
+- Phase 1 工具验收已通过：
+  - `python3 -m py_compile scripts/init_review_workspace.py scripts/evaluate_review_toolchain.py`
+  - `python3 scripts/init_review_workspace.py --root . --paper-id phase1-runtime-check --date 2026-04-07`
+  - `python3 /Users/jixiaokang/.agents/skills/files-driven/scripts/validate_governance_assets.py papers/phase1-runtime-check/governance/review-workspace-pack`
+  - `python3 scripts/evaluate_review_toolchain.py --paper-dir papers/phase1-runtime-check`
+- 本轮临时工作区已清理；`evaluate_review_toolchain.py` 能识别并验证新 runtime pack，但 `check_review_workspace.py` 仍因 legacy `reviews/` 模板保持 `BLOCKED`，这符合当前 phase 边界，legacy 降级留到 Phase 3 处理
+- 已正式进入 `Phase 2: Introduce Evidence Workspace`，并先写出短合同：`governance/proposals/2026-04-phase-2-evidence-workspace-contract.md`
+- 本轮严格按 `Phase 2` 边界执行：只引入 paper-level `evidence/` 家族与最小 `review-verdict` 形状，不改 `README/SKILL/references`，不改 `check_review_workspace.py` 的 release/specialty/scoped rewrite 逻辑，也不把 verdict 提前升成 output gate
+- 已新增 `scripts/evidence_workspace_utils.py` 作为本 phase 的最小共享层，统一提供 `criteria-coverage.json`、`review-verdict.json`、`limitations.json` 的初始 payload 与 `evidence-ledger.jsonl` / evidence workspace 的 shape 校验
+- `init_review_workspace.py` 现会在新论文工作区下生成 `papers/<paper-id>/evidence/`，并写入 `criteria-coverage.json`、`evidence-ledger.jsonl`、`review-verdict.json`、`limitations.json`
+- `review-verdict.json` 当前最小字段已固定：`study_type_resolved / specialty_resolved / criteria_coverage_level / evidence_sufficiency_level / limitations_disclosed / claim_ceiling / allowed_output_refs / forbidden_output_refs / missing_criterion_refs / missing_evidence_refs`
+- `init_review_workspace.py` 初始化 verdict 时，会从 `workflow/review-workspace/workflow.contract.json` 继承 `missing_evidence_refs` 与默认 `forbidden_output_refs`，保证 evidence/verdict 初始状态与 runtime pack 不脱节
+- `evaluate_review_toolchain.py` 已新增 `evidence_workspace` 报告段，当前会输出 `present / files / shape_ok / criteria_coverage / ledger / review_verdict / limitations`
+- `evaluate_review_toolchain.py` 的 `proxy_summary` 已新增 `evidence_workspace_present / evidence_workspace_shape_ok / review_verdict_claim_ceiling / review_verdict_criteria_coverage_level`
+- Phase 2 工具验收已通过：
+  - `python3 -m py_compile scripts/evidence_workspace_utils.py scripts/init_review_workspace.py scripts/evaluate_review_toolchain.py`
+  - `python3 scripts/init_review_workspace.py --root . --paper-id phase2-evidence-check --date 2026-04-07`
+  - `python3 /Users/jixiaokang/.agents/skills/files-driven/scripts/validate_governance_assets.py papers/phase2-evidence-check/governance/review-workspace-pack`
+  - `python3 scripts/evaluate_review_toolchain.py --paper-dir papers/phase2-evidence-check`
+- 当前 Phase 2 结果符合约束：`evidence_workspace.shape_ok = true`，`review_verdict.claim_ceiling = none`，`review_verdict.missing_evidence_refs` 已按 truth pack 预填；与此同时，legacy `reviews/` 仍保持 `BLOCKED`，这属于预期现象，legacy authority 降级仍留到 Phase 3/4
+- 已正式进入 `Phase 3: Downgrade Legacy Assets`，并写出短合同：`governance/proposals/2026-04-phase-3-legacy-asset-downgrade-contract.md`
+- 本轮严格按 `Phase 3` 边界执行：只降级 legacy manifest 与 note-like Markdown 的位置和读取入口，不改 `release_gate / specialty_gate / scoped_rewrite` 的业务规则，不改 `README/SKILL/references`，不改 output/advice policy，也不删除 `reviews/` 目录
+- 已新增 `scripts/legacy_asset_paths.py` 作为本 phase 的最小共享层，统一提供 `notes/` canonical 路径、`reviews/` alias 路径，以及 manifest / migrated note 的 canonical-first 解析
+- `init_review_workspace.py` 现会生成 `papers/<paper-id>/notes/`，并把下列 note-like 资产作为 canonical 文件放入该目录：
+  - `legacy-review-manifest.json`
+  - `process_projection.md`
+  - `评审闭环与放行判断.md`
+  - `专业手册完备性判断.md`
+  - `专业专项补充说明.md`
+  - `局部改写任务卡.md`
+  - `审阅对象冻结说明.md`
+  - `版本冻结与依赖回归台账.md`
+  - `关键数值与复算准入台账.md`
+  - `图表索引台账.md`
+  - `图表专项核查.md`
+- `reviews/` 当前不再承载上述资产的 canonical 内容；新工作区下对应路径仅保留单一 symlink alias，指向 `notes/` 中的 canonical 文件
+- `review_version_manifest.json.handoff.process_projection` 的默认值已改成 `notes/process_projection.md`，与新的 canonical note 位置对齐
+- `check_review_workspace.py` 已改成 canonical-first 读取 `notes/legacy-review-manifest.json` 与 migrated note assets；当 canonical 不存在时，仍回退兼容旧 `reviews/` 路径
+- `evaluate_review_toolchain.py` 已改成 canonical-first 读取 legacy manifest / note assets，并新增 `notes` 与 `legacy_manifest` 报告段，显式报告当前 canonical 路径和 legacy alias 路径
+- Phase 3 工具验收已通过：
+  - `python3 -m py_compile scripts/legacy_asset_paths.py scripts/init_review_workspace.py scripts/evaluate_review_toolchain.py scripts/check_review_workspace.py`
+  - `python3 scripts/init_review_workspace.py --root . --paper-id phase3-legacy-check --date 2026-04-07`
+  - `python3 scripts/check_review_workspace.py --paper-dir papers/phase3-legacy-check`
+  - `python3 scripts/evaluate_review_toolchain.py --paper-dir papers/phase3-legacy-check`
+  - `python3 /Users/jixiaokang/.agents/skills/files-driven/scripts/validate_governance_assets.py papers/phase3-legacy-check/governance/review-workspace-pack`
+- 当前 Phase 3 结果符合约束：
+  - `notes/legacy-review-manifest.json` 已成为新工作区的 canonical legacy manifest
+  - `evaluate_review_toolchain.py` 报告 `legacy_manifest.canonical = true`
+  - `check_review_workspace.py` 的阻断路径已切到 `notes/` canonical 文件，而不是 `reviews/` alias
+  - legacy `reviews/` 仍保留单一 alias 兼容层，未新增第二套 compatibility layer
+- 已正式进入 `Phase 4: Shift Advice To Policy-Driven Outputs`，并写出短合同：`governance/proposals/2026-04-phase-4-policy-driven-outputs-contract.md`
+- 本轮严格按 `Phase 4` 边界执行：只把导师/学生输出授权切到 `review-verdict + knowledge/output-policies`，不改 `README/SKILL/references`，不重写全文改稿系统，不新增新的展示产物，也不改 problem-list / readiness verdict 的 legacy gate 语义
+- 已新增 repo-level canonical policy：`knowledge/output-policies/advice-output-policy.json`
+- 当前最小 output policy 已定义三类内容：
+  - `allowed_low_risk`
+  - `verdict_required_high_risk`
+  - `forbidden_transformations`
+- 已新增 `scripts/output_policy_utils.py` 作为本 phase 的最小共享层，统一提供 output policy 读取、shape 校验、`review-verdict` 绑定和 high-risk output allowance 摘要
+- `check_review_workspace.py` 的 `inspect_stage_promotion()` 已改成：
+  - 对 `output.advisor.line-editing / output.advisor.summary / output.student.execution-pack` 优先按 `review-verdict + output policy` 授权
+  - `readiness verdict` 仍按 legacy release gate 处理
+  - advice 输出中的 `forbidden_transformations` 会被显式拦截
+- `evaluate_review_toolchain.py` 已新增 `output_policy` 报告段，并在 `proxy_summary` 中输出：
+  - `output_policy_present`
+  - `output_policy_shape_ok`
+  - `policy_high_risk_outputs_allowed`
+- Phase 4 工具验收已通过：
+  - `python3 -m py_compile scripts/output_policy_utils.py scripts/check_review_workspace.py scripts/evaluate_review_toolchain.py scripts/init_review_workspace.py`
+  - `python3 scripts/init_review_workspace.py --root . --paper-id phase4-policy-check --date 2026-04-07`
+  - `python3 /Users/jixiaokang/.agents/skills/files-driven/scripts/validate_governance_assets.py papers/phase4-policy-check/governance/review-workspace-pack`
+  - `python3 scripts/evaluate_review_toolchain.py --paper-dir papers/phase4-policy-check`
+  - `python3 scripts/check_review_workspace.py --paper-dir papers/phase4-policy-check`
+- 已完成两组针对性 Phase 4 回放，验证 advice authority 已从 legacy release gate 切走：
+  - 第一组：在 `release_gate.can_emit_execution_outputs / can_enter_line_editing` 仍缺失的情况下，向 `reviews/导师汇报版摘要.md` 与 `reviews/原子级修改建议.md` 写入 substantive 内容；`check_review_workspace.py` 明确报出 `Advice output exists before review-verdict/output policy allows it`
+  - 第二组：只修改 `evidence/review-verdict.json.allowed_output_refs / forbidden_output_refs`，不改任何 legacy release gate 字段；再次运行后，上述 advice-output 阻断消息消失，说明授权已由 verdict/output policy 接管
+  - 第三组：在 verdict 已允许 line-editing 的前提下，向 `reviews/原子级修改建议.md` 写入 `补造盲法`；`check_review_workspace.py` 明确报出 `Forbidden transformation appears in advice output`
+- 当前 Phase 4 结果符合约束：
+  - `evaluate_review_toolchain.py` 报告 `output_policy.present = true`、`output_policy.shape_ok = true`
+  - verdict 放行后，`policy_high_risk_outputs_allowed` 会正确反映 `output.advisor.line-editing / output.advisor.summary`
+  - `review_version_manifest.json.release_gate.can_emit_execution_outputs / can_enter_line_editing` 对 advice outputs 已不再是第一授权面；当前仅保留 legacy 兼容语义
+
+## 2026-04-08
+
+- 按用户要求先执行整体验收，暂不写设计说明和 release 说明
+- 本轮验收覆盖四层：
+  - 静态回归：`python3 -m py_compile scripts/check_review_workspace.py scripts/evaluate_review_toolchain.py scripts/init_review_workspace.py scripts/evidence_workspace_utils.py scripts/legacy_asset_paths.py scripts/output_policy_utils.py scripts/release_gate_utils.py scripts/specialty_gate_utils.py scripts/workflow_route_registry.py scripts/run_workflow_regression.py scripts/validate_evals.py`
+  - 静态评测：`python3 scripts/validate_evals.py`
+  - 执行型回归：`python3 scripts/run_workflow_regression.py`
+  - governed pack 验证：`python3 /Users/jixiaokang/.agents/skills/files-driven/scripts/validate_governance_assets.py workflow/review-workspace` 与 `workflow/skill-maintenance`
+- 验收过程中先发现一处真实缺口：
+  - `evals/workflow_fixtures/release_gate_blocks_execution_output.json` 仍断言旧的 release-gate 文案 `Execution output exists before current workflow state allows it`
+  - 该 fixture 在 `Phase 4` 之后应改为断言新文案 `Advice output exists before review-verdict/output policy allows it`
+  - 已更新 fixture，重新执行 `python3 scripts/run_workflow_regression.py` 后 4/4 fixture 全通过
+- 已补做 repo 内临时 paper 验收：
+  - `python3 scripts/init_review_workspace.py --root . --paper-id acceptance-20260408-runtime2 --date 2026-04-08`
+  - `python3 /Users/jixiaokang/.agents/skills/files-driven/scripts/validate_governance_assets.py papers/acceptance-20260408-runtime2/governance/review-workspace-pack`
+  - `python3 scripts/evaluate_review_toolchain.py --paper-dir papers/acceptance-20260408-runtime2`
+  - 结果确认：
+    - `runtime_pack.present = true`
+    - `runtime_pack.validator.ok = true`
+    - `evidence_workspace.present = true`
+    - `evidence_workspace.shape_ok = true`
+    - `output_policy.present = true`
+    - `output_policy.shape_ok = true`
+    - `review_verdict.claim_ceiling = none`
+- 已补做旧式工作区迁移回放：
+  - 先把 `notes/legacy-review-manifest.json`、`notes/process_projection.md`、`notes/评审闭环与放行判断.md`、`notes/专业手册完备性判断.md` 人工移回 `reviews/` 非 symlink 旧形态
+  - 再次执行 `python3 scripts/init_review_workspace.py --root . --paper-id legacy-replay --date 2026-04-08`
+  - 结果确认：canonical `notes/` 文件会重新生成，`reviews/` 下对应 alias 会重新变回 symlink
+- 已补做 policy-driven outputs 针对性回放：
+  - 在 verdict 未放行前，向 `reviews/导师汇报版摘要.md` 与 `reviews/原子级修改建议.md` 写入 substantive 内容，`check_review_workspace.py` 会报出 `Advice output exists before review-verdict/output policy allows it`
+  - 只修改 `evidence/review-verdict.json` 中的 `claim_ceiling / allowed_output_refs / forbidden_output_refs` 后再次检查，上述 advice-output 阻断消失
+  - 在 verdict 已放行的前提下追加 `补造盲法`，`check_review_workspace.py` 会报出 `Forbidden transformation appears in advice output`
+- 当前验收结论：
+  - `Phase 1-4` 的代码改动、执行型回归、repo truth pack、paper runtime pack、legacy note 迁移和 output policy 授权链均已通过验收
+  - 当前未发现阻断进入“设计说明整理”和“发版准备”的代码级缺陷
+  - 尚未开始 `README / SKILL / references` 的对外说明层改写，也未进入 release 打包或提交阶段
+- 验收通过后，已开始说明层与 release 材料整理：
+  - 新增实现说明：`governance/design/2026-04-phase-1-4-implementation-note.md`
+  - 新增 release note：`governance/release/2026-04-phase-1-4-migration-release-note.md`
+  - `README.md` 已补 `governance / evidence / outputs / notes` canonical map、repo truth packs、policy-driven advice 和 validator 用法
+  - `SKILL.md` 已补使命层级、canonical path map、legacy alias 解释和 `review-verdict + output policy` 的 advice authority
+  - `references/review-operations-architecture.md`、`references/file-structure.md`、`references/deep-review-gates.md`、`references/output-templates.md`、`references/specialty-manual-readiness-gate.md` 已做最小纠偏，避免继续把 `reviews/review_version_manifest.json` 和 legacy `release_gate` 写成唯一中心
+- 当前说明层策略保持收缩：
+  - 不全文重写 `SKILL.md`
+  - 只纠正 authority、canonical 路径、mission hierarchy 和 advice gate
+  - 更完整的实现叙事统一收口到 implementation note 与 release note
+- 已结合 `audit_report_2026-04-08.md` 与 `governance_audit_report_2026-04-08.md` 启动一轮“溢出 / 漂移 / 过度设计”质询-收敛
+- 本轮收敛主稿已落到：`governance/design/2026-04-overflow-drift-overdesign-cross-audit-decision.md`
+- 当前统一裁定：
+  - 当前最真实的问题不是 `overflow`，而是 `drift`
+  - 立即应修的是：硬编码路径、references canonical-path 口径、`claim_ceiling` 执行约束、legacy sunset/drift 检查
+  - 当前最该冻结的是：`agent.contract` 执行化、`knowledge/criteria/` 家族、全量 schema 扩展、对象层深度整合、附加治理型文档扩张
+- 本轮已明确增加执行护栏：
+  - 不允许把任何“下一代 greenfield 资产”伪装成“当前 release 的必要修复”
+  - 下一轮只有能直接降低 `drift / portability / 字段只记录不执行` 这三类风险的改动，才允许进入补丁合同
+- 本轮对两个并行裁定稿做了二次收口：
+  - 保留 `governance/design/2026-04-overflow-drift-overdesign-cross-audit-decision.md` 作为唯一 canonical 决策稿
+  - 删除重复生成的 `challenge-decision` 草稿，避免本轮收敛自己制造 drift
+- 已按 cross-audit 决策启动并完成一轮窄范围 `P0 remediation`，合同落到：
+  - `governance/proposals/2026-04-p0-remediation-contract.md`
+- 本轮只处理 4 项 drift：
+  - 去掉 `evaluate_review_toolchain.py` 的硬编码 validator 绝对路径，改为 sibling `files-driven` 自动发现
+  - 给 `claim_ceiling` 增加最小执行约束，并接入 `check_review_workspace.py` / `evaluate_review_toolchain.py`
+  - 新增 legacy canonical/alias 健康检查，显式报告 `legacy_primary / dual_track_regular_file / alias_target_mismatch`
+  - 修正 `README.md`、`SKILL.md`、关键 references 和 release/design 文档中的高频 canonical path 漂移
+- 本轮执行中顺手暴露并修正了一处真实旧漏项：
+  - `init_review_workspace.py` 之前误把用户项目根目录当成 skill repo 根目录，导致 paper runtime pack fresh init 时没有复制 repo truth pack
+  - 已改为固定从当前 skill 仓库复制 `workflow/review-workspace/` 骨架；fresh workspace 现在会正确预填 runtime pack 与 `review-verdict.forbidden_output_refs`
+- 本轮验收已完成：
+  - `python3 -m py_compile scripts/init_review_workspace.py scripts/check_review_workspace.py scripts/evaluate_review_toolchain.py scripts/output_policy_utils.py scripts/legacy_asset_paths.py scripts/run_workflow_regression.py scripts/render_docx_with_word.py`
+  - `python3 scripts/validate_evals.py`
+  - `python3 scripts/run_workflow_regression.py`
+  - `python3 ../files-driven/scripts/validate_governance_assets.py workflow/review-workspace`
+  - `python3 ../files-driven/scripts/validate_governance_assets.py workflow/skill-maintenance`
+- 本轮 targeted replay 结果：
+  - fresh workspace 现在能正确复制 runtime pack，`evaluate_review_toolchain.py` 报告 `runtime_pack.validator.ok = true`、`output_policy.alignment_ok = true`
+  - 当 `review-verdict.claim_ceiling = advisor_only` 却试图放行 `output.student.execution-pack` 时，`check_review_workspace.py` 会明确报出 `Advice output exists before review-verdict/output policy allows it`
+  - 当 `reviews/review_version_manifest.json` 被改成与 `notes/legacy-review-manifest.json` 并存的常规文件时，`check_review_workspace.py` 与 `evaluate_review_toolchain.py` 都会显式报出 `dual-track drift`
+- 用户要求“先完成修改再推”后，又补做了一轮 residual drift 清理：
+  - `scripts/extract_docx_citations.py` 默认 manifest 已从 `reviews/citation_extraction_manifest.json` 改到 `notes/citation_extraction_manifest.json`
+  - `scripts/check_docx_formal_rules.py` 默认 manifest 已从 `reviews/formal_review_manifest.json` 改到 `notes/formal_review_manifest.json`
+  - `README.md`、`SKILL.md` 和 `2026-04-files-driven-workflow-multirole-design.md` 中对应的高频示例路径已同步到当前 canonical
+- 补完后再次验收：
+  - `python3 -m py_compile scripts/extract_docx_citations.py scripts/check_docx_formal_rules.py scripts/evaluate_review_toolchain.py scripts/check_review_workspace.py scripts/init_review_workspace.py scripts/run_workflow_regression.py`
+  - `python3 scripts/run_workflow_regression.py`
+  - `python3 scripts/validate_evals.py`
+- 在 draft PR focused review 阶段又发现一个阻断级漏口：
+  - `workflow/rules` 已声明 `output.advisor.defense-talking-points` 属于高风险 advisor 输出
+  - 但 `knowledge/output-policies/advice-output-policy.json` 与当前检查链还没有把它纳入授权面
+- 已修正：
+  - `advice-output-policy.json` 已新增 `output.advisor.defense-talking-points -> reviews/答辩口径.md`
+  - `claim_ceiling` 的 `advisor_only / execution_ready` 允许集合已同步纳入该输出
+  - `init_review_workspace.py` 已补 `答辩口径.md` 占位文件
+  - `check_review_workspace.py` 在 policy unavailable fallback 下也会把 `答辩口径.md` 视作 execution/advisor 输出
+- 阻断修复验收：
+  - `python3 -m py_compile scripts/output_policy_utils.py scripts/check_review_workspace.py scripts/init_review_workspace.py`
+  - `python3 scripts/run_workflow_regression.py`
+  - targeted replay：fresh workspace 下手工写入 `reviews/答辩口径.md`，`check_review_workspace.py` 会明确报出 `Advice output exists before review-verdict/output policy allows it`

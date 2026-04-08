@@ -1,0 +1,100 @@
+#!/usr/bin/osascript -l JavaScript
+
+ObjC.import("stdlib");
+
+var SystemEvents = Application("System Events");
+
+function fail(message) {
+  console.log(
+    JSON.stringify({
+      result: "error",
+      error: message,
+    })
+  );
+  $.exit(1);
+}
+
+function isDir(path) {
+  path = path.toString();
+  var ref = Ref();
+  $.NSFileManager.defaultManager.fileExistsAtPathIsDirectory(path, ref);
+  return ref[0];
+}
+
+function parseArgs(argv) {
+  if (argv.length < 2 || argv.length > 3) {
+    fail("Usage: export_docx_to_pdf_word.jxa <INPUT_DOCX> <OUTPUT_PDF> [KEEP_ACTIVE]");
+  }
+
+  var inputPath = Path(argv[0]).toString();
+  var outputPath = Path(argv[1]).toString();
+  var keepActive = argv.length === 3 ? argv[2] === "true" : false;
+
+  if (!inputPath.endsWith(".docx")) {
+    fail("Input must be a .docx file: " + inputPath);
+  }
+  if (isDir(outputPath) || !outputPath.endsWith(".pdf")) {
+    fail("Output must be a .pdf file path: " + outputPath);
+  }
+
+  return {
+    inputPath: inputPath,
+    outputPath: outputPath,
+    keepActive: keepActive,
+  };
+}
+
+function run(argv) {
+  var args = parseArgs(argv);
+  var word = Application("Microsoft Word");
+
+  try {
+    if (!word.running()) {
+      word.activate();
+      delay(1);
+    } else {
+      word.launch();
+    }
+    SystemEvents.processes["Microsoft Word"].visible = false;
+
+    word.open(args.inputPath);
+    var doc = word.activeDocument;
+    doc.saveAs({
+      fileName: args.outputPath,
+      fileFormat: "format PDF",
+    });
+    doc.close({ saving: "no" });
+
+    console.log(
+      JSON.stringify({
+        result: "success",
+        input: args.inputPath,
+        output: args.outputPath,
+        renderer: "word_native",
+      })
+    );
+  } catch (error) {
+    try {
+      if (word.running()) {
+        word.activeDocument.close({ saving: "no" });
+      }
+    } catch (closeError) {}
+
+    console.log(
+      JSON.stringify({
+        result: "error",
+        input: args.inputPath,
+        output: args.outputPath,
+        error: error.toString(),
+      })
+    );
+    $.exit(1);
+  } finally {
+    if (!args.keepActive) {
+      try {
+        word.quit();
+      } catch (quitError) {}
+    }
+  }
+}
+

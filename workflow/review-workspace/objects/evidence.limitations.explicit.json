@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "object_id": "evidence.limitations.explicit",
+  "family": "object",
+  "version_anchor": "v1",
+  "kind": "evidence_type",
+  "fields": [
+    {
+      "field_id": "evidence_id",
+      "type": "string",
+      "required": true
+    },
+    {
+      "field_id": "limitation_summary",
+      "type": "string",
+      "required": true
+    }
+  ]
+}

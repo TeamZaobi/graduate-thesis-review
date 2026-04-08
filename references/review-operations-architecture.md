@@ -8,6 +8,27 @@
 2. 图、表、引文和路径怎么从“手工记忆”升级成结构化资产
 3. 多线程、多代理、多工具时，怎么降低接手和恢复成本
 
+## 当前 Canonical 映射
+
+当前实现不再把 `reviews/` 当成 paper workspace 的 authority 中心。
+
+paper-level canonical 家族固定为：
+
+1. `governance/review-workspace-pack/`
+   - machine-readable runtime 真源
+2. `evidence/`
+   - 事实、coverage、verdict、limitations 真源
+3. `outputs/`
+   - 派生输出
+4. `notes/`
+   - legacy manifest 与按需人工说明
+
+兼容说明：
+
+1. `reviews/` 仍保留历史 alias
+2. 本文后续如继续出现 `reviews/...` 路径，默认都可映射到 canonical 文件
+3. advice outputs 的最终授权已从 legacy `release_gate` 切到 `review-verdict + output policy`
+
 ## 1. 总目标
 
 只保留两类真正有价值的改动：
@@ -29,7 +50,7 @@
 推荐映射：
 
 - `truth_source`
-  - 原论文 `DOCX/PDF`
+  - 原论文 `DOCX/WPS/PDF`
   - `paperXX_docx_lines.txt`
   - `objects/figures.json`
   - `objects/tables.json`
@@ -38,19 +59,27 @@
   - 原始数据、分析导出和复算结果
 - `execution_object`
   - 各类台账、审计表、改稿卡片
+  - `notes/legacy-review-manifest.json`
+  - `notes/评审闭环与放行判断.md`
 - `status_projection`
-  - `审阅工作流.md`
-  - `执行状态总览.md`
-  - 学生版和执行清单
+  - `governance/review-workspace-pack/status.projection.json`
+  - `students/导师` Markdown 或其他派生摘要
 - `display_projection`
   - `综合评审汇总.html`
-  - 导师摘要
-  - 最终展示页
+  - `display/问题清单页.html`
+  - `display/完整评审页.html`
+  - `display/学生执行页.html`
+  - `display/导师汇报页.html`
 
 核心规则：
 
 - `status` 和 `display` 只能 summarize/display，不改写真源
 - 同一慢变量优先只有一个明确真源
+- 对 `Word / WPS` 这类所见即所得原稿，默认分清三层：`authoring_truth_source`、`visual_truth_source`、`evidence_asset`
+- `authoring_truth_source` 是学生实际编辑的作者文件；`visual_truth_source` 是本轮受控渲染权威；`page_renders/`、裁图和拼图只是审计资产
+- 是否允许进入 `导师/学生` 输出，当前机器可读真源默认放在 `evidence/review-verdict.json + knowledge/output-policies/`
+- `notes/评审闭环与放行判断.md` 与 `notes/legacy-review-manifest.json.release_gate` 当前只保留 readiness 等 legacy 兼容语义，不要再把它们当成 advice outputs 的第一推进器
+- 学生 / 导师 Markdown 默认是主 `status_projection`；对应 HTML 子页是它们的 `display_projection`，不要让两套投影各写各的
 
 ## 3. 对象层最小集合
 
@@ -63,11 +92,23 @@
 - `id`
 - `figure_no`
 - `caption`
+- `source_kind`
 - `source_path`
 - `page_or_line_anchor`
 - `role`
 - `can_enter_abstract`
 - `can_enter_conclusion`
+
+图件来源类型至少区分：
+
+- `docx_media`：原始图件作为二进制图片存放在 `DOCX word/media`
+- `shape_rendered`：图件本体来自 `Word shape / 文本框 / SmartArt / 分组绘图 / 版式渲染`
+
+补充约束：
+
+- `source_kind` 表示图件原始来源类型，不表示当前证据文件是怎么取得的
+- `source_path` 表示当前默认引用的证据资产路径；如果图件属于 `shape_rendered`，这里可以指向页面渲染图、重导出页图或审计文件，但不能因此把 `source_kind` 改写成 `page_render_capture`
+- 对 `shape_rendered` 图件，建议补 `source_paths`、`status_note`、`render_chain_status` 或 `requires_render_audit`
 
 ### `objects/tables.json`
 
@@ -101,15 +142,35 @@
 - `output_path`
 - `linked_object_ids`
 
+字段边界：
+
+- `source_kind`：原始来源类型，当前至少区分 `docx_media`、`shape_rendered`
+- `asset_type`：当前证据资产的取得方式，当前至少区分 `docx_media_extract`、`page_render_capture`、`zoom_crop`
+
+约束：
+
+- 不要把 `page_render_capture` 或历史兼容值 `pdf_page_capture` 混写成 `source_kind`
+- 对 `docx_media_extract`，`source_path` 可以是 `word/media/image7.png` 这类 `DOCX` 成员路径，并配合 `source_docx` 使用
+- 对 `page_render_capture`，建议额外记录 `render_engine` 与 `render_authority`，例如 `word_native`、`wps_native`、`word_web`、`pdf_export_snapshot`
+- 对 `shape_rendered` 图件，`assets_manifest.json` 应允许同时登记“页面渲染证据”和“审计衍生资产”，而不是假装它们来自 `word/media`
+
 Markdown 台账继续保留，但默认只承担执行面，不再兼任结构化数据库。
 
 ## 4. `process_projection`
 
-如果项目跨越多线程、多代理、多工具或多轮交接，就补一个统一接手面：`reviews/process_projection.md`。
+如果项目跨越多线程、多代理、多工具或多轮交接，就补一个统一接手面：`notes/process_projection.md`。
 
 最小字段固定为：`goal / actions / findings / decisions / artifacts / status / next_step`。
 
-它是过程投影，不是真源；作用只是降低接手和恢复成本。
+它是过程投影，不是真源；作用只是降低接手和恢复成本。不要把 `next_step` 直接当作“已经放行到下一阶段”的依据。
+
+另补三个 machine-readable 锚点：
+
+- `governance/review-workspace-pack/workflow.state.json`
+- `governance/review-workspace-pack/workflow.events.jsonl`
+- `evidence/review-verdict.json`
+
+`notes/legacy-review-manifest.json` 仍保留 thesis-specific 补充字段，但不再是长期唯一 runtime 真源。
 
 ## 5. 默认读取顺序
 
@@ -117,11 +178,15 @@ Markdown 台账继续保留，但默认只承担执行面，不再兼任结构�
 
 1. 原始论文和当前底稿
 2. 对象层
-3. 审阅对象冻结说明
-4. 版本冻结与依赖回归台账
-5. 审阅工作流和执行状态页
-6. 证据型台账
-7. HTML、导师摘要和其他展示页
+3. `governance/review-workspace-pack/`
+4. `evidence/review-verdict.json`
+5. `notes/legacy-review-manifest.json`
+6. 审阅对象冻结说明
+7. 版本冻结与依赖回归台账
+8. `评审闭环与放行判断.md`
+9. 审阅工作流和执行状态页
+10. 证据型台账
+11. HTML、导师摘要和其他展示页
 
 如果项目已经漂移，先判断哪些入口还可信，再按这个顺序读。
 
@@ -131,17 +196,21 @@ Markdown 台账继续保留，但默认只承担执行面，不再兼任结构�
 
 1. `textutil + nl + rg`
    - 建文本底稿和快速定位
-2. `scripts/extract_docx_media.py`
-   - 从 `DOCX word/media` 抽图
-3. `scripts/extract_docx_tables.py`
+2. `scripts/render_docx_with_word.py`
+   - 在 macOS 上优先调用 `Word` 原生 PDF 导出，再用 `gs` 固化到 `assets/page_renders/`
+   - 默认通过常驻 daemon 复用同一个 `Word` 控制进程，降低重复授权和重复冷启动成本
+   - 这是当前默认的稳健路线
+3. `scripts/extract_docx_media.py`
+   - 只从 `DOCX word/media` 抽取 `docx_media` 图件，并回写带 `source_kind = docx_media` 的资产清单
+4. `scripts/extract_docx_tables.py`
    - 从 `DOCX` 抽表到 `assets/tables/docx_csv` 并回写 `objects/tables.json`
-4. `scripts/extract_docx_citations.py`
+5. `scripts/extract_docx_citations.py`
    - 从 `DOCX` 抽取正文引用锚点与参考文献条目映射，并回写 `objects/citations.json`
-5. `scripts/check_review_workspace.py`
-   - 检查工作区合同和对象层
-6. `scripts/scan_stale_paths.py`
+6. `scripts/check_review_workspace.py`
+   - 检查工作区合同、模板污点和 `READY / PARTIAL / BLOCKED` gate
+7. `scripts/scan_stale_paths.py`
    - 扫旧绝对路径和迁移漂移
-7. `scripts/evaluate_review_toolchain.py`
+8. `scripts/evaluate_review_toolchain.py`
    - 量化单篇论文的对象层、图表资产、表格可抽取性、引文可抽取性、接手面和路径漂移状态
 
 如果这些工具不可用，也要尽量保留同样的结构合同，而不是直接退回纯聊天记忆。

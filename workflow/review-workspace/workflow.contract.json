@@ -1,0 +1,117 @@
+{
+  "schema_version": "1.0",
+  "workflow_id": "workflow.review-workspace",
+  "family": "workflow",
+  "governance_level": "controlled",
+  "execution_mode": "gated",
+  "version_anchor": "v1",
+  "explanation_ref": "workflow/review-workspace/WORKFLOW.md",
+  "policy_refs": [
+    "policy.review-workspace.guard"
+  ],
+  "object_refs": [
+    "state.review.partial",
+    "state.advice.partial",
+    "action.review",
+    "action.advice",
+    "action.rollback",
+    "evidence.review_object.frozen",
+    "evidence.specialty_route.completed",
+    "evidence.core_evidence.covered",
+    "evidence.core_loops.reviewed",
+    "evidence.limitations.explicit",
+    "evidence.output_authority.defined",
+    "approval.review.high-level-complete",
+    "approval.review.rollback",
+    "output.advisor.line-editing",
+    "output.advisor.summary",
+    "output.advisor.defense-talking-points",
+    "output.student.execution-pack"
+  ],
+  "agent_refs": [
+    "agent.review-workspace"
+  ],
+  "entry_intents": [
+    {
+      "intent_id": "intent.review",
+      "entry_node": "node.review",
+      "aliases": [
+        "initial review",
+        "deep review",
+        "strict review"
+      ]
+    },
+    {
+      "intent_id": "intent.advice-request",
+      "entry_node": "node.review",
+      "aliases": [
+        "line edit",
+        "advisor rewrite",
+        "defense prep"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "node_id": "node.review",
+      "state_ref": "state.review.partial",
+      "action_ref": "action.review",
+      "evidence_refs": [
+        "evidence.review_object.frozen",
+        "evidence.specialty_route.completed",
+        "evidence.core_evidence.covered",
+        "evidence.core_loops.reviewed",
+        "evidence.limitations.explicit",
+        "evidence.output_authority.defined"
+      ],
+      "output_policy_refs": [
+        "policy.review-workspace.guard"
+      ],
+      "approver_ref": "role.review-approver"
+    },
+    {
+      "node_id": "node.advice",
+      "state_ref": "state.advice.partial",
+      "action_ref": "action.advice",
+      "output_policy_refs": [
+        "policy.review-workspace.guard"
+      ],
+      "approver_ref": "role.review-approver"
+    }
+  ],
+  "transitions": [
+    {
+      "transition_id": "transition.review-to-advice",
+      "from_node": "node.review",
+      "to_node": "node.advice",
+      "guard_policy_refs": [
+        "policy.review-workspace.guard"
+      ],
+      "approval_ref": "approval.review.high-level-complete"
+    },
+    {
+      "transition_id": "transition.advice-to-review",
+      "from_node": "node.advice",
+      "to_node": "node.review",
+      "guard_policy_refs": [
+        "policy.review-workspace.guard"
+      ],
+      "approval_ref": "approval.review.rollback",
+      "rollback_to": "node.review"
+    }
+  ],
+  "checks": {
+    "route": [
+      "check.route.review-workspace"
+    ],
+    "evidence": [
+      "check.evidence.review-workspace"
+    ],
+    "write": [
+      "check.write.review-workspace"
+    ],
+    "stop": [
+      "check.stop.review-workspace"
+    ]
+  }
+}

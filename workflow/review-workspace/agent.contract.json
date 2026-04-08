@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0",
+  "agent_id": "agent.review-workspace",
+  "family": "agent",
+  "version_anchor": "v1",
+  "roles": [
+    {
+      "role_id": "role.route-governor",
+      "can_execute_refs": [
+        "action.review",
+        "action.rollback"
+      ],
+      "can_review_refs": [
+        "action.review",
+        "action.rollback"
+      ],
+      "can_approve_refs": [
+        "approval.review.high-level-complete",
+        "approval.review.rollback"
+      ]
+    },
+    {
+      "role_id": "role.review-approver",
+      "can_execute_refs": [
+        "action.review"
+      ],
+      "can_review_refs": [
+        "action.review"
+      ],
+      "can_approve_refs": [
+        "approval.review.high-level-complete",
+        "approval.review.rollback"
+      ]
+    },
+    {
+      "role_id": "role.specialty-approver",
+      "can_execute_refs": [
+        "action.review"
+      ],
+      "can_review_refs": [
+        "action.review"
+      ],
+      "can_approve_refs": [
+        "approval.review.high-level-complete"
+      ]
+    },
+    {
+      "role_id": "role.advisor-author",
+      "can_execute_refs": [
+        "action.advice"
+      ],
+      "can_review_refs": [
+        "action.advice"
+      ],
+      "blocked_action_refs": [
+        "output.student.execution-pack"
+      ]
+    },
+    {
+      "role_id": "role.rollback-approver",
+      "can_execute_refs": [
+        "action.rollback"
+      ],
+      "can_review_refs": [
+        "action.rollback"
+      ],
+      "can_approve_refs": [
+        "approval.review.rollback"
+      ]
+    }
+  ]
+}
