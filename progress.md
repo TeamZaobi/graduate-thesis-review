@@ -291,3 +291,21 @@
   - `python3 -m py_compile scripts/output_policy_utils.py scripts/check_review_workspace.py scripts/init_review_workspace.py`
   - `python3 scripts/run_workflow_regression.py`
   - targeted replay：fresh workspace 下手工写入 `reviews/答辩口径.md`，`check_review_workspace.py` 会明确报出 `Advice output exists before review-verdict/output policy allows it`
+- 已基于 `origin/main` 新开收尾修复分支并补完一轮 post-merge e2e fixes，提交为 `58a75c9`
+- 该补丁已通过 PR `#2` 合并到 `main`，merge commit 为 `95c89fbdf006acc8cbb2760ec740657154dc483f`
+- 本轮补丁只做三件事：
+  - 补强 `output policy` 条目级 shape 校验，避免坏条目静默漏管高风险输出
+  - 修正 `evaluate_review_toolchain.py` 在 policy 缺失/损坏时误报 `alignment_ok = true`
+  - 新增 paper runtime pack 对 repo truth pack 的 drift 检查
+- 已新增 workflow fixtures：
+  - `invalid_output_policy_blocks_advice_output`
+  - `runtime_pack_drift_is_reported`
+- 收尾验收已再次通过：
+  - `python3 -m py_compile scripts/*.py`
+  - `python3 scripts/validate_evals.py`
+  - `python3 scripts/run_workflow_regression.py`
+  - `python3 ../files-driven/scripts/validate_governance_assets.py workflow/review-workspace`
+  - `python3 ../files-driven/scripts/validate_governance_assets.py workflow/skill-maintenance`
+- 当前阶段结论：
+  - `Phase 1-4 migration + P0 remediation + post-merge e2e stabilization` 已全部进入 `main`
+  - 本轮任务到此收口，不再继续扩展 `agent.contract` 执行化、`knowledge/criteria/` 家族、自有 schema 体系或更深的数据建模主线

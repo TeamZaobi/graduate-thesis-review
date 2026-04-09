@@ -8,6 +8,27 @@
 
 本稿不再重开 greenfield 愿景，也不重做 Phase 1-4 迁移设计。
 
+## Resolution Update (2026-04-09)
+
+本稿保留为当时的 cross-audit 决策真稿，但截至 `2026-04-09`，其中列出的 4 条立即修复项已经全部落地并合并到 `main`：
+
+1. 硬编码 validator 路径已改成 sibling `files-driven` 自动发现
+2. 高频 canonical 路径 drift 已收口到 `notes/` 语义
+3. `claim_ceiling` 已从记录字段升级成 advice gate 的执行约束
+4. legacy compatibility 与 paper runtime pack 的 drift 都已有自动检查
+
+当前再回看本稿时，应按下面方式理解：
+
+1. `B1` 与 `Decision / 立即处理` 记录的是当时待修问题，不再代表当前主线状态
+2. 当前剩余 deferred 项仍保持不变：
+   - `agent.contract` runtime enforcement
+   - `knowledge/criteria/` 全面结构化
+   - 自有全量 schema 扩展
+   - 对象层与 evidence workspace 深度融合
+3. 如果后续再次引用本稿，应同时回看：
+   - `governance/release/2026-04-phase-1-4-migration-release-note.md`
+   - `progress.md`
+
 ## Inputs
 
 本轮输入固定为四份：
