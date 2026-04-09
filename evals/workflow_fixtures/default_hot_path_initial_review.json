@@ -1,0 +1,24 @@
+{
+  "name": "default_hot_path_initial_review",
+  "paper_id": "paper08",
+  "manifest_updates": {
+    "template_status": "ready",
+    "entry_mode": "initial_review"
+  },
+  "expected": {
+    "check_status": "PARTIAL",
+    "report_equals": {
+      "mentor_constructive.repair_map_present": false,
+      "mentor_constructive.layered_advice_present": false,
+      "mentor_constructive.epi_biostat_language_present": false,
+      "mentor_constructive.frontier_brief_present": false,
+      "mentor_constructive.innovation_position_present": false,
+      "path_projection.default_hot_path_active": true,
+      "path_projection.cold_path_triggered": false,
+      "path_projection.cold_path_triggers": [],
+      "proxy_summary.default_hot_path_active": true,
+      "proxy_summary.cold_path_triggered": false,
+      "proxy_summary.cold_path_triggers": []
+    }
+  }
+}

@@ -54,6 +54,22 @@
       ]
     },
     {
+      "rule_id": "rule.require-methodology-repair-map-before-advice-output",
+      "effect": "require_evidence",
+      "target_refs": [
+        "action.advice",
+        "output.advisor.line-editing",
+        "output.advisor.summary",
+        "output.advisor.defense-talking-points",
+        "output.student.execution-pack"
+      ],
+      "required_refs": [
+        "evidence.methodology_repair.mapped",
+        "evidence.advice_tier.assessed",
+        "evidence.language_contract.audited"
+      ]
+    },
+    {
       "rule_id": "rule.require-rollback-before-reopen",
       "effect": "require_rollback",
       "target_refs": [

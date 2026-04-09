@@ -13,7 +13,9 @@ Core path:
 1. Enter at `node.review`.
 2. Collect the minimum high-level review evidence set.
 3. Transition to `node.advice` only after review evidence is complete.
-4. Roll back to `node.review` when advice must be reopened under stricter review.
+4. Before advisor outputs, build a methodology-backed repair map for the scoped advice target.
+5. Tier the mentor advice by effort and difficulty, then calibrate it with epi/biostat language.
+6. Roll back to `node.review` when advice must be reopened under stricter review.
 
 Non-goals:
 

@@ -9,6 +9,26 @@
       "field_id": "output_id",
       "type": "string",
       "required": true
+    },
+    {
+      "field_id": "repair_map_ref",
+      "type": "string",
+      "required": true
+    },
+    {
+      "field_id": "verification_scope",
+      "type": "string",
+      "required": true
+    },
+    {
+      "field_id": "advice_tier_ref",
+      "type": "string",
+      "required": true
+    },
+    {
+      "field_id": "language_contract_ref",
+      "type": "string",
+      "required": true
     }
   ]
 }

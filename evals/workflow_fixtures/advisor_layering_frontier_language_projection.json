@@ -1,0 +1,212 @@
+{
+  "name": "advisor_layering_frontier_language_projection",
+  "paper_id": "paper07",
+  "manifest_updates": {
+    "template_status": "ready",
+    "entry_mode": "initial_review",
+    "review_object": {
+      "path": "papers/paper07/manuscript.docx",
+      "label": "导师修改建议分层与前沿语言规范",
+      "last_modified": "2026-04-09T00:00:00Z",
+      "derived_text_source": "papers/paper07/manuscript.docx",
+      "visual_truth_source": {
+        "path": "papers/paper07/display/完整评审页.html",
+        "authority_type": "display_projection",
+        "renderer": "word",
+        "page_renders_dir": "assets/page_renders",
+        "fallback_pdf": "papers/paper07/manuscript.pdf"
+      },
+      "derived_pdf_source": "papers/paper07/manuscript.pdf",
+      "stage": "advisor_projection"
+    },
+    "truth_source": {
+      "current": [
+        "papers/paper07/manuscript.docx"
+      ],
+      "historical_sources": [
+        "papers/paper07/manuscript-v6.1.docx"
+      ],
+      "deprecated_anchors": [
+        "旧版摘要"
+      ]
+    },
+    "rebase": {
+      "enabled": false,
+      "from_version": "6.1",
+      "to_version": "6.2",
+      "status": "stable",
+      "impacted_artifacts": [
+        "reviews/导师汇报版摘要.md",
+        "display/导师汇报页.html"
+      ]
+    },
+    "slow_variables": [
+      "前沿检索 gate",
+      "流行病学语言",
+      "生物统计学语言"
+    ],
+    "dependents": [
+      "reviews/论文多智能体审查报告.md",
+      "notes/process_projection.md",
+      "display/完整评审页.html"
+    ],
+    "readiness": {
+      "workspace_gate": "partial",
+      "reason": "frontier_gate_pending"
+    },
+    "handoff": {
+      "process_projection": "notes/process_projection.md",
+      "decision_snapshot": [
+        "导师建议分层",
+        "前沿检索 gate",
+        "epi/biostat 语言规范"
+      ],
+      "produced_artifacts": [
+        "reviews/论文多智能体审查报告.md",
+        "notes/process_projection.md"
+      ],
+      "next_gate": "frontier_gate"
+    },
+    "release_gate": {
+      "scope_frozen": "yes",
+      "deep_review_status": "partial",
+      "coverage_status": "partial",
+      "can_emit_problem_list": "yes",
+      "can_emit_execution_outputs": "no",
+      "can_issue_readiness_verdict": "no",
+      "can_enter_line_editing": "no",
+      "blockers": [
+        "frontier gate pending"
+      ],
+      "allowed_next_steps": [
+        "导师修改建议分层",
+        "前沿检索 gate",
+        "流行病学语言规范",
+        "生物统计学语言规范"
+      ],
+      "forbidden_outputs": [
+        "output.student.execution-pack"
+      ]
+    },
+    "specialty_gate": {
+      "domain_stack": [
+        "公共卫生",
+        "临床流行病学",
+        "生物统计"
+      ],
+      "primary_loop": "因果识别与估计边界",
+      "supporting_loops": [
+        "导师修改建议分层",
+        "前沿检索 gate",
+        "role/specialty adapter"
+      ],
+      "matched_manuals": [
+        "specialty-public-health-causal.md"
+      ],
+      "specialty_readiness": "partial",
+      "discipline_register_status": "partial",
+      "independent_audit_required": "yes",
+      "required_expert_checks": [
+        "流行病学判断",
+        "生物统计判断",
+        "前沿对标"
+      ],
+      "next_action": "先补论文级专项补充说明"
+    },
+    "task_exceptions": {
+      "scoped_rewrite": {
+        "enabled": false,
+        "targets": [],
+        "reason": null
+      }
+    }
+  },
+  "file_overrides": {
+    "reviews/论文多智能体审查报告.md": "# 论文多智能体审查报告\n\n## 导师修改建议分层\n- L1：直接改稿\n- L2：科学加固\n- L3：结构重排\n- L4：前沿升级\n\n## 前沿检索 gate\n- 先核查最新研究进展，再判断创新定位是否成立。\n\n## 流行病学 / 生物统计学语言\n- 流行病学负责问题成立边界。\n- 生物统计学负责估计对象和不确定性。\n\n## role / specialty adapter\n- role adapter 面向学生版、导师版和评审版。\n- specialty adapter 负责把同一修复路径翻译到公共卫生语境。\n",
+    "notes/process_projection.md": "# process_projection\n\n## goal\n把导师修改建议、前沿 gate 和语言规范投影到当前工作流。\n\n## actions\n- 先输出 review_report。\n- 再维护 process_projection。\n- 最后同步 display projection。\n\n## findings\n- 当前只适合导师层建议。\n- 不应把执行层和放行层提前写死。\n\n## decisions\n- 采用 role adapter 与 specialty adapter 的分层投影。\n\n## artifacts\n- reviews/论文多智能体审查报告.md\n- display/完整评审页.html\n\n## status\n进行中。\n\n## next_step\n继续补前沿检索 gate 与专项补充。\n",
+    "reviews/audience_language_contract.md": "# audience_language_contract\n\n## 页面\n导师汇报页\n\n## 论文所属学科\n公共卫生 / 临床流行病学 / 生物统计\n\n## 目标读者\n导师、评审和学生三类读者。\n\n## 使用场景\n在不改变证据边界的前提下，分别输出导师版、学生版和评审版。\n\n## 本学科常用审查用语\n流行病学边界、估计对象、不确定性、前沿对标、工作量层级。\n\n## 应避免的跨学科行话\n不要把内部流程词直接塞进页面首层。\n\n## 允许术语\n导师修改建议分层、前沿检索 gate、role adapter、specialty adapter。\n\n## 禁止直接出现的内部术语\n任何会把学生执行面提前写实的词。\n\n## 首层应保留的判断\n当前建议停留在导师层，不进入执行层。\n\n## 页面阅读规则\n先看结论层，再看依据层。\n\n## 适合写成 tips 的内容\n工作量层级、风险收益、前沿检索结果摘要。\n\n## tips 不应承担的内容\n不要用 tips 代替方法学证据。\n\n## drilldown 标题与展开方式\n按学生版、导师版、评审版分三组展开。\n\n## 不应承担的职责\n不应承担放行结论，也不应承担结果补造。\n",
+    "reviews/display_projection_schema.md": "# display_projection_schema\n\n## 页面\n完整评审页、导师汇报页、问题清单页\n\n## 页面目标\n把导师修改建议分层和前沿 gate 显式投影出来。\n\n## 目标读者要做出的判断\n读者应先判断当前是导师层建议还是执行层建议。\n\n## 首层必须承载的判断\n流行病学边界、生物统计学边界、当前创新定位。\n\n## tips 需要承载的阅读规则\ntips 只做压缩摘要，不做证据替代。\n\n## drilldown 需要承载的深层依据、例外或阻塞项\ndrilldown 承载前沿检索结论、专项补充和工作量层级。\n\n## 必须出现的内容块\nrole adapter、specialty adapter、L1 到 L4 分层。\n\n## 不应出现的内容块\n不应出现提前放行或提前执行的措辞。\n\n## 上游依据文件\nreviews/方法学修复路径表.md、reviews/专业手册完备性判断.md、reviews/导师汇报版摘要.md\n",
+    "reviews/评审闭环与放行判断.md": "# 评审闭环与放行判断\n\n## scope_frozen\nyes\n\n## deep_review_status\npartial\n\n## coverage_status\npartial\n\n## can_emit_problem_list\nyes\n\n## can_emit_execution_outputs\nno\n\n## can_issue_readiness_verdict\nno\n\n## can_enter_line_editing\nno\n\n## blockers\n- 前沿检索 gate 未完成\n- specialty adapter 仍需补充\n\n## allowed_next_steps\n- 完成导师修改建议分层\n- 补流行病学语言规范\n- 补生物统计学语言规范\n- 做外部知识检索\n\n## forbidden_outputs\n- output.student.execution-pack\n",
+    "reviews/专业手册完备性判断.md": "# 专业手册完备性判断\n\n## 当前论文画像\n公共卫生 / 临床流行病学 / 生物统计\n\n## domain_stack\n- 公共卫生\n- 临床流行病学\n- 生物统计\n\n## primary_loop\n因果识别与估计边界\n\n## supporting_loops\n- 导师修改建议分层\n- 前沿检索 gate\n- role/specialty adapter\n\n## 命中的专项文件\n- specialty-public-health-causal.md\n\n## 完备性结论\npartial\n\n## discipline_register_status\npartial\n\n## independent_audit_required\nyes\n\n## required_expert_checks\n- 流行病学判断\n- 生物统计判断\n- 前沿对标\n\n## 结论依据\n当前可共享的只是方法语言，不足以覆盖全部前沿判断。\n\n## 下一动作\n- 先补论文级专项补充说明\n",
+    "reviews/专业专项补充说明.md": "# 专业专项补充说明\n\n- 本论文暂时借用公共卫生、临床流行病学和生物统计的共性语言。\n- 前沿检索结果只用于创新定位和边界校准，不用于补造结果。\n- role adapter 先输出学生版、导师版、评审版三种投影。\n",
+    "reviews/方法学修复路径表.md": "# 方法学修复路径表\n\n- 问题归类：结论强度过高。\n- 修复类型：范围收紧。\n- epi_basis：当前比较框架只能支持关联性解释。\n- stats_basis：当前估计对象和不确定性只支持保守表达。\n- claim_boundary：不宜写成确证因果。\n",
+    "reviews/导师分层修改建议.md": "# 导师分层修改建议\n\n## L1\n- 收紧摘要因果措辞。\n\n## L2\n- 加固讨论中的偏倚说明。\n\n## L3\n- 重排讨论与结论的结构。\n\n## L4\n- 用最新研究进展重写创新定位。\n",
+    "reviews/流调统计语言校准表.md": "# 流调统计语言校准表\n\n- epi_basis：先界定研究问题和比较边界。\n- stats_basis：明确估计对象、不确定性与稳健性。\n- claim_boundary：当前只支持导师层建议，不支持执行层放行。\n- mentor_action：按 L1 到 L4 分层推进。\n",
+    "reviews/前沿知识简报.md": "# 前沿知识简报\n\n- 最新研究进展提示当前创新点需要收紧定位。\n- 外部知识只用于讨论和答辩，不进入论文事实层。\n",
+    "reviews/创新定位判断卡.md": "# 创新定位判断卡\n\n- 当前创新定位：偏弱但可保留。\n- 建议：转入答辩定位与未来研究路径，不直接写成重大原创突破。\n",
+    "reviews/审阅对象冻结说明.md": "# 审阅对象冻结说明\n\n当前冻结对象为 paper07 的 manuscript.docx，后续只允许围绕同一份原文做导师层、前沿层和语言层投影。\n",
+    "reviews/版本冻结与依赖回归台账.md": "# 版本冻结与依赖回归台账\n\n当前版本基线保持不变，依赖项只回看论文正文、导师修改建议分层和 display projection。\n",
+    "reviews/关键数值与复算准入台账.md": "# 关键数值与复算准入台账\n\n本轮按非复算审查处理，只核对关键数值口径，不重新跑模型。\n",
+    "reviews/图表索引台账.md": "# 图表索引台账\n\n图表索引用于定位图表与主文投影的一致性，不承担结论放行。\n",
+    "reviews/图表专项核查.md": "# 图表专项核查\n\n核查重点是图表语义、caption 和正文互引是否一致，以及是否与流行病学边界相符。\n",
+    "display/问题清单页.html": "<!doctype html>\n<html lang=\"zh-CN\">\n<head>\n  <meta charset=\"utf-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n  <title>问题清单页</title>\n</head>\n<body>\n  <h1>问题清单页</h1>\n  <p>应如何处理导师修改建议分层、前沿检索 gate、流行病学语言和生物统计学语言。</p>\n  <p>先按工作量层级分层，再按专业适配器投影。</p>\n</body>\n</html>\n",
+    "display/完整评审页.html": "<!doctype html>\n<html lang=\"zh-CN\">\n<head>\n  <meta charset=\"utf-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n  <title>完整评审页</title>\n</head>\n<body>\n  <h1>完整评审页</h1>\n  <p>审阅步骤：先判断流行病学边界，再判断生物统计学边界，最后再看导师修改建议分层。</p>\n  <p>交稿前终检：当前 readiness 仍应暂缓，直到前沿检索 gate 与专项补充同步完成。</p>\n  <p>readiness 目前只能停在导师层，不进入执行层。</p>\n</body>\n</html>\n"
+  },
+  "json_overrides": {
+    "evidence/review-verdict.json": {
+      "schema_version": "1.0",
+      "paper_id": "paper07",
+      "kind": "review_verdict",
+      "template_status": "ready",
+      "study_type_resolved": true,
+      "specialty_resolved": true,
+      "criteria_coverage_level": "partial",
+      "evidence_sufficiency_level": "partial",
+      "limitations_disclosed": true,
+      "claim_ceiling": "advisor_only",
+      "allowed_output_refs": [
+        "output.advisor.line-editing",
+        "output.advisor.summary",
+        "output.advisor.defense-talking-points"
+      ],
+      "forbidden_output_refs": [
+        "output.student.execution-pack"
+      ],
+      "missing_criterion_refs": [],
+      "missing_evidence_refs": [],
+      "summary": "当前只允许导师层建议和答辩口径，不允许学生执行包。"
+    }
+  },
+  "expected": {
+    "check_status": "PARTIAL",
+    "check_contains": [
+      "Object file exists but is still empty",
+      "Display page still template-shaped"
+    ],
+    "report_equals": {
+      "workspace_contract_ok": true,
+      "workspace_contract_status": "PARTIAL",
+      "release_gate.source": "manifest",
+      "release_gate.can_issue_readiness_verdict": "no",
+      "specialty.source": "manifest",
+      "specialty.specialty_readiness": "partial",
+      "output_policy.shape_ok": true,
+      "output_policy.alignment_ok": true,
+      "task_exceptions.scoped_rewrite_enabled": false,
+      "mentor_constructive.repair_map_present": true,
+      "mentor_constructive.layered_advice_present": true,
+      "mentor_constructive.epi_biostat_language_present": true,
+      "mentor_constructive.frontier_brief_present": true,
+      "mentor_constructive.innovation_position_present": true,
+      "path_projection.default_hot_path_active": false,
+      "path_projection.cold_path_triggered": true,
+      "path_projection.cold_path_triggers": [
+        "mentor_gate",
+        "frontier_gate"
+      ],
+      "proxy_summary.mentor_layered_advice_present": true,
+      "proxy_summary.mentor_language_contract_present": true,
+      "proxy_summary.mentor_frontier_brief_present": true,
+      "proxy_summary.mentor_innovation_position_present": true,
+      "proxy_summary.default_hot_path_active": false,
+      "proxy_summary.cold_path_triggered": true,
+      "proxy_summary.cold_path_triggers": [
+        "mentor_gate",
+        "frontier_gate"
+      ],
+      "proxy_summary.release_gate_source": "manifest",
+      "proxy_summary.specialty_readiness_status": "partial",
+      "proxy_summary.has_process_projection": true
+    }
+  }
+}

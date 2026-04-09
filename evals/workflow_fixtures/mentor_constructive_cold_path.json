@@ -1,0 +1,37 @@
+{
+  "name": "mentor_constructive_cold_path",
+  "paper_id": "paper09",
+  "manifest_updates": {
+    "template_status": "ready",
+    "entry_mode": "initial_review"
+  },
+  "file_overrides": {
+    "reviews/方法学修复路径表.md": "# 方法学修复路径表\n\n- 问题归类：结论强度略高。\n- 修复类型：强度降级。\n- epi_basis：当前研究设计更适合关联解释。\n- stats_basis：当前估计精度与不确定性要求更保守的表述。\n- claim_boundary：不宜写成确证性因果。\n",
+    "reviews/导师分层修改建议.md": "# 导师分层修改建议\n\n## L1\n- 收紧摘要结论措辞。\n\n## L2\n- 补充局限性与偏倚说明。\n",
+    "reviews/流调统计语言校准表.md": "# 流调统计语言校准表\n\n- epi_basis：先界定问题、比较与偏倚来源。\n- stats_basis：说明估计对象与不确定性。\n- claim_boundary：最多写成关联与趋势。\n- mentor_action：先给出最小可执行修改动作。\n"
+  },
+  "expected": {
+    "check_status": "PARTIAL",
+    "report_equals": {
+      "mentor_constructive.repair_map_present": true,
+      "mentor_constructive.layered_advice_present": true,
+      "mentor_constructive.epi_biostat_language_present": true,
+      "mentor_constructive.frontier_brief_present": false,
+      "mentor_constructive.innovation_position_present": false,
+      "path_projection.default_hot_path_active": false,
+      "path_projection.cold_path_triggered": true,
+      "path_projection.cold_path_triggers": [
+        "mentor_gate"
+      ],
+      "proxy_summary.default_hot_path_active": false,
+      "proxy_summary.cold_path_triggered": true,
+      "proxy_summary.cold_path_triggers": [
+        "mentor_gate"
+      ],
+      "proxy_summary.mentor_layered_advice_present": true,
+      "proxy_summary.mentor_language_contract_present": true,
+      "proxy_summary.mentor_frontier_brief_present": false,
+      "proxy_summary.mentor_innovation_position_present": false
+    }
+  }
+}

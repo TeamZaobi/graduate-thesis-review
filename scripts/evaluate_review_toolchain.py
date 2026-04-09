@@ -320,6 +320,23 @@ def main() -> int:
                 migrated_note_path(paper_dir, "局部改写任务卡.md")
             ).exists(),
         },
+        "mentor_constructive": {
+            "repair_map_present": migrated_note_path(
+                paper_dir, "方法学修复路径表.md"
+            ).exists(),
+            "layered_advice_present": migrated_note_path(
+                paper_dir, "导师分层修改建议.md"
+            ).exists(),
+            "epi_biostat_language_present": migrated_note_path(
+                paper_dir, "流调统计语言校准表.md"
+            ).exists(),
+            "frontier_brief_present": migrated_note_path(
+                paper_dir, "前沿知识简报.md"
+            ).exists(),
+            "innovation_position_present": migrated_note_path(
+                paper_dir, "创新定位判断卡.md"
+            ).exists(),
+        },
         "objects": {
             "figures_items": load_items_count(objects_dir / "figures.json"),
             "tables_items": load_items_count(objects_dir / "tables.json"),
@@ -335,6 +352,29 @@ def main() -> int:
         "timings_ms": {},
         "extraction": {},
         "stale_path_scan": None,
+    }
+
+    path_projection_triggers: list[str] = []
+    if report["process_projection_required"]:
+        path_projection_triggers.append("handoff_resume")
+    if any(
+        [
+            report["mentor_constructive"]["repair_map_present"],
+            report["mentor_constructive"]["layered_advice_present"],
+            report["mentor_constructive"]["epi_biostat_language_present"],
+        ]
+    ):
+        path_projection_triggers.append("mentor_gate")
+    if report["mentor_constructive"]["frontier_brief_present"] or report[
+        "mentor_constructive"
+    ]["innovation_position_present"]:
+        path_projection_triggers.append("frontier_gate")
+    if report["task_exceptions"]["scoped_rewrite_enabled"]:
+        path_projection_triggers.append("scoped_rewrite")
+    report["path_projection"] = {
+        "default_hot_path_active": not path_projection_triggers,
+        "cold_path_triggered": bool(path_projection_triggers),
+        "cold_path_triggers": path_projection_triggers,
     }
 
     started = time.perf_counter()
@@ -499,6 +539,13 @@ def main() -> int:
         "has_specialty_readiness_record": report["specialty"]["readiness_record_present"],
         "specialty_readiness_status": report["specialty"]["specialty_readiness"],
         "scoped_rewrite_enabled": report["task_exceptions"]["scoped_rewrite_enabled"],
+        "default_hot_path_active": report["path_projection"]["default_hot_path_active"],
+        "cold_path_triggered": report["path_projection"]["cold_path_triggered"],
+        "cold_path_triggers": report["path_projection"]["cold_path_triggers"],
+        "mentor_layered_advice_present": report["mentor_constructive"]["layered_advice_present"],
+        "mentor_language_contract_present": report["mentor_constructive"]["epi_biostat_language_present"],
+        "mentor_frontier_brief_present": report["mentor_constructive"]["frontier_brief_present"],
+        "mentor_innovation_position_present": report["mentor_constructive"]["innovation_position_present"],
         "media_extractable": report["extraction"].get("media_ok"),
         "tables_extractable": report["extraction"].get("tables_ok"),
         "citations_extractable": report["extraction"].get("citations_ok"),

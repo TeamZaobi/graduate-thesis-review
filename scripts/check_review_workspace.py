@@ -123,6 +123,17 @@ LINE_EDITING_FILES = [
     "论断-引文核查表.md",
 ]
 
+MENTOR_CONSTRUCTIVE_CORE_FILES = [
+    "方法学修复路径表.md",
+    "导师分层修改建议.md",
+    "流调统计语言校准表.md",
+]
+
+MENTOR_FRONTIER_FILES = [
+    "前沿知识简报.md",
+    "创新定位判断卡.md",
+]
+
 SCOPED_REWRITE_TASK_CARD = "局部改写任务卡.md"
 
 LINE_EDITING_PROMOTION_PATTERNS = [
@@ -146,6 +157,7 @@ READINESS_PROMOTION_PATTERNS = [
 
 NEGATION_TOKENS = [
     "暂不",
+    "不宜",
     "不建议",
     "不允许",
     "不得",
@@ -596,6 +608,50 @@ def inspect_stage_promotion(
 
     if any(value is None for value in release_gate_flags.values()):
         partial.append("Release gate file exists but key can_* flags are not fully explicit yet")
+
+    return blocked, partial
+
+
+def inspect_mentor_constructive_stack(
+    reviews_dir: Path,
+    display_dir: Path,
+) -> tuple[list[str], list[str]]:
+    blocked: list[str] = []
+    partial: list[str] = []
+
+    advice_output_paths = [
+        *[reviews_dir / name for name in EXECUTION_OUTPUT_FILES],
+        *[reviews_dir / name for name in LINE_EDITING_FILES],
+        display_dir / "学生执行页.html",
+        display_dir / "导师汇报页.html",
+    ]
+    has_advice_output = any(
+        output_artifact_has_substantive_content(path) for path in advice_output_paths
+    )
+    if has_advice_output:
+        for name in MENTOR_CONSTRUCTIVE_CORE_FILES:
+            path = reviews_dir / name
+            if not output_artifact_has_substantive_content(path):
+                partial.append(
+                    f"Mentor constructive stack is missing substantive core artifact: {path}"
+                )
+
+    frontier_paths = [reviews_dir / name for name in MENTOR_FRONTIER_FILES]
+    has_frontier_artifact = any(
+        output_artifact_has_substantive_content(path) for path in frontier_paths
+    )
+    if has_frontier_artifact:
+        for path in frontier_paths:
+            if not output_artifact_has_substantive_content(path):
+                partial.append(
+                    f"Frontier advice stack is incomplete: {path}"
+                )
+        language_contract_path = reviews_dir / "流调统计语言校准表.md"
+        if not output_artifact_has_substantive_content(language_contract_path):
+            partial.append(
+                "Frontier advice exists but epi/biostat language contract artifact is missing: "
+                f"{language_contract_path}"
+            )
 
     return blocked, partial
 
@@ -1513,6 +1569,12 @@ def main() -> int:
     )
     blocked.extend(stage_blocked)
     partial.extend(stage_partial)
+    mentor_blocked, mentor_partial = inspect_mentor_constructive_stack(
+        reviews_dir,
+        display_dir,
+    )
+    blocked.extend(mentor_blocked)
+    partial.extend(mentor_partial)
     release_projection_path = migrated_note_path(paper_dir, "评审闭环与放行判断.md")
     if release_gate_source == "manifest" and not release_projection_path.exists():
         warnings.append(

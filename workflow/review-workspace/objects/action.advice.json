@@ -14,6 +14,41 @@
       "field_id": "advice_scope",
       "type": "string",
       "required": true
+    },
+    {
+      "field_id": "repair_basis_ref",
+      "type": "string",
+      "required": true
+    },
+    {
+      "field_id": "repair_mode",
+      "type": "string",
+      "required": true
+    },
+    {
+      "field_id": "verification_scope",
+      "type": "string",
+      "required": true
+    },
+    {
+      "field_id": "audience_role",
+      "type": "string",
+      "required": true
+    },
+    {
+      "field_id": "advice_tier",
+      "type": "string",
+      "required": true
+    },
+    {
+      "field_id": "language_contract_ref",
+      "type": "string",
+      "required": true
+    },
+    {
+      "field_id": "frontier_review_mode",
+      "type": "string",
+      "required": true
     }
   ]
 }
