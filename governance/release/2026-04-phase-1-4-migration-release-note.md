@@ -67,7 +67,23 @@
 
 - `output.advisor.line-editing`
 - `output.advisor.summary`
+- `output.advisor.defense-talking-points`
 - `output.student.execution-pack`
+
+## Post-Release Stabilization
+
+在 `Phase 1-4` 首次合并后，又补了一轮非常窄的主线稳定化修复，并已通过 PR `#2` 合并到 `main`。
+
+这轮只处理三个问题：
+
+1. `output policy` 从顶层字段校验，补到高风险条目 shape 校验
+2. `evaluate_review_toolchain.py` 不再把 policy 缺失/损坏误报成 `alignment_ok = true`
+3. paper runtime pack 新增与 repo truth pack 的 drift 对账
+
+同时补了两条 workflow fixtures：
+
+- `invalid_output_policy_blocks_advice_output`
+- `runtime_pack_drift_is_reported`
 
 ## Behavioral Changes
 
@@ -123,3 +139,13 @@ python3 scripts/check_review_workspace.py \
 7. policy-driven advice replay
 
 当前未发现阻断本次 release 的代码级缺陷。
+
+补丁合并后再次确认：
+
+1. `python3 -m py_compile scripts/*.py`
+2. `python3 scripts/validate_evals.py`
+3. `python3 scripts/run_workflow_regression.py`
+4. `python3 ../files-driven/scripts/validate_governance_assets.py workflow/review-workspace`
+5. `python3 ../files-driven/scripts/validate_governance_assets.py workflow/skill-maintenance`
+
+当前 workflow fixtures 为 `6` 条，全部通过。
