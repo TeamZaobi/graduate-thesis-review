@@ -38,6 +38,11 @@ REQUIRED_THEMES = {
     "formal_word_mechanics": ["修订记录", "批注", "目录域", "页码域", "交叉引用"],
     "formal_blind_pdf": ["盲审", "匿名", "PDF", "导出", "元数据"],
     "formal_numbering": ["公式编号", "图号", "表号", "互引", "caption"],
+    "mentor_layering": ["导师修改建议分层", "L1", "工作量层级", "创新性"],
+    "frontier_gate": ["前沿检索 gate", "外部知识检索", "最新研究进展", "创新定位"],
+    "epi_biostat_language": ["流行病学", "生物统计学", "估计对象", "不确定性"],
+    "role_specialty_adapter": ["role adapter", "specialty adapter", "学生版", "导师版"],
+    "hot_cold_path_projection": ["默认热路径", "冷路径", "显式触发", "frontier_gate", "mentor_gate"],
 }
 
 def fail(message: str) -> None:

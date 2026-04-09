@@ -1,27 +1,27 @@
 {
   "schema_version": "1.0",
-  "object_id": "output.advisor.summary",
+  "object_id": "evidence.methodology_repair.mapped",
   "family": "object",
   "version_anchor": "v1",
-  "kind": "output_type",
+  "kind": "evidence_type",
   "fields": [
     {
-      "field_id": "output_id",
+      "field_id": "evidence_id",
       "type": "string",
       "required": true
     },
     {
-      "field_id": "layered_plan_ref",
+      "field_id": "repair_scope",
       "type": "string",
       "required": true
     },
     {
-      "field_id": "target_role",
+      "field_id": "methodology_basis",
       "type": "string",
       "required": true
     },
     {
-      "field_id": "language_contract_ref",
+      "field_id": "repair_mode",
       "type": "string",
       "required": true
     }

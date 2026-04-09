@@ -246,6 +246,60 @@
       "prompt": "工作区里已经出现了实填的 `局部改写任务卡.md`，但 `review_version_manifest.json` 里没有 `task_exceptions.scoped_rewrite`，`can_enter_line_editing` 也还没放行。请用 $graduate-thesis-review 处理。",
       "expected_output": "应把这识别为局部改写越权：没有 `task_exceptions.scoped_rewrite` 的明确授权时，`局部改写任务卡.md` 不应提前实填；要么补齐受限例外合同，要么撤回到普通评审，不得默认继续改写。",
       "files": []
+    },
+    {
+      "id": 42,
+      "prompt": "用户说：不要只告诉我摘要因果词太强，我要知道哪些地方能靠降级和补局限修，哪些地方根本不能靠写作修。论文是观察性队列，只有单次测量，还把行为指标写成神经机制。请用 $graduate-thesis-review 给出建设性修改建议。",
+      "expected_output": "应先生成方法学修复路径，区分 `强度降级 / 局限性补写 / 范围收紧 / 不可由写作修复`，并把行为指标支撑机制结论的问题收回到代理指标边界，而不是直接输出一版更顺的摘要。",
+      "files": []
+    },
+    {
+      "id": 43,
+      "prompt": "方法段把随机、分配隐藏和盲法都写得很满，但当前材料只能证实做了随机分组，不能证实分配隐藏和盲法。用户要你直接出最终执行清单。请用 $graduate-thesis-review 处理。",
+      "expected_output": "应把这类问题放进方法学修复路径：允许补充已核实的随机信息，缺证据的分配隐藏和盲法只能写成局限性或待人工回查，不得补造设计特征，也不能把整项任务误写成普通润色。",
+      "files": []
+    },
+    {
+      "id": 44,
+      "prompt": "用户不接受单一结论，要求你把导师修改建议分层输出成 L1 到 L4，并按工作量层级和创新性收益排序。请用 $graduate-thesis-review 处理。",
+      "expected_output": "应先给出导师修改建议分层，明确 L1 到 L4 的工作量层级，再说明各层对应的创新性收益与最小动作，而不是把所有建议混成一层。",
+      "files": []
+    },
+    {
+      "id": 45,
+      "prompt": "论文讨论想对标最新研究进展，但你必须先跑前沿检索 gate 和外部知识检索，再判断创新定位是否成立。请用 $graduate-thesis-review 审查。",
+      "expected_output": "应先经过前沿检索 gate，使用外部知识检索对标最新研究进展，再给出创新定位判断和可升级路径，而不是直接把旧结论包装成前沿创新。",
+      "files": []
+    },
+    {
+      "id": 46,
+      "prompt": "用户要求把建设性意见统一成流行病学和生物统计学的语言，明确偏倚、估计对象和不确定性边界。请用 $graduate-thesis-review 给出导师建议。",
+      "expected_output": "应先用流行病学语言界定问题与偏倚，再用生物统计学语言说明估计对象和不确定性，最后再落到可执行修改，而不是只给写作润色建议。",
+      "files": []
+    },
+    {
+      "id": 47,
+      "prompt": "同一条建议要同时给学生版、导师版和评审版，还要按专业适配成 role/specialty adapter。请用 $graduate-thesis-review 组织输出。",
+      "expected_output": "应把同一 repair map 投影成 role adapter 与 specialty adapter，分别输出学生版、导师版、评审版和本专业可接受表述，而不是只发一份通用说明。",
+      "files": []
+    },
+    {
+      "id": 48,
+      "prompt": "用户要求默认走热路径，只在出现明确的冷路径显式触发时才展开前沿检索和接手恢复。请用 $graduate-thesis-review 说明默认热路径与冷路径的边界。",
+      "expected_output": "应保持默认热路径，不把冷路径显式触发误写成默认步骤；只有在 frontier_gate 或 handoff_resume 等条件出现时，才进入冷路径并记录触发原因。",
+      "files": []
+    },
+    {
+      "id": 49,
+      "prompt": "这轮工作区已经出现前沿检索 gate 和 process_projection，说明冷路径显式触发。请用 $graduate-thesis-review 复核是否仍保留默认热路径的最小输出。",
+      "expected_output": "应把前沿检索 gate 视为冷路径的显式触发信号，同时确认默认热路径仍只保留 review_report 和必要的过程投影，而不是直接升级到执行面。",
+      "files": []
+    },
+    {
+      "id": 50,
+      "prompt": "这轮并没有进入前沿检索，也没有接手恢复，但已经开始输出方法学修复路径表、导师分层修改建议和流调统计语言校准表。请用 $graduate-thesis-review 说明当前是否还属于默认热路径。",
+      "expected_output": "应把方法学修复路径表、导师分层修改建议和流调统计语言校准表视为 mentor_gate 冷路径显式触发，不应继续宣称当前仍停留在默认热路径。",
+      "files": []
     }
   ]
 }

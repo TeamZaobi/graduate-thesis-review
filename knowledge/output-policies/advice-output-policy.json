@@ -66,6 +66,15 @@
         "确证因果",
         "已证实因果"
       ]
+    },
+    {
+      "rule_id": "forbid.unverified-innovation-upgrade",
+      "patterns": [
+        "国际领先",
+        "填补国内外空白",
+        "首次实现",
+        "首次证实"
+      ]
     }
   ]
 }

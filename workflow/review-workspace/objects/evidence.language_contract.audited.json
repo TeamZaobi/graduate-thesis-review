@@ -1,27 +1,27 @@
 {
   "schema_version": "1.0",
-  "object_id": "output.advisor.summary",
+  "object_id": "evidence.language_contract.audited",
   "family": "object",
   "version_anchor": "v1",
-  "kind": "output_type",
+  "kind": "evidence_type",
   "fields": [
     {
-      "field_id": "output_id",
+      "field_id": "evidence_id",
       "type": "string",
       "required": true
     },
     {
-      "field_id": "layered_plan_ref",
+      "field_id": "epi_basis",
       "type": "string",
       "required": true
     },
     {
-      "field_id": "target_role",
+      "field_id": "stats_basis",
       "type": "string",
       "required": true
     },
     {
-      "field_id": "language_contract_ref",
+      "field_id": "claim_boundary",
       "type": "string",
       "required": true
     }

@@ -103,7 +103,73 @@ description: 面向中文使用者操作的研究生毕业论文审查技能，�
 
 历史写法中的 `reviews/review_version_manifest.json` 当前视作 `notes/legacy-review-manifest.json` 的兼容 alias。
 
-在审查方法、统计、图表、外部建议时，加载 [references/review-rubric.md](./references/review-rubric.md)。在起草 Markdown 报告、修改清单、HTML / 网页展示层、答辩口径和导师式精修材料时，加载 [references/output-templates.md](./references/output-templates.md)。只要任务进入网页 / HTML / display_projection 模式，再额外加载 [references/display-projection-gates.md](./references/display-projection-gates.md)。在规划目录、文件命名、交付物落点时，加载 [references/file-structure.md](./references/file-structure.md)。在判断工作区四层、对象层、默认读取顺序、图表/表格/引文结构化资产和多线程接手面时，加载 [references/review-operations-architecture.md](./references/review-operations-architecture.md)。当论文涉及统计图、结果图、脑图、连接图、表格重构或答辩 PPT 图表时，加载 [references/figure-table-standards.md](./references/figure-table-standards.md)。当需要区分干预研究、观察性研究、诊断研究、预测模型或系统综述时，加载 [references/clinical-study-types.md](./references/clinical-study-types.md)。当用户明确要求导师式逐段改稿、原子级修改建议或可直接替换的文字版本时，加载 [references/advisor-line-editing.md](./references/advisor-line-editing.md)。当用户明确要求形式审查、学校模板核查、送审格式检查，或需要核查目录/页码/编号/页眉页脚/版式时，加载 [references/formal-review-checklist.md](./references/formal-review-checklist.md)。**每次审查任务开启，必须先加载 [references/specialty-router.md](./references/specialty-router.md) 识别专业领域，再加载 [references/specialty-manual-readiness-gate.md](./references/specialty-manual-readiness-gate.md) 判断当前专项手册是否 `complete / partial / missing`，然后再按路由结果决定加载哪些专项文件**：当论文属于康复医学、神经工程、脑机接口、神经影像或多模态设备研究时，加载 [references/rehab-neuroengineering.md](./references/rehab-neuroengineering.md)；当论文属于心血管内科/外科时，加载 [references/specialty-cardiology.md](./references/specialty-cardiology.md)；当论文属于中医或中西医结合时，加载 [references/specialty-tcm.md](./references/specialty-tcm.md)；当论文属于公共卫生、临床流行病学、真实世界队列、药物流行病学或目标试验模拟时，加载 [references/specialty-public-health-causal.md](./references/specialty-public-health-causal.md)；其他专业按 `specialty-router.md` 第6节流程处理。只有当需要新建或重写共享专项文件时，才加载 [references/specialty-manual-standard.md](./references/specialty-manual-standard.md)，并在完成后运行 `scripts/check_specialty_manual.py`。当论文属于临床干预、随机对照、康复工程交叉，或用户明确要求“更深的科学性/学术性检查”时，追加加载 [references/deep-review-gates.md](./references/deep-review-gates.md)。当任务需要综合 `Codex`、`Claude Code`、`AntiGrativity` 或其他代理的输出，或用户明确要求跨工具复核时，加载 [references/agent-tool-adaptation.md](./references/agent-tool-adaptation.md)。如果论文原文是英文，则用同样流程核查，只把术语、图题、结果层级和答辩口径切换为英文论文常见表达。
+## 默认热路径
+
+默认只把下面三层当作首要心智模型，不要求每次任务一上来就同时理解全部模块。
+
+### `Review` 热路径
+
+每次论文审查任务默认只前置这四项：
+
+1. [references/review-rubric.md](./references/review-rubric.md)
+2. [references/specialty-router.md](./references/specialty-router.md)
+3. [references/specialty-manual-readiness-gate.md](./references/specialty-manual-readiness-gate.md)
+4. [references/review-operations-architecture.md](./references/review-operations-architecture.md)
+
+这是本 Skill 的默认热路径。其职责只有三件事：
+
+1. 判清研究问题和证据边界
+2. 判清当前专业和专项是否够用
+3. 判清当前运行底座、对象层和投影关系是否已经可用
+
+热路径与冷路径的正式映射以 [references/activation-matrix.md](./references/activation-matrix.md) 为准；`SKILL.md` 只保留入口摘要，不重复展开全部触发细节。
+
+### `Mentor` 热路径
+
+只有当任务进入“建设性修改建议 / 学生执行清单 / 导师式逐条改稿 / 可直接替换文本”时，才额外前置：
+
+1. [references/methodology-backed-advice.md](./references/methodology-backed-advice.md)
+2. [references/mentor-constructive-layers.md](./references/mentor-constructive-layers.md)
+3. [references/epi-biostat-language-contract.md](./references/epi-biostat-language-contract.md)
+4. [references/mentor-projection-contract.md](./references/mentor-projection-contract.md)
+
+如果用户明确要求逐段/逐句改稿，再额外加载 [references/advisor-line-editing.md](./references/advisor-line-editing.md)。
+
+### `Frontier` 热路径
+
+只有当任务明确进入“创新性 / 最新进展 / 领域定位 / 高水平导师判断”时，才额外前置：
+
+1. [references/frontier-innovation-gates.md](./references/frontier-innovation-gates.md)
+2. [$deep-research](/Users/jixiaokang/.agents/skills/deep-research/SKILL.md)（如需受控外部检索）
+
+外部知识只能改变定位、边界、答辩口径和未来研究建议，不能补造论文事实。
+
+## 显式冷路径
+
+以下模块保留，但默认不应成为每次任务的首屏心智负担。只有命中触发条件时才加载：
+
+- [references/display-projection-gates.md](./references/display-projection-gates.md)
+  只在任务进入网页 / HTML / `display_projection` 时加载。
+- [references/output-templates.md](./references/output-templates.md)
+  只在需要写修改清单、评审报告、导师摘要或网页 / HTML 输出时加载。
+- [references/file-structure.md](./references/file-structure.md)
+  只在规划目录、文件命名、交付物落点时加载。
+- [references/figure-table-standards.md](./references/figure-table-standards.md)
+  只在图表、表格或图像证据是核心风险源时加载。
+- [references/clinical-study-types.md](./references/clinical-study-types.md)
+  只在需要严格区分研究类型时加载。
+- [references/formal-review-checklist.md](./references/formal-review-checklist.md)
+  只在形式审查、学校模板或送审格式核查时加载。
+- [references/deep-review-gates.md](./references/deep-review-gates.md)
+  只在干预/RCT/设备交叉等高风险论文，或用户明确要求更深科学性审查时加载。
+- [references/agent-tool-adaptation.md](./references/agent-tool-adaptation.md)
+  只在需要裁决 `Codex`、`Claude Code`、`AntiGrativity` 或其他代理输出时加载。
+- 各专项手册
+  只在 `specialty-router + readiness gate` 已命中后按专业加载；[references/specialty-manual-standard.md](./references/specialty-manual-standard.md) 只在新建/重写共享专项时加载。
+- [references/self-audit.md](./references/self-audit.md)
+  只在最终综合交付完成后做最后一轮自检。
+
+如果论文原文是英文，则沿用同一热路径与冷路径，只把术语、图题、结果层级和答辩口径切换为英文论文常见表达。
 
 如果任务需要核对最新指南、规范或对照研究，优先查官方或一手来源，并可配合 [$deep-research](/Users/jixiaokang/.agents/skills/deep-research/SKILL.md)。如果任务需要做结构清晰、适合打印和展示的 HTML / 网页交付物，可配合 [$design-taste-frontend](/Users/jixiaokang/.agents/skills/taste-skill/SKILL.md)。但视觉设计不能替代证据映射深度；display_projection 的内容边界、拆页规则、映射粒度和回归检查由本 Skill 本身负责。
 
@@ -284,12 +350,14 @@ description: 面向中文使用者操作的研究生毕业论文审查技能，�
 
 - 论文已经进入送审、盲审、预答辩或正式答辩前精修阶段
 
-进入该模式后，固定执行四件事：
+进入该模式后，固定执行六件事：
 
 1. 先做诊断，再给改写，不反过来
-2. 每条改写都绑定原句、证据锚点和安全改写目标
-3. 对需要回查原始数据、代码、伦理批件或参考文献原文的句子，标记 `待人工回查`，不要代写事实
-4. 默认优先精修摘要、结果、讨论、结论、图题表题和答辩高风险段落，再决定是否扩展到全文
+2. 先按 [references/methodology-backed-advice.md](./references/methodology-backed-advice.md) 生成 `方法学修复路径表`，再决定哪些问题能进入改写卡，哪些必须退回评审或人工回查
+3. 再按 [references/mentor-constructive-layers.md](./references/mentor-constructive-layers.md) 生成 `导师分层修改建议`，明确当前建议属于 `L1 / L2 / L3 / L4`
+4. 每条改写都绑定原句、证据锚点、安全改写目标、`epi_basis / stats_basis / claim_boundary` 和方法学依据
+5. 对需要回查原始数据、代码、伦理批件或参考文献原文的句子，标记 `待人工回查`，不要代写事实
+6. 默认优先精修摘要、结果、讨论、结论、图题表题和答辩高风险段落，再决定是否扩展到全文
 
 如果完整评审尚未闭环，但用户明确要求先处理某个局部高风险段落，只允许做有范围边界的局部改写；不要顺势产出全文执行清单、送审判断或导师决策页。
 
@@ -297,10 +365,14 @@ description: 面向中文使用者操作的研究生毕业论文审查技能，�
 
 此模式下，固定加载 [references/advisor-line-editing.md](./references/advisor-line-editing.md)，并按需要调用：
 
+- [agents/workload-assessment-agent.md](./agents/workload-assessment-agent.md)
 - [agents/advisor-line-edit-agent.md](./agents/advisor-line-edit-agent.md)
 - [agents/evidence-anchored-rewrite-agent.md](./agents/evidence-anchored-rewrite-agent.md)
 - [agents/citation-integrity-agent.md](./agents/citation-integrity-agent.md)
 - [agents/chapter-logic-surgeon.md](./agents/chapter-logic-surgeon.md)
+- [agents/frontier-innovation-agent.md](./agents/frontier-innovation-agent.md)（当命中 `L4` 或前沿判断时）
+
+只要建设性建议命中了 `证据-结论匹配度`、因果强度、机制宣称、对照可信度或关键图表口径问题，就不要跳过 `workload-assessment-agent`。它负责先判“可修复性”和“修复类型”，再把结果交给最终改稿或学生执行清单。
 
 ### 1.4 先冻结核心结果真源与依赖关系
 
@@ -424,6 +496,48 @@ description: 面向中文使用者操作的研究生毕业论文审查技能，�
 
 不要混层。`Upgrade` 不能拿来替代未处理的 `P0`。
 
+### 3.1 建设性建议先判修复路径
+
+建设性建议不是“给一句更顺的话”，而是先回答五个问题：
+
+1. 这是什么问题类型
+2. 它属于哪种修复类型
+3. 修复依据来自哪条方法学判断
+4. 当前属于 `L1 / L2 / L3 / L4` 的哪一层
+5. `epi_basis / stats_basis / claim_boundary` 是什么
+6. 最小动作是句子、段落、图表还是小节
+7. 改完后用什么动作验证已经闭合
+
+如果这七个问题答不出来，就不要直接写最终修改建议。默认先产 `方法学修复路径表`、`导师分层修改建议` 和 `流调统计语言校准表`，再分流到：
+
+- `逐条修改建议卡`
+- `学生执行版`
+- `答辩口径`
+- `退回评审 / 待人工回查`
+
+只要问题本质上属于设计硬伤、证据缺失或关键方法未核实，就把它写成 `不可由写作修复`，不要用漂亮文字掩盖硬伤。
+
+### 3.2 流调与生统语言先于专业润色
+
+导师修改建议层的推荐语言固定先过两道校准：
+
+1. `流行病学`
+   - 研究到底在回答什么问题，比较基础和偏倚边界在哪里
+2. `生物统计`
+   - 当前估计对象、不确定性和稳健性最多支持什么强度
+
+之后才进入专业语境和导师动作。不要直接用“结论太强、证据不够、结果不稳”这种经验话术跳过方法学判断；优先改写成流调/生统可成立的表达。
+
+### 3.3 前沿检索只服务导师层高阶判断
+
+只有当建议进入 `L4`、或用户明确要求创新性/最新进展判断时，才进入外部检索与前沿定位。前沿层的职责是：
+
+1. 产出 `前沿知识简报`
+2. 产出 `创新定位判断卡`
+3. 帮导师决定哪些内容进入正文、答辩或未来研究
+
+前沿层不是用来替论文补事实、补实验或补分析。
+
 ### 4. 严格复核外部建议，不照单全收
 
 当用户拿来 Opus、Claude、Gemini、导师、外审、`Codex`、`Claude Code`、`AntiGrativity` 或其他 AI / 代理的建议时，不要整包接受或否定。每条建议都要落到下列四类之一：
@@ -544,10 +658,18 @@ legacy gate 至少回答：
 
 进入导师式逐条改稿模式时，再补 2-4 样精修材料：
 
+- `方法学修复路径表`
+- `导师分层修改建议`
+- `流调统计语言校准表`
 - 逐条修改建议卡 / 导师式逐段改稿
 - 证据绑定改写表
 - 论断-引文核查表
 - 章节功能重构建议
+
+如果进入 `L4`，再补：
+
+- `前沿知识简报`
+- `创新定位判断卡`
 
 如果进入了“强制深审”模式，再补三样证据型材料，或把它们并入综合报告附录：
 

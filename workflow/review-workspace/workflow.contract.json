@@ -21,6 +21,9 @@
     "evidence.core_loops.reviewed",
     "evidence.limitations.explicit",
     "evidence.output_authority.defined",
+    "evidence.methodology_repair.mapped",
+    "evidence.advice_tier.assessed",
+    "evidence.language_contract.audited",
     "approval.review.high-level-complete",
     "approval.review.rollback",
     "output.advisor.line-editing",
@@ -73,6 +76,11 @@
       "node_id": "node.advice",
       "state_ref": "state.advice.partial",
       "action_ref": "action.advice",
+      "evidence_refs": [
+        "evidence.methodology_repair.mapped",
+        "evidence.advice_tier.assessed",
+        "evidence.language_contract.audited"
+      ],
       "output_policy_refs": [
         "policy.review-workspace.guard"
       ],

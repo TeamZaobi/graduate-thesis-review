@@ -9,6 +9,21 @@
       "field_id": "output_id",
       "type": "string",
       "required": true
+    },
+    {
+      "field_id": "frontier_brief_ref",
+      "type": "string",
+      "required": true
+    },
+    {
+      "field_id": "language_contract_ref",
+      "type": "string",
+      "required": true
+    },
+    {
+      "field_id": "claim_boundary_ref",
+      "type": "string",
+      "required": true
     }
   ]
 }
