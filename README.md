@@ -2,11 +2,25 @@
 
 面向中文使用者的研究生毕业论文审查 Skill。当前执行“先完成高水平评审，再进入导师职责”的流程，支持中文和英文论文，并把论文工作区收口到 Files Driven 的 `governance / evidence / outputs / notes` 四族结构。
 
+## 当前版本
+
+- **Skill release version**：`v1.1.0`
+- **Release date**：`2026-04-09`
+- **Workflow / contract version_anchor**：`v1`
+
+当前 release 聚焦三件事：
+
+1. 把建设性意见收敛成导师层的结构化能力，而不是泛化的话术输出
+2. 把流行病学 / 生物统计学语言校准与前沿检索 gate 接入导师建议链路
+3. 把默认热路径压缩到最小核，并把高级能力全部改成显式冷路径触发
+
 ## 核心能力
 
 - **效率与效能优先**：所有结构和工具改动都以“减少人工成本、提升证据绑定强度和改稿可执行性”为判断标准
 - **分级问题识别**：P0/P1/P2 关键问题分级
 - **使命层级固定**：先完成高水平评审，再进入导师式修改建议；导师职责不能脱离评审职责单独成立
+- **默认热路径收口**：默认只前置 `review-rubric / specialty-router / specialty-manual-readiness-gate / review-operations-architecture`
+- **显式冷路径触发**：导师修改、前沿检索、深审、形式审查、展示投影都按触发条件加载，不再默认展开
 - **repo truth packs**：repo 级真源固定为 `workflow/review-workspace/` 与 `workflow/skill-maintenance/`
 - **paper runtime pack**：每篇论文的 machine-readable runtime 真源固定为 `papers/<paper-id>/governance/review-workspace-pack/`
 - **evidence verdict 中枢**：`papers/<paper-id>/evidence/review-verdict.json` 负责结论强度、缺失证据和输出授权边界
@@ -21,6 +35,10 @@
 - **观察性因果推断专项**：目标试验模拟、`time zero`、新使用者设计、权重、竞争风险、交互作用
 - **强制深审模式**：干预研究、随机对照、设备/影像密集型论文自动升级为专家 agent 分工审查
 - **外部建议复核**：对导师、外审、AI 建议逐条判断 Adopt / Adopt with rewrite / Downgrade / Reject
+- **方法学修复路径表**：所有建设性建议先落到问题类型、修复类型、依据、最小动作、验证动作
+- **导师建议分层**：按 `L1-L4` 输出工作量、难度、收益和创新升级层级
+- **流调 / 生统语言校准**：导师建议先经过 `epi_basis / stats_basis / claim_boundary / mentor_action`
+- **受控前沿检索**：只有命中创新性、最新进展、领域定位等条件时，才进入外部知识检索
 - **导师式逐条改稿**：输出逐段 / 逐句 / 可直接替换的证据绑定修改建议
 - **引文与章节外科**：核查论断-引文匹配，并修复章节功能错位
 - **答辩口径生成**：高频追问的安全应答框架
@@ -45,8 +63,13 @@
 - `reviews/process_projection.md`、`reviews/评审闭环与放行判断.md`、`reviews/专业手册完备性判断.md` 等历史路径仍可读，但 canonical 内容已迁入 `notes/`
 - 下文仍出现的 `reviews/...` 路径，如果没有特别说明，默认视作 legacy alias，而不是新的 authority 落点
 
-实现说明与 release 说明见：
+实现说明、版本与 release 说明见：
 
+- `VERSION`
+- `CHANGELOG.md`
+- `governance/design/2026-04-mentor-constructive-advice-upgrade-design.md`
+- `governance/design/2026-04-hot-cold-path-closure-decision.md`
+- `governance/release/2026-04-v1-1-0-mentor-hot-path-release-note.md`
 - `governance/design/2026-04-phase-1-4-implementation-note.md`
 - `governance/release/2026-04-phase-1-4-migration-release-note.md`
 
@@ -54,6 +77,9 @@
 
 ```
 graduate-thesis-review/
+├── README.md                         # 对外说明与使用入口
+├── CHANGELOG.md                      # 发布变更记录
+├── VERSION                           # 当前 skill release 版本锚点
 ├── SKILL.md                          # 主技能文件，执行流程入口
 ├── workflow/
 │   ├── review-workspace/             # 论文评审 repo truth pack
@@ -72,10 +98,17 @@ graduate-thesis-review/
 │   ├── chapter-logic-surgeon.md      # 章节逻辑外科专家
 │   ├── evidence-anchored-rewrite-agent.md # 证据绑定改写专家
 │   ├── advisor-line-edit-agent.md    # 导师式逐条改稿专家
+│   ├── frontier-innovation-agent.md  # 前沿检索与创新定位专家
 │   ├── defense-risk-agent.md         # 答辩风险与口径专家
 │   └── workload-assessment-agent.md  # 证据-结论匹配度评估专家
 ├── references/
+    ├── activation-matrix.md          # 默认热路径 / 显式冷路径激活矩阵
     ├── review-operations-architecture.md # 四层运行底座、对象层、接手顺序、工具链
+    ├── methodology-backed-advice.md  # 方法学修复路径表与建设性建议真源
+    ├── mentor-constructive-layers.md # 导师建议 `L1-L4` 分层
+    ├── epi-biostat-language-contract.md # 流调 / 生统语言校准合同
+    ├── mentor-projection-contract.md # 学生 / 导师 / 评审 / 答辩投影合同
+    ├── frontier-innovation-gates.md  # 前沿检索与创新定位 gate
     ├── advisor-line-editing.md       # 导师式逐条改稿流程
     ├── specialty-router.md           # 专业领域识别与路由（每次必加载）
     ├── specialty-manual-readiness-gate.md # 专项手册完备性判定与补建流程
@@ -164,6 +197,35 @@ papers/
 ```
 
 如果完整评审尚未闭环，但用户明确只要求处理局部高风险段落，当前只允许启用 `legacy-review-manifest.json.task_exceptions.scoped_rewrite`，并补 `notes/局部改写任务卡.md`；不要直接把它放大成全文逐条改稿。
+
+## 默认加载策略
+
+当前默认心智模型固定为三层：
+
+1. `Review`
+2. `Mentor`
+3. `Frontier`
+
+其中默认热路径只保留：
+
+1. `references/review-rubric.md`
+2. `references/specialty-router.md`
+3. `references/specialty-manual-readiness-gate.md`
+4. `references/review-operations-architecture.md`
+
+以下能力全部改为显式冷路径触发：
+
+- `output-templates`
+- `methodology-backed-advice`
+- `mentor-constructive-layers`
+- `epi-biostat-language-contract`
+- `mentor-projection-contract`
+- `frontier-innovation-gates`
+- `formal-review-checklist`
+- `deep-review-gates`
+- `display-projection-gates`
+
+正式触发矩阵以 `references/activation-matrix.md` 为准。
 
 ## 运行底座
 
@@ -311,7 +373,7 @@ python3 scripts/run_workflow_regression.py
 - `id` 是否连续且唯一
 - 是否覆盖 `审阅对象冻结 / 模板假完成 / 真源与版本漂移 / 非复算审查 / 主文补充附录闭环 / 合规与引文法证 / 上下文隔离反思 / 对象层 / process_projection / review_version_manifest / 路径漂移 / 表格抽取流水线 / 工具链轻量评估 / workspace gate / release gate / 结构化 release gate / 提前改稿 / 提前 readiness / 形式审查` 等关键回归主题
 - 文档抽取脚本是否仍能覆盖 `图 / 表 / 引文` 三条对象层流水线
-- 4 条执行型 workflow fixture 是否仍能通过：`handoff_resume` 路由、结构化 specialty gate、局部改写例外合同、release gate 阶段拦截
+- 9 条执行型 workflow fixture 是否仍能通过，包括默认热路径、导师冷路径、前沿冷路径、`handoff_resume` 路由、结构化 specialty gate、局部改写例外合同、release gate 阶段拦截、runtime drift 和无效 output policy
 
 如果要校验 repo truth packs 和 paper runtime pack，额外运行：
 
