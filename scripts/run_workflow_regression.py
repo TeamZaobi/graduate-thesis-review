@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -120,6 +121,32 @@ def prepare_workspace(root: Path, fixture: dict) -> Path:
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(content, encoding="utf-8")
 
+    json_overrides = fixture.get("json_overrides", {})
+    if not isinstance(json_overrides, dict):
+        raise ValueError(f"json_overrides must be object in fixture: {fixture.get('name')}")
+    for relative_path, updates in json_overrides.items():
+        if not isinstance(updates, dict):
+            raise ValueError(
+                f"json_overrides[{relative_path!r}] must be object in fixture: {fixture.get('name')}"
+            )
+        path = paper_dir / relative_path
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        if not isinstance(payload, dict):
+            raise ValueError(f"{relative_path} is not object-shaped JSON in fixture: {fixture.get('name')}")
+        payload = deep_merge(payload, updates)
+        path.write_text(
+            json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+
+    policy_override_payload = fixture.get("policy_override_payload")
+    if policy_override_payload is not None:
+        policy_override_path = paper_dir / "notes" / "test-output-policy.json"
+        policy_override_path.write_text(
+            json.dumps(policy_override_payload, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+
     removals = fixture.get("remove_paths", [])
     if not isinstance(removals, list):
         raise ValueError(f"remove_paths must be list in fixture: {fixture.get('name')}")
@@ -140,13 +167,23 @@ def evaluate_fixture(fixture_path: Path) -> tuple[bool, list[str]]:
     with tempfile.TemporaryDirectory() as tmpdir:
         paper_dir = prepare_workspace(Path(tmpdir), fixture)
 
-        check = run_cmd(
+        env = dict(os.environ)
+        if fixture.get("policy_override_payload") is not None:
+            env["THESIS_REVIEW_OUTPUT_POLICY"] = str(
+                paper_dir / "notes" / "test-output-policy.json"
+            )
+
+        check = subprocess.run(
             [
                 sys.executable,
                 str(SCRIPTS_DIR / "check_review_workspace.py"),
                 "--paper-dir",
                 str(paper_dir),
-            ]
+            ],
+            text=True,
+            capture_output=True,
+            check=False,
+            env=env,
         )
         check_output = check.stdout.strip() or check.stderr.strip()
         status_line = next(
@@ -155,13 +192,17 @@ def evaluate_fixture(fixture_path: Path) -> tuple[bool, list[str]]:
         )
         actual_status = status_line.split("STATUS: ", 1)[1].strip() if status_line else None
 
-        evaluate = run_cmd(
+        evaluate = subprocess.run(
             [
                 sys.executable,
                 str(SCRIPTS_DIR / "evaluate_review_toolchain.py"),
                 "--paper-dir",
                 str(paper_dir),
-            ]
+            ],
+            text=True,
+            capture_output=True,
+            check=False,
+            env=env,
         )
         if evaluate.returncode != 0:
             failures.append(

@@ -1,0 +1,35 @@
+{
+  "name": "invalid_output_policy_blocks_advice_output",
+  "paper_id": "paper05",
+  "manifest_updates": {
+    "template_status": "ready",
+    "entry_mode": "initial_review"
+  },
+  "file_overrides": {
+    "reviews/答辩口径.md": "# 答辩口径\n\n建议答辩时强调疗效稳定。\n"
+  },
+  "policy_override_payload": {
+    "schema_version": "1.0",
+    "policy_id": "policy.invalid-shape",
+    "family": "output_policy",
+    "version_anchor": "v1",
+    "allowed_low_risk": [],
+    "verdict_required_high_risk": [
+      {
+        "route_family": "execution_outputs"
+      }
+    ],
+    "forbidden_transformations": []
+  },
+  "expected": {
+    "check_status": "BLOCKED",
+    "check_contains": [
+      "Advice output exists while policy-driven advice gate is unavailable"
+    ],
+    "report_equals": {
+      "output_policy.present": true,
+      "output_policy.shape_ok": false,
+      "output_policy.alignment_ok": false
+    }
+  }
+}

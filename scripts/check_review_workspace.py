@@ -32,6 +32,7 @@ from release_gate_utils import (
     has_explicit_release_gate_authority,
     manifest_release_gate_is_placeholder,
 )
+from runtime_pack_utils import inspect_runtime_pack_drift
 from specialty_gate_utils import (
     SPECIALTY_GATE_BOOLEAN_FIELDS,
     SPECIALTY_GATE_EXPLICIT_BOOLEAN_VALUES,
@@ -1240,6 +1241,7 @@ def main() -> int:
     display_dir = paper_dir / "display"
     manifest_path = resolve_manifest_path(paper_dir)
     legacy_compatibility = inspect_legacy_compatibility(paper_dir)
+    runtime_pack_drift = inspect_runtime_pack_drift(paper_dir)
 
     blocked: list[str] = []
     partial: list[str] = []
@@ -1292,6 +1294,13 @@ def main() -> int:
         (blocked if args.strict else warnings).append(message)
     partial.extend(legacy_compatibility["partial"])
     warnings.extend(legacy_compatibility["warnings"])
+    if runtime_pack_drift["errors"]:
+        partial.extend(
+            [
+                "Runtime pack drift from repo truth pack: " + message
+                for message in runtime_pack_drift["errors"]
+            ]
+        )
 
     thesis_files = (
         list(paper_dir.glob("*.docx"))

@@ -29,6 +29,7 @@ from release_gate_utils import (
     has_explicit_release_gate_authority,
     manifest_release_gate_is_placeholder,
 )
+from runtime_pack_utils import inspect_runtime_pack_drift
 from specialty_gate_utils import (
     SPECIALTY_GATE_BOOLEAN_FIELDS,
     SPECIALTY_GATE_STATUS_FIELDS,
@@ -222,6 +223,7 @@ def main() -> int:
     manifest_path = resolve_manifest_path(paper_dir)
     governance_validator = resolve_governance_validator()
     legacy_compatibility = inspect_legacy_compatibility(paper_dir)
+    runtime_pack_drift = inspect_runtime_pack_drift(paper_dir)
     manifest_payload = load_manifest(manifest_path)
     entry_mode = manifest_payload.get("entry_mode") if isinstance(manifest_payload, dict) else None
     workflow_route_source, workflow_route = extract_workflow_route(manifest_payload)
@@ -278,6 +280,7 @@ def main() -> int:
             "present": runtime_pack_dir.exists(),
             "validator_path": str(governance_validator) if governance_validator else None,
             "validator": None,
+            "drift": runtime_pack_drift,
         },
         "evidence_workspace": validate_evidence_workspace(evidence_dir),
         "output_policy": build_output_policy_status(paper_dir),
