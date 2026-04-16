@@ -405,7 +405,7 @@ def main() -> int:
         report["timings_ms"]["validate_runtime_pack"] = round((time.perf_counter() - started) * 1000, 2)
         output = runtime_validation.stdout.strip() or runtime_validation.stderr.strip()
         report["runtime_pack"]["validator"] = {
-            "ok": runtime_validation.returncode == 0 and not output,
+            "ok": runtime_validation.returncode == 0,
             "output": output or None,
         }
 

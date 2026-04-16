@@ -434,6 +434,7 @@ def ensure_runtime_pack(repo_root: Path, paper_dir: Path) -> dict[str, object]:
     runtime_pack.mkdir(parents=True, exist_ok=True)
 
     for filename in [
+        "BOUNDARY.md",
         "workflow.contract.json",
         "rules.contract.json",
         "agent.contract.json",
@@ -476,7 +477,6 @@ def ensure_runtime_pack(repo_root: Path, paper_dir: Path) -> dict[str, object]:
         "gate_state": "partial",
         "required_evidence_refs": required_evidence_refs,
         "missing_evidence_refs": required_evidence_refs,
-        "allowed_next_step_refs": [],
         "forbidden_output_refs": output_object_refs,
         "updated_at": iso_now(),
         "last_event_id": f"event.{paper_dir.name}.review-workspace.001",

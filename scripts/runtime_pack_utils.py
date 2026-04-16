@@ -8,18 +8,26 @@ ROOT = Path(__file__).resolve().parents[1]
 TRUTH_PACK_ROOT = ROOT / "workflow" / "review-workspace"
 
 RUNTIME_TRUTH_ROOT_FILES = [
+    "BOUNDARY.md",
     "workflow.contract.json",
     "rules.contract.json",
     "agent.contract.json",
 ]
 
 
-def _load_normalized_json(path: Path) -> str | None:
+def _load_comparable_content(path: Path) -> str | None:
     try:
-        payload = json.loads(path.read_text(encoding="utf-8"))
-    except (FileNotFoundError, json.JSONDecodeError):
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
         return None
-    return json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+
+    if path.suffix == ".json":
+        try:
+            payload = json.loads(text)
+        except json.JSONDecodeError:
+            return None
+        return json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return text
 
 
 def truth_pack_relpaths(truth_pack_root: Path = TRUTH_PACK_ROOT) -> set[str]:
@@ -86,12 +94,12 @@ def inspect_runtime_pack_drift(
     for relpath in sorted(expected_relpaths & actual_relpaths):
         truth_path = truth_pack_root / relpath
         runtime_path = runtime_pack_root / relpath
-        truth_json = _load_normalized_json(truth_path)
-        runtime_json = _load_normalized_json(runtime_path)
-        if truth_json is None or runtime_json is None:
+        truth_content = _load_comparable_content(truth_path)
+        runtime_content = _load_comparable_content(runtime_path)
+        if truth_content is None or runtime_content is None:
             unreadable_files.append(relpath)
             continue
-        if truth_json != runtime_json:
+        if truth_content != runtime_content:
             mismatched_files.append(relpath)
 
     errors: list[str] = []
